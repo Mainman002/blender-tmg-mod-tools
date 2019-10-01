@@ -33,7 +33,9 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
         col_smooth_lbl.label(text="Modifier Tools")
 
         row = layout.column()
-        row.operator('wm.mod_spin_ot_operator', text='Modifier Spin Edge')
+        row.operator('wm.mod_spin_edit_ot_operator', text='Modifier Spin Edge')
+        row.operator('wm.mod_solidify_plane_edit_ot_operator', text='Modifier Solidify Plane')
+
 
 class DEC_PT_Object_Panel(bpy.types.Panel):
     bl_idname = 'object.dec_pt_object_panel'
@@ -51,7 +53,16 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
         col_smooth_lbl.label(text="Modifier Tools")
 
         row = layout.column()
-        row.operator('wm.mod_spin_ot_operator', text='Modifier Spin Edge')
+        row.operator('wm.mod_spin_object_ot_operator', text='Modifier Spin Edge')
+        row.operator('wm.mod_solidify_plane_object_ot_operator', text='Modifier Solidify Plane')
+
+        row_smooth = layout.row()
+        col_smooth_lbl = row_smooth.column()
+        col_smooth_lbl.label(text="Add Extra Objects")
+
+        row = layout.column()
+        row.operator('wm.mod_add_arch_object_ot_operator', text='Add Arch Object')
+        row.operator('wm.mod_add_spiral_object_ot_operator', text='Add Spiral Object')
 
 
 
