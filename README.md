@@ -5,4 +5,4 @@ current version is supported for Blender 2.80 (stable)
 
 youtube video showing what it can do -> 
 
-https://youtu.be/F2liY1oFzDY
+https://youtu.be/QiOlLwNzvYw
