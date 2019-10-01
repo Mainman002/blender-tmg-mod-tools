@@ -10,12 +10,13 @@ bl_info = {
 }
 
 import bpy
-#from bpy.props import *
+from bpy.props import *
 
-from . dec_op import DEC_OT_Operator
-from . dec_panel import Dec_PT_Panel
+from . dec_op import *
+from . mod_op import * 
+from . dec_panel import * 
 
-classes = ( DEC_OT_Operator, Dec_PT_Panel )
+classes = ( DEC_Edge_OT_Operator, DEC_Verts_OT_Operator, MOD_Spin_OT_Operator, DEC_PT_Object_Panel, DEC_PT_Edit_Panel )
 
 register, unregister = bpy.utils.register_classes_factory(classes)
     
