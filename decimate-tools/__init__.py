@@ -14,9 +14,10 @@ from bpy.props import *
 
 from . dec_op import *
 from . mod_op import * 
+from . add_op import * 
 from . dec_panel import * 
 
-classes = ( DEC_Edge_OT_Operator, DEC_Verts_OT_Operator, MOD_Spin_Object_OT_Operator, MOD_Solidify_Plane_Object_OT_Operator, MOD_Spin_Edit_OT_Operator, MOD_Solidify_Plane_Edit_OT_Operator, MOD_Add_Arch_Object_OT_Operator, MOD_Add_Spiral_Object_OT_Operator, DEC_PT_Object_Panel, DEC_PT_Edit_Panel )
+classes = ( DEC_Edge_OT_Operator, DEC_Verts_OT_Operator, MOD_Spin_Object_OT_Operator, MOD_Solidify_Plane_Object_OT_Operator, MOD_Spin_Edit_OT_Operator, MOD_Solidify_Plane_Edit_OT_Operator, ADD_Arch_Object_OT_Operator, ADD_Pipe_Line_Object_Y_OT_Operator, ADD_Pipe_Line_Object_Z_OT_Operator, ADD_Basic_Spline_Y_OT_Operator, ADD_Pipe_Spline_Y_OT_Operator, DEC_PT_Object_Panel, DEC_PT_Edit_Panel )
 
 register, unregister = bpy.utils.register_classes_factory(classes)
     

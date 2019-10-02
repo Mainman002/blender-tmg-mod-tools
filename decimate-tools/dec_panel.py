@@ -12,6 +12,14 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
         sel_mode = context.tool_settings.mesh_select_mode
         layout = self.layout
 
+        row_smooth = layout.row()
+        col_smooth_lbl = row_smooth.column()
+        col_smooth_lbl.label(text="Modifier Tools")
+
+        row = layout.column()
+        row.operator('wm.mod_spin_edit_ot_operator', text='Modifier Spin Edge')
+        row.operator('wm.mod_solidify_plane_edit_ot_operator', text='Modifier Solidify Plane')
+
         if sel_mode[1]: # edge
 
             row_smooth = layout.row()
@@ -27,15 +35,6 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
 
             row = layout.column()
             row.operator('wm.dec_verts_ot_operator', text='Decimate Verts')
-
-        row_smooth = layout.row()
-        col_smooth_lbl = row_smooth.column()
-        col_smooth_lbl.label(text="Modifier Tools")
-
-        row = layout.column()
-        row.operator('wm.mod_spin_edit_ot_operator', text='Modifier Spin Edge')
-        row.operator('wm.mod_solidify_plane_edit_ot_operator', text='Modifier Solidify Plane')
-
 
 class DEC_PT_Object_Panel(bpy.types.Panel):
     bl_idname = 'object.dec_pt_object_panel'
@@ -58,11 +57,20 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
 
         row_smooth = layout.row()
         col_smooth_lbl = row_smooth.column()
-        col_smooth_lbl.label(text="Add Extra Objects")
+        col_smooth_lbl.label(text="Add Objects")
 
         row = layout.column()
-        row.operator('wm.mod_add_arch_object_ot_operator', text='Add Arch Object')
-        row.operator('wm.mod_add_spiral_object_ot_operator', text='Add Spiral Object')
+        row.operator('wm.add_arch_object_ot_operator', text='Add Arch Object')
+        row.operator('wm.add_pipe_line_object_y_ot_operator', text='Add Pipe Object Y Axis')
+        row.operator('wm.add_pipe_line_object_z_ot_operator', text='Add Pipe Object Z Axis')
+
+        row_smooth = layout.row()
+        col_smooth_lbl = row_smooth.column()
+        col_smooth_lbl.label(text="Add Splines")
+
+        row = layout.column()
+        row.operator('wm.add_basic_spline_y_ot_operator', text='Add Basic Spline Y Axis')
+        row.operator('wm.add_pipe_spline_y_ot_operator', text='Add Pipe Spline Y Axis')
 
 
 
