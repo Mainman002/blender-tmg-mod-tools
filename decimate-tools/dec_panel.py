@@ -1,4 +1,13 @@
 import bpy
+from bpy.types import Panel
+
+# define classes for registration
+#DEC_Classes = (
+    #VIEW3D_MT_edit_mesh_looptools,
+    #LoopToolsProps,
+    #DEC_PT_Edit_Panel,
+    #DEC_PT_Object_Panel,
+#)
 
 class DEC_PT_Edit_Panel(bpy.types.Panel):
     bl_idname = 'object.dec_pt_edit_panel'
@@ -10,6 +19,7 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
  
     def draw(self, context):
         sel_mode = context.tool_settings.mesh_select_mode
+        axis_mode = context.scene.axis_mod
         layout = self.layout
 
         row_smooth = layout.row()
@@ -43,8 +53,9 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
     bl_context = "objectmode"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
- 
+
     def draw(self, context):
+        axis_mode = context.scene.axis_mod
         layout = self.layout
 
         row_smooth = layout.row()
@@ -60,32 +71,56 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
         col_smooth_lbl.label(text="Add Objects")
 
         row = layout.column()
-        row.operator('wm.add_arch_object_ot_operator', text='Add Arch Object')
-        row.operator('wm.add_pipe_line_object_y_ot_operator', text='Add Pipe Object Y Axis')
-        row.operator('wm.add_pipe_line_object_z_ot_operator', text='Add Pipe Object Z Axis')
+        row.prop(context.scene, "axis_mod", text="Object axis.")
+
+        row = layout.column()
+        row.operator('wm.add_solid_plane_object_ot_operator', text='Add Plane Object')
+        row.operator('wm.add_solid_circle_object_ot_operator', text='Add Circle Object')
+
+        row = layout.column()
+        if axis_mode == "X": # Y
+            row.operator('wm.add_arch_object_x_ot_operator', text='Add Arch Object')
+        if axis_mode == "Y": # Y
+            row.operator('wm.add_arch_object_y_ot_operator', text='Add Arch Object')
+            row.operator('wm.add_pipe_line_object_y_ot_operator', text='Add Pipe Object')
+        if axis_mode == "Z": # Z
+            row.operator('wm.add_arch_object_z_ot_operator', text='Add Arch Object')
+            row.operator('wm.add_pipe_line_object_z_ot_operator', text='Add Pipe Object')
 
         row_smooth = layout.row()
         col_smooth_lbl = row_smooth.column()
         col_smooth_lbl.label(text="Add Splines")
 
-        row = layout.column()
-        row.operator('wm.add_basic_spline_y_ot_operator', text='Add Basic Spline Y Axis')
-        row.operator('wm.add_pipe_spline_y_ot_operator', text='Add Pipe Spline Y Axis')
+        if axis_mode == "Y": # Y
+            row = layout.column()
+            row.operator('wm.add_basic_spline_y_ot_operator', text='Add Basic Spline')
+            row.operator('wm.add_pipe_spline_y_ot_operator', text='Add Pipe Spline')
 
 
+# menu containing all tools
+#class VIEW3D_MT_edit_mesh_looptools(Menu):
+    #bl_label = "LoopTools"
 
-            #sel_mode = context.tool_settings.mesh_select_mode
-            #if sel_mode[0]: # vertex
-            #    bpy.ops.mesh.select_mode(type='EDGE')
-            #elif sel_mode[1]: # edge
-            #    bpy.ops.mesh.select_mode(type='FACE')
-            #else: # face
-            #    bpy.ops.mesh.select_mode(type='VERT')
+    #def draw(self, context):
+        #layout = self.layout
 
+        #layout.operator("mesh.looptools_bridge", text="Bridge").loft = False
 
-    #bpy.ops.mesh.select_mode(use_extend=False, use_expand=False, type='EDGE')
-    #bpy.ops.mesh.select_mode(use_extend=False, use_expand=False, type='FACE')
-    #bpy.ops.mesh.select_mode(use_extend=False, use_expand=False, type='VERT')
+# property group containing all properties for the gui in the panel
+#class LoopToolsProps(PropertyGroup):
+    #"""
+    #Fake module like class
+    #bpy.context.window_manager.looptools
+    #"""
+    # general display properties
+    #display_bridge: BoolProperty(
+        #name="Bridge settings",
+        #description="Display settings of the Bridge tool",
+        #default=False
+        #)
+
+#row = layout.column()
+#bl_options = {'DEFAULT_CLOSED'}
 
 
 
