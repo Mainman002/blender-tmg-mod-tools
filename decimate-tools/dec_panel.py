@@ -19,8 +19,10 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
  
     def draw(self, context):
 
+        obj = bpy.context.view_layer.objects.active
         obj = context.object
 
+        check_settings = context.scene.check_settings
         check_mods = context.scene.check_mods
         check_adds = context.scene.check_adds
 
@@ -40,14 +42,70 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
         col = layout.column(align=True)
         subcol = col.column()
 
+        if check_settings == False:
+            subcol.prop(context.scene, "check_settings", text="Settings", icon="RIGHTARROW")
+        else:
+            subcol.prop(context.scene, "check_settings", text="Settings", icon="DOWNARROW_HLT")
+
+            row_smooth = layout.row()
+            col_smooth_lbl = row_smooth.row()
+            col_smooth_lbl.label(text="Object axis:")
+
+            row = col_smooth_lbl.row()
+            row.prop(context.scene, "axis_mod", text="")
+
+            row = layout.row()
+            row_btn = layout.row()
+            col_btn_lbl = row_btn.row(align=True)
+
+            col_btn_lbl.label(text="Screw")
+            col_btn_lbl.prop(context.scene, "mod_screw", text="", icon="MOD_SCREW")
+            
+            col_btn_lbl.label(text="Solidify")
+            col_btn_lbl.prop(context.scene, "mod_solid", text="", icon="MOD_SOLIDIFY")
+                
+            row = layout.row(align=True)
+            row_btn = layout.row()
+            col_btn_lbl = row_btn.row()
+
+            col_btn_lbl.label(text="Mirror")
+            col_btn_lbl.prop(context.scene, "mod_mirror", text="", icon="MOD_MIRROR")
+
+            col_btn_lbl.label(text="Bevel")
+            col_btn_lbl.prop(context.scene, "mod_bevel", text="", icon="MOD_BEVEL")
+
+            row = layout.row(align=True)
+            row_btn = layout.row()
+            col_btn_lbl = row_btn.row()
+
+            col_btn_lbl.label(text="Subsurface")
+            col_btn_lbl.prop(context.scene, "mod_subsurf", text="", icon="MOD_SUBSURF")
+
+            row = layout.row(align=True)
+            if context.view_layer.objects.active:
+                row.operator('wm.mod_add_object_ot_operator', text='Add Modifiers', icon="MODIFIER")
+
+        layout.use_property_split = True
+        layout.use_property_decorate = False  # No animation.
+
+        view = context.space_data
+
+        col = layout.column(align=True)
+        subcol = col.column()
+
         if check_mods == False:
             subcol.prop(context.scene, "check_mods", text="Add Mods", icon="RIGHTARROW")
         else:
             subcol.prop(context.scene, "check_mods", text="Add Mods", icon="DOWNARROW_HLT")
 
-            row = col.column()
-            row.operator('wm.mod_spin_edit_ot_operator', text='Modifier Spin Edge')
-            row.operator('wm.mod_solidify_plane_edit_ot_operator', text='Modifier Solidify Plane')
+            #row = col.column()
+
+            row = layout.row(align=True)
+            #if context.view_layer.objects.active:
+            row.operator('wm.mod_solidify_plane_edit_ot_operator', text='Add Modifiers', icon="MODIFIER")
+            
+            #row.operator('wm.mod_spin_edit_ot_operator', text='Modifier Spin Edge')
+            #row.operator('wm.mod_solidify_plane_edit_ot_operator', text='Modifier Solidify Plane')
 
             if sel_mode[1]: # edge
 
@@ -112,39 +170,51 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
             row.prop(context.scene, "axis_mod", text="")
 
             row = layout.row()
-            row.prop(context.scene, "mod_screw", text="Screw")
-            row.prop(context.scene, "mod_solid", text="Solidify")
+            row_btn = layout.row()
+            col_btn_lbl = row_btn.row(align=True)
+
+            col_btn_lbl.label(text="Screw")
+            col_btn_lbl.prop(context.scene, "mod_screw", text="", icon="MOD_SCREW")
+            
+            col_btn_lbl.label(text="Solidify")
+            col_btn_lbl.prop(context.scene, "mod_solid", text="", icon="MOD_SOLIDIFY")
                 
+            row = layout.row(align=True)
+            row_btn = layout.row()
+            col_btn_lbl = row_btn.row()
 
-            row = layout.row()
-            row.prop(context.scene, "mod_bevel", text="Bevel")
-            row.prop(context.scene, "mod_subsurf", text="Subsurface")
+            col_btn_lbl.label(text="Mirror")
+            col_btn_lbl.prop(context.scene, "mod_mirror", text="", icon="MOD_MIRROR")
 
-        #row = layout.column()
-        #row.prop(context.scene, "check_mods", text="Show Mods", icon="CANCEL")
+            col_btn_lbl.label(text="Bevel")
+            col_btn_lbl.prop(context.scene, "mod_bevel", text="", icon="MOD_BEVEL")
 
-        layout.use_property_split = True
-        layout.use_property_decorate = False  # No animation.
+            row = layout.row(align=True)
+            row_btn = layout.row()
+            col_btn_lbl = row_btn.row()
 
-        view = context.space_data
+            col_btn_lbl.label(text="Subsurface")
+            col_btn_lbl.prop(context.scene, "mod_subsurf", text="", icon="MOD_SUBSURF")
 
-        col = layout.column(align=True)
-        subcol = col.column()
-
-        if check_mods == False:
-            subcol.prop(context.scene, "check_mods", text="Add Mods", icon="RIGHTARROW")
-        else:
-            subcol.prop(context.scene, "check_mods", text="Add Mods", icon="DOWNARROW_HLT")
-
-            #row = layout.row()
-            #col_smooth_lbl = row_smooth.column()
-            #col_smooth_lbl.label(text="Modifier Tools")
-
-            #row = layout.column()
-            #if obj.name != "":
-            #if obj:
+            row = layout.row(align=True)
             if context.view_layer.objects.active:
-                col.operator('wm.mod_add_object_ot_operator', text='Add Modifiers')
+                row.operator('wm.mod_add_object_ot_operator', text='Add Modifiers', icon="MODIFIER")
+
+        #layout.use_property_split = True
+        #layout.use_property_decorate = False  # No animation.
+
+        #view = context.space_data
+
+        #col = layout.column(align=True)
+        #subcol = col.column()
+
+        #if check_mods == False:
+            #subcol.prop(context.scene, "check_mods", text="Add Mods", icon="RIGHTARROW")
+        #else:
+            #subcol.prop(context.scene, "check_mods", text="Add Mods", icon="DOWNARROW_HLT")
+
+            #if context.view_layer.objects.active:
+                #col.operator('wm.mod_add_object_ot_operator', text='Add Modifiers')
 
 
             #col.operator('wm.mod_spin_object_ot_operator', text='Modifier Spin Edge')

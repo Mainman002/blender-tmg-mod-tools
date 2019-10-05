@@ -45,6 +45,10 @@ bpy.types.Scene.mod_solid = BoolProperty(name="Add solidify modifier",
                 default=True,
                 description="Adds solidify modifier")
 
+bpy.types.Scene.mod_mirror = BoolProperty(name="Add mirror modifier",
+                default=True,
+                description="Adds mirror modifier")
+
 bpy.types.Scene.mod_bevel = BoolProperty(name="Add bevel modifier",
                 default=True,
                 description="Adds bevel modifier")

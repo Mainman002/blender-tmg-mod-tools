@@ -52,6 +52,7 @@ class ADD_Solid_Plane_Object_OT_Operator(bpy.types.Operator):
 
         axis_mode = context.scene.axis_mod
         mod_solid = context.scene.mod_solid
+        mod_mirror = context.scene.mod_mirror
         mod_bevel = context.scene.mod_bevel
         mod_subsurf = context.scene.mod_subsurf
 
@@ -108,6 +109,7 @@ class ADD_Solid_Circle_Object_OT_Operator(bpy.types.Operator):
 
         axis_mode = context.scene.axis_mod
         mod_solid = context.scene.mod_solid
+        mod_mirror = context.scene.mod_mirror
         mod_bevel = context.scene.mod_bevel
         mod_subsurf = context.scene.mod_subsurf
 
@@ -166,6 +168,7 @@ class ADD_Arch_Object_X_OT_Operator(bpy.types.Operator):
 
         axis_mode = context.scene.axis_mod
         mod_solid = context.scene.mod_solid
+        mod_mirror = context.scene.mod_mirror
         mod_bevel = context.scene.mod_bevel
         mod_subsurf = context.scene.mod_subsurf
 
@@ -228,6 +231,7 @@ class ADD_Arch_Object_Y_OT_Operator(bpy.types.Operator):
 
         axis_mode = context.scene.axis_mod
         mod_solid = context.scene.mod_solid
+        mod_mirror = context.scene.mod_mirror
         mod_bevel = context.scene.mod_bevel
         mod_subsurf = context.scene.mod_subsurf
 
@@ -287,6 +291,7 @@ class ADD_Arch_Object_Z_OT_Operator(bpy.types.Operator):
 
         axis_mode = context.scene.axis_mod
         mod_solid = context.scene.mod_solid
+        mod_mirror = context.scene.mod_mirror
         mod_bevel = context.scene.mod_bevel
         mod_subsurf = context.scene.mod_subsurf
 
@@ -348,6 +353,7 @@ class ADD_Pipe_Line_Object_Y_OT_Operator(bpy.types.Operator):
 
         axis_mode = context.scene.axis_mod
         mod_solid = context.scene.mod_solid
+        mod_mirror = context.scene.mod_mirror
         mod_bevel = context.scene.mod_bevel
         mod_subsurf = context.scene.mod_subsurf
 
@@ -416,6 +422,7 @@ class ADD_Pipe_Line_Object_Z_OT_Operator(bpy.types.Operator):
 
         axis_mode = context.scene.axis_mod
         mod_solid = context.scene.mod_solid
+        mod_mirror = context.scene.mod_mirror
         mod_bevel = context.scene.mod_bevel
         mod_subsurf = context.scene.mod_subsurf
 
@@ -492,6 +499,7 @@ class ADD_Basic_Spline_Y_OT_Operator(bpy.types.Operator):
 
         axis_mode = context.scene.axis_mod
         mod_solid = context.scene.mod_solid
+        mod_mirror = context.scene.mod_mirror
         mod_bevel = context.scene.mod_bevel
         mod_subsurf = context.scene.mod_subsurf
 
@@ -545,6 +553,7 @@ class ADD_Pipe_Spline_Y_OT_Operator(bpy.types.Operator):
 
         axis_mode = context.scene.axis_mod
         mod_solid = context.scene.mod_solid
+        mod_mirror = context.scene.mod_mirror
         mod_bevel = context.scene.mod_bevel
         mod_subsurf = context.scene.mod_subsurf
 
