@@ -17,9 +17,43 @@ from . mod_op import *
 from . add_op import * 
 from . dec_panel import * 
 
-#bpy.types.Scene.apply_modifiers = BoolProperty(name="Apply modifiers",
-                #default=True,
-                #description="Applies modifiers")
+#### Menu Tabs #########################
+
+bpy.types.Scene.check_settings = BoolProperty(name="Menu toggle settings tab",
+                default=True,
+                description="Menu show | hide settings tab.")
+
+bpy.types.Scene.check_mods = BoolProperty(name="Menu toggle modifiers tab",
+                default=False,
+                description="Menu show | hide modifiers tab.")
+
+bpy.types.Scene.check_adds = BoolProperty(name="Menu toggle add objects tab",
+                default=False,
+                description="Menu show | hide add objects tab.")
+
+bpy.types.Scene.check_splines = BoolProperty(name="Menu toggle add splines tab",
+                default=False,
+                description="Menu show | hide add splines tab.")
+
+#### Modifier Checkboxes #########################
+
+bpy.types.Scene.mod_screw = BoolProperty(name="Add screw modifier",
+                default=False,
+                description="Adds screw modifier")
+
+bpy.types.Scene.mod_solid = BoolProperty(name="Add solidify modifier",
+                default=True,
+                description="Adds solidify modifier")
+
+bpy.types.Scene.mod_bevel = BoolProperty(name="Add bevel modifier",
+                default=True,
+                description="Adds bevel modifier")
+
+bpy.types.Scene.mod_subsurf = BoolProperty(name="Add subsurface modifier",
+                default=True,
+                description="Adds subsurface modifier")
+
+#### Dropdown Buttons #########################
 
 bpy.types.Scene.axis_mod = EnumProperty(
     name="Axis",
@@ -29,11 +63,11 @@ bpy.types.Scene.axis_mod = EnumProperty(
         ('Y', 'Axis Y', 'Face the Y axis',1),
         ('Z', 'Axis Z', 'Face the Z axis',2)
         ),
-    default='Z'
+    default='Y'
     )
 
 
-classes = ( DEC_Edge_OT_Operator, DEC_Verts_OT_Operator, MOD_Spin_Object_OT_Operator, MOD_Solidify_Plane_Object_OT_Operator, MOD_Spin_Edit_OT_Operator, MOD_Solidify_Plane_Edit_OT_Operator, ADD_Solid_Plane_Object_OT_Operator, ADD_Solid_Circle_Object_OT_Operator, ADD_Arch_Object_X_OT_Operator, ADD_Arch_Object_Y_OT_Operator, ADD_Arch_Object_Z_OT_Operator, ADD_Pipe_Line_Object_Y_OT_Operator, ADD_Pipe_Line_Object_Z_OT_Operator, ADD_Basic_Spline_Y_OT_Operator, ADD_Pipe_Spline_Y_OT_Operator, DEC_PT_Object_Panel, DEC_PT_Edit_Panel )
+classes = ( DEC_Edge_OT_Operator, DEC_Verts_OT_Operator, MOD_Spin_Object_OT_Operator, MOD_Solidify_Plane_Object_OT_Operator, MOD_Spin_Edit_OT_Operator, MOD_Solidify_Plane_Edit_OT_Operator, MOD_Add_Object_OT_Operator, ADD_Solid_Plane_Object_OT_Operator, ADD_Solid_Circle_Object_OT_Operator, ADD_Arch_Object_X_OT_Operator, ADD_Arch_Object_Y_OT_Operator, ADD_Arch_Object_Z_OT_Operator, ADD_Pipe_Line_Object_Y_OT_Operator, ADD_Pipe_Line_Object_Z_OT_Operator, ADD_Basic_Spline_Y_OT_Operator, ADD_Pipe_Spline_Y_OT_Operator, DEC_PT_Object_Panel, DEC_PT_Edit_Panel )
 
 register, unregister = bpy.utils.register_classes_factory(classes)
     
