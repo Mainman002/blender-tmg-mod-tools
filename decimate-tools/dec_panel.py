@@ -47,43 +47,60 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
         else:
             subcol.prop(context.scene, "check_settings", text="Settings", icon="DOWNARROW_HLT")
 
-            row_smooth = layout.row()
+            row_smooth = subcol.row()
             col_smooth_lbl = row_smooth.row()
-            col_smooth_lbl.label(text="Object axis:")
+            col_smooth_lbl.label(text="Mod Axis:")
 
             row = col_smooth_lbl.row()
             row.prop(context.scene, "axis_mod", text="")
 
-            row = layout.row()
-            row_btn = layout.row()
-            col_btn_lbl = row_btn.row(align=True)
+            row = col.column()
 
-            col_btn_lbl.label(text="Screw")
-            col_btn_lbl.prop(context.scene, "mod_screw", text="", icon="MOD_SCREW")
+            #layout = self.layout    
+            layout.use_property_split = True
+            flow = layout.grid_flow(row_major=True, columns=0, even_columns=False, even_rows=False, align=True)
+
+            colm = flow.column()
+
+            col = colm.row()
+            col.label(text="Screw")
+            col.prop(context.scene, "mod_screw", text="", icon="MOD_SCREW")
             
-            col_btn_lbl.label(text="Solidify")
-            col_btn_lbl.prop(context.scene, "mod_solid", text="", icon="MOD_SOLIDIFY")
-                
-            row = layout.row(align=True)
-            row_btn = layout.row()
-            col_btn_lbl = row_btn.row()
+            col = colm.row()
+            col.label(text="Solidify")
+            col.prop(context.scene, "mod_solid", text="", icon="MOD_SOLIDIFY")
 
-            col_btn_lbl.label(text="Mirror")
-            col_btn_lbl.prop(context.scene, "mod_mirror", text="", icon="MOD_MIRROR")
+            colm = flow.column()
 
-            col_btn_lbl.label(text="Bevel")
-            col_btn_lbl.prop(context.scene, "mod_bevel", text="", icon="MOD_BEVEL")
+            col = colm.row()
+            col.label(text="Mirror")
+            col.prop(context.scene, "mod_mirror", text="", icon="MOD_MIRROR")
 
-            row = layout.row(align=True)
-            row_btn = layout.row()
-            col_btn_lbl = row_btn.row()
+            col = colm.row()
+            col.label(text="Bevel")
+            col.prop(context.scene, "mod_bevel", text="", icon="MOD_BEVEL")
 
-            col_btn_lbl.label(text="Subsurface")
-            col_btn_lbl.prop(context.scene, "mod_subsurf", text="", icon="MOD_SUBSURF")
+            colm = flow.column()
 
-            row = layout.row(align=True)
+            col = colm.row()
+            col.label(text="Subsurface")
+            col.prop(context.scene, "mod_subsurf", text="", icon="MOD_SUBSURF")
+
+            row = subcol.column()
+
+            row_smooth = row.row()
+            col_smooth_lbl = row_smooth.row()
+            row = col_smooth_lbl.row()
+
             if context.view_layer.objects.active:
-                row.operator('wm.mod_add_object_ot_operator', text='Add Modifiers', icon="MODIFIER")
+
+                row_smooth.operator('wm.mod_solidify_plane_edit_ot_operator', text='Add Modifiers', icon="MODIFIER")
+
+            #col = colm.row()
+            #col = layout.row(align=True)
+            #if context.view_layer.objects.active:
+                #row.operator('wm.mod_add_object_ot_operator', text='Add Modifiers', icon="MODIFIER")
+            #row.operator('wm.mod_solidify_plane_edit_ot_operator', text='Add Modifiers', icon="MODIFIER")
 
         layout.use_property_split = True
         layout.use_property_decorate = False  # No animation.
@@ -98,14 +115,7 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
         else:
             subcol.prop(context.scene, "check_mods", text="Add Mods", icon="DOWNARROW_HLT")
 
-            #row = col.column()
-
             row = layout.row(align=True)
-            #if context.view_layer.objects.active:
-            row.operator('wm.mod_solidify_plane_edit_ot_operator', text='Add Modifiers', icon="MODIFIER")
-            
-            #row.operator('wm.mod_spin_edit_ot_operator', text='Modifier Spin Edge')
-            #row.operator('wm.mod_solidify_plane_edit_ot_operator', text='Modifier Solidify Plane')
 
             if sel_mode[1]: # edge
 
@@ -114,14 +124,17 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
                 col_smooth_lbl.label(text="Decimate Tools")
 
                 row = col.column()
+                row.operator('wm.dec_verts_ot_operator', text='Decimate Verts')
                 row.operator('wm.dec_edge_ot_operator', text='Decimate Edges')
+
             elif sel_mode[0]: # vertex
+
                 row_smooth = col.row()
                 col_smooth_lbl = row_smooth.column()
                 col_smooth_lbl.label(text="Decimate Tools")
 
-            row = col.column()
-            row.operator('wm.dec_verts_ot_operator', text='Decimate Verts')
+                row = col.column()
+                row.operator('wm.dec_verts_ot_operator', text='Decimate Verts')
 
 class DEC_PT_Object_Panel(bpy.types.Panel):
     bl_idname = 'object.dec_pt_object_panel'
@@ -162,64 +175,54 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
         else:
             subcol.prop(context.scene, "check_settings", text="Settings", icon="DOWNARROW_HLT")
 
-            row_smooth = layout.row()
+            row_smooth = subcol.row()
             col_smooth_lbl = row_smooth.row()
-            col_smooth_lbl.label(text="Object axis:")
+            col_smooth_lbl.label(text="Mod Axis:")
 
             row = col_smooth_lbl.row()
             row.prop(context.scene, "axis_mod", text="")
 
-            row = layout.row()
-            row_btn = layout.row()
-            col_btn_lbl = row_btn.row(align=True)
+            row = col.column()
 
-            col_btn_lbl.label(text="Screw")
-            col_btn_lbl.prop(context.scene, "mod_screw", text="", icon="MOD_SCREW")
+            #layout = self.layout    
+            layout.use_property_split = True
+            flow = layout.grid_flow(row_major=True, columns=0, even_columns=False, even_rows=False, align=True)
+
+            colm = flow.column()
+
+            col = colm.row()
+            col.label(text="Screw")
+            col.prop(context.scene, "mod_screw", text="", icon="MOD_SCREW")
             
-            col_btn_lbl.label(text="Solidify")
-            col_btn_lbl.prop(context.scene, "mod_solid", text="", icon="MOD_SOLIDIFY")
-                
-            row = layout.row(align=True)
-            row_btn = layout.row()
-            col_btn_lbl = row_btn.row()
+            col = colm.row()
+            col.label(text="Solidify")
+            col.prop(context.scene, "mod_solid", text="", icon="MOD_SOLIDIFY")
 
-            col_btn_lbl.label(text="Mirror")
-            col_btn_lbl.prop(context.scene, "mod_mirror", text="", icon="MOD_MIRROR")
+            colm = flow.column()
 
-            col_btn_lbl.label(text="Bevel")
-            col_btn_lbl.prop(context.scene, "mod_bevel", text="", icon="MOD_BEVEL")
+            col = colm.row()
+            col.label(text="Mirror")
+            col.prop(context.scene, "mod_mirror", text="", icon="MOD_MIRROR")
 
-            row = layout.row(align=True)
-            row_btn = layout.row()
-            col_btn_lbl = row_btn.row()
+            col = colm.row()
+            col.label(text="Bevel")
+            col.prop(context.scene, "mod_bevel", text="", icon="MOD_BEVEL")
 
-            col_btn_lbl.label(text="Subsurface")
-            col_btn_lbl.prop(context.scene, "mod_subsurf", text="", icon="MOD_SUBSURF")
+            colm = flow.column()
 
-            row = layout.row(align=True)
+            col = colm.row()
+            col.label(text="Subsurface")
+            col.prop(context.scene, "mod_subsurf", text="", icon="MOD_SUBSURF")
+
+            row = subcol.column()
+
+            row_smooth = row.row()
+            col_smooth_lbl = row_smooth.row()
+            row = col_smooth_lbl.row()
+
             if context.view_layer.objects.active:
-                row.operator('wm.mod_add_object_ot_operator', text='Add Modifiers', icon="MODIFIER")
 
-        #layout.use_property_split = True
-        #layout.use_property_decorate = False  # No animation.
-
-        #view = context.space_data
-
-        #col = layout.column(align=True)
-        #subcol = col.column()
-
-        #if check_mods == False:
-            #subcol.prop(context.scene, "check_mods", text="Add Mods", icon="RIGHTARROW")
-        #else:
-            #subcol.prop(context.scene, "check_mods", text="Add Mods", icon="DOWNARROW_HLT")
-
-            #if context.view_layer.objects.active:
-                #col.operator('wm.mod_add_object_ot_operator', text='Add Modifiers')
-
-
-            #col.operator('wm.mod_spin_object_ot_operator', text='Modifier Spin Edge')
-            #col.operator('wm.mod_solidify_plane_object_ot_operator', text='Modifier Solidify Plane')
-
+                row_smooth.operator('wm.mod_add_object_ot_operator', text='Add Modifiers', icon="MODIFIER")
 
         layout.use_property_split = True
         layout.use_property_decorate = False  # No animation.
@@ -234,14 +237,9 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
         else:
             subcol.prop(context.scene, "check_adds", text="Add Objects", icon="DOWNARROW_HLT")
 
-            #col_smooth_lbl = row_smooth.column()
-            #col.label(text="Add Objects")
-
-            #row = layout.column()
             col.operator('wm.add_solid_plane_object_ot_operator', text='Add Plane Object')
             col.operator('wm.add_solid_circle_object_ot_operator', text='Add Circle Object')
 
-            #row = layout.column()
             if axis_mode == "X": # Y
                 col.operator('wm.add_arch_object_x_ot_operator', text='Add Arch Object')
             elif axis_mode == "Y": # Y
@@ -266,8 +264,6 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
             if axis_mode == "Y": # Y:
                 subcol.prop(context.scene, "check_splines", text="Add Splines", icon="DOWNARROW_HLT")
 
-            #if axis_mode == "Y": # Y
-                #row = layout.column()
                 col.operator('wm.add_basic_spline_y_ot_operator', text='Add Basic Spline')
                 col.operator('wm.add_pipe_spline_y_ot_operator', text='Add Smooth Spline')
 
