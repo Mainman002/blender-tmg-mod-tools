@@ -1,9 +1,13 @@
 # blender-decimate-tools
-### Adding various mesh decimation tools to the Edit Panel.
+#### Adding various mesh decimation tools to the Edit Panel.
 
-current version is supported for Blender 2.80 (stable)
+#### current version is supported for Blender 2.80 (stable)
 
-youtube video showing what it can do -> 
+### Release zip here -> 
+
+https://github.com/Mainman002/blender-decimate-tools/releases
+
+### youtube video showing what it can do -> 
 
 https://youtu.be/D8FJvBc65Lk
 
