@@ -50,6 +50,9 @@ class ADD_Solid_Plane_Object_OT_Operator(bpy.types.Operator):
 
     def execute(self, context):
 
+        solid_offset = context.scene.solid_offset
+        solid_thickness = context.scene.solid_thickness
+
         axis_mode = context.scene.axis_mod
         mod_solid = context.scene.mod_solid
         mod_mirror = context.scene.mod_mirror
@@ -60,8 +63,8 @@ class ADD_Solid_Plane_Object_OT_Operator(bpy.types.Operator):
 
         if mod_solid == True:
             bpy.ops.object.modifier_add(type='SOLIDIFY')
-            bpy.context.object.modifiers["Solidify"].offset = 1
-            bpy.context.object.modifiers["Solidify"].thickness = 0.2
+            bpy.context.object.modifiers["Solidify"].offset = solid_offset
+            bpy.context.object.modifiers["Solidify"].thickness = solid_thickness
             bpy.context.object.modifiers["Solidify"].use_even_offset = True
             bpy.context.object.modifiers["Solidify"].use_quality_normals = True
             bpy.context.object.modifiers["Solidify"].show_on_cage = True
@@ -107,6 +110,9 @@ class ADD_Solid_Circle_Object_OT_Operator(bpy.types.Operator):
 
     def execute(self, context):
 
+        solid_offset = context.scene.solid_offset
+        solid_thickness = context.scene.solid_thickness
+
         axis_mode = context.scene.axis_mod
         mod_solid = context.scene.mod_solid
         mod_mirror = context.scene.mod_mirror
@@ -119,10 +125,10 @@ class ADD_Solid_Circle_Object_OT_Operator(bpy.types.Operator):
 
         if mod_solid == True:
             bpy.ops.object.modifier_add(type='SOLIDIFY')
-            bpy.context.object.modifiers["Solidify"].offset = 1
+            bpy.context.object.modifiers["Solidify"].offset = solid_offset
             bpy.context.object.modifiers["Solidify"].use_even_offset = True
             bpy.context.object.modifiers["Solidify"].use_quality_normals = True
-            bpy.context.object.modifiers["Solidify"].thickness = 0.2
+            bpy.context.object.modifiers["Solidify"].thickness = solid_thickness
             bpy.context.object.modifiers["Solidify"].show_on_cage = True
             bpy.context.object.modifiers["Solidify"].show_expanded = False
 
@@ -165,6 +171,9 @@ class ADD_Arch_Object_X_OT_Operator(bpy.types.Operator):
     bl_description = 'Add Arch.'
 
     def execute(self, context):
+
+        solid_offset = context.scene.solid_offset
+        solid_thickness = context.scene.solid_thickness
 
         axis_mode = context.scene.axis_mod
         mod_solid = context.scene.mod_solid
@@ -229,6 +238,9 @@ class ADD_Arch_Object_Y_OT_Operator(bpy.types.Operator):
 
     def execute(self, context):
 
+        solid_offset = context.scene.solid_offset
+        solid_thickness = context.scene.solid_thickness
+
         axis_mode = context.scene.axis_mod
         mod_solid = context.scene.mod_solid
         mod_mirror = context.scene.mod_mirror
@@ -288,6 +300,9 @@ class ADD_Arch_Object_Z_OT_Operator(bpy.types.Operator):
     bl_description = 'Add Arch.'
 
     def execute(self, context):
+
+        solid_offset = context.scene.solid_offset
+        solid_thickness = context.scene.solid_thickness
 
         axis_mode = context.scene.axis_mod
         mod_solid = context.scene.mod_solid
@@ -351,6 +366,9 @@ class ADD_Pipe_Line_Object_Y_OT_Operator(bpy.types.Operator):
 
     def execute(self, context):
 
+        solid_offset = context.scene.solid_offset
+        solid_thickness = context.scene.solid_thickness
+
         axis_mode = context.scene.axis_mod
         mod_solid = context.scene.mod_solid
         mod_mirror = context.scene.mod_mirror
@@ -373,8 +391,8 @@ class ADD_Pipe_Line_Object_Y_OT_Operator(bpy.types.Operator):
 
         if mod_solid == True:
             bpy.ops.object.modifier_add(type='SOLIDIFY')
-            bpy.context.object.modifiers["Solidify"].offset = -1
-            bpy.context.object.modifiers["Solidify"].thickness = 0.1
+            bpy.context.object.modifiers["Solidify"].offset = solid_offset
+            bpy.context.object.modifiers["Solidify"].thickness = solid_thickness
             bpy.context.object.modifiers["Solidify"].use_quality_normals = True
             bpy.context.object.modifiers["Solidify"].use_even_offset = True
             bpy.context.object.modifiers["Solidify"].show_expanded = False
@@ -420,6 +438,9 @@ class ADD_Pipe_Line_Object_Z_OT_Operator(bpy.types.Operator):
 
     def execute(self, context):
 
+        solid_offset = context.scene.solid_offset
+        solid_thickness = context.scene.solid_thickness
+
         axis_mode = context.scene.axis_mod
         mod_solid = context.scene.mod_solid
         mod_mirror = context.scene.mod_mirror
@@ -444,8 +465,8 @@ class ADD_Pipe_Line_Object_Z_OT_Operator(bpy.types.Operator):
 
         if mod_solid == True:
             bpy.ops.object.modifier_add(type='SOLIDIFY')
-            bpy.context.object.modifiers["Solidify"].offset = -1
-            bpy.context.object.modifiers["Solidify"].thickness = 0.1
+            bpy.context.object.modifiers["Solidify"].offset = solid_offset
+            bpy.context.object.modifiers["Solidify"].thickness = solid_thickness
             bpy.context.object.modifiers["Solidify"].use_quality_normals = True
             bpy.context.object.modifiers["Solidify"].use_even_offset = True
             bpy.context.object.modifiers["Solidify"].show_expanded = False
@@ -497,6 +518,9 @@ class ADD_Basic_Spline_Y_OT_Operator(bpy.types.Operator):
 
     def execute(self, context):
 
+        solid_offset = context.scene.solid_offset
+        solid_thickness = context.scene.solid_thickness
+
         axis_mode = context.scene.axis_mod
         mod_solid = context.scene.mod_solid
         mod_mirror = context.scene.mod_mirror
@@ -512,8 +536,8 @@ class ADD_Basic_Spline_Y_OT_Operator(bpy.types.Operator):
 
         if mod_solid == True:
             bpy.ops.object.modifier_add(type='SOLIDIFY')
-            bpy.context.object.modifiers["Solidify"].thickness = -0.1
-            bpy.context.object.modifiers["Solidify"].offset = 0
+            bpy.context.object.modifiers["Solidify"].thickness = solid_thickness
+            bpy.context.object.modifiers["Solidify"].offset = solid_offset
             bpy.context.object.modifiers["Solidify"].use_even_offset = True
             bpy.context.object.modifiers["Solidify"].use_quality_normals = False
             bpy.context.object.modifiers["Solidify"].show_expanded = False
@@ -551,6 +575,9 @@ class ADD_Pipe_Spline_Y_OT_Operator(bpy.types.Operator):
 
     def execute(self, context):
 
+        solid_offset = context.scene.solid_offset
+        solid_thickness = context.scene.solid_thickness
+
         axis_mode = context.scene.axis_mod
         mod_solid = context.scene.mod_solid
         mod_mirror = context.scene.mod_mirror
@@ -572,8 +599,8 @@ class ADD_Pipe_Spline_Y_OT_Operator(bpy.types.Operator):
 
         if mod_solid == True:
             bpy.ops.object.modifier_add(type='SOLIDIFY')
-            bpy.context.object.modifiers["Solidify"].thickness = -0.1
-            bpy.context.object.modifiers["Solidify"].offset = 0
+            bpy.context.object.modifiers["Solidify"].thickness = solid_thickness
+            bpy.context.object.modifiers["Solidify"].offset = solid_offset
             bpy.context.object.modifiers["Solidify"].use_even_offset = True
             bpy.context.object.modifiers["Solidify"].use_quality_normals = False
             bpy.context.object.modifiers["Solidify"].show_expanded = False

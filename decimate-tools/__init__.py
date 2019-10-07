@@ -17,6 +17,20 @@ from . mod_op import *
 from . add_op import * 
 from . dec_panel import * 
 
+#### Menu Float Sliders #########################
+
+bpy.types.Scene.solid_offset = FloatProperty(name="Menu solidify offset slider",
+                default=1.0,
+                min=-1.0,
+                max=1.0,
+                description="Menu solidify offset slider.")
+
+bpy.types.Scene.solid_thickness = FloatProperty(name="Menu solidify thickness slider",
+                default=0.20,
+                min=-200.0,
+                max=200.0,
+                description="Menu solidify thickness slider.")
+
 #### Menu Tabs #########################
 
 bpy.types.Scene.check_settings = BoolProperty(name="Menu toggle settings tab",
@@ -46,7 +60,7 @@ bpy.types.Scene.mod_solid = BoolProperty(name="Add solidify modifier",
                 description="Adds solidify modifier")
 
 bpy.types.Scene.mod_mirror = BoolProperty(name="Add mirror modifier",
-                default=True,
+                default=False,
                 description="Adds mirror modifier")
 
 bpy.types.Scene.mod_bevel = BoolProperty(name="Add bevel modifier",
@@ -54,7 +68,7 @@ bpy.types.Scene.mod_bevel = BoolProperty(name="Add bevel modifier",
                 description="Adds bevel modifier")
 
 bpy.types.Scene.mod_subsurf = BoolProperty(name="Add subsurface modifier",
-                default=True,
+                default=False,
                 description="Adds subsurface modifier")
 
 #### Dropdown Buttons #########################
@@ -71,7 +85,7 @@ bpy.types.Scene.axis_mod = EnumProperty(
     )
 
 
-classes = ( DEC_Edge_OT_Operator, DEC_Verts_OT_Operator, MOD_Spin_Object_OT_Operator, MOD_Solidify_Plane_Object_OT_Operator, MOD_Spin_Edit_OT_Operator, MOD_Solidify_Plane_Edit_OT_Operator, MOD_Add_Object_OT_Operator, ADD_Solid_Plane_Object_OT_Operator, ADD_Solid_Circle_Object_OT_Operator, ADD_Arch_Object_X_OT_Operator, ADD_Arch_Object_Y_OT_Operator, ADD_Arch_Object_Z_OT_Operator, ADD_Pipe_Line_Object_Y_OT_Operator, ADD_Pipe_Line_Object_Z_OT_Operator, ADD_Basic_Spline_Y_OT_Operator, ADD_Pipe_Spline_Y_OT_Operator, DEC_PT_Object_Panel, DEC_PT_Edit_Panel )
+classes = ( DEC_Edge_OT_Operator, DEC_Verts_OT_Operator, MOD_Object_OT_Operator, MOD_Edit_OT_Operator, ADD_Solid_Plane_Object_OT_Operator, ADD_Solid_Circle_Object_OT_Operator, ADD_Arch_Object_X_OT_Operator, ADD_Arch_Object_Y_OT_Operator, ADD_Arch_Object_Z_OT_Operator, ADD_Pipe_Line_Object_Y_OT_Operator, ADD_Pipe_Line_Object_Z_OT_Operator, ADD_Basic_Spline_Y_OT_Operator, ADD_Pipe_Spline_Y_OT_Operator, DEC_PT_Object_Panel, DEC_PT_Edit_Panel )
 
 register, unregister = bpy.utils.register_classes_factory(classes)
     

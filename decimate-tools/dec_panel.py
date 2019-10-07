@@ -1,14 +1,6 @@
 import bpy
 from bpy.types import Panel
 
-# define classes for registration
-#DEC_Classes = (
-    #VIEW3D_MT_edit_mesh_looptools,
-    #LoopToolsProps,
-    #DEC_PT_Edit_Panel,
-    #DEC_PT_Object_Panel,
-#)
-
 class DEC_PT_Edit_Panel(bpy.types.Panel):
     bl_idname = 'object.dec_pt_edit_panel'
     bl_category = 'Edit'
@@ -21,6 +13,9 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
 
         obj = bpy.context.view_layer.objects.active
         obj = context.object
+
+        solid_offset = context.scene.solid_offset
+        solid_thickness = context.scene.solid_thickness
 
         check_settings = context.scene.check_settings
         check_mods = context.scene.check_mods
@@ -47,12 +42,32 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
         else:
             subcol.prop(context.scene, "check_settings", text="Settings", icon="DOWNARROW_HLT")
 
-            row_smooth = subcol.row()
-            col_smooth_lbl = row_smooth.row()
-            col_smooth_lbl.label(text="Mod Axis:")
+            col = layout.column(align=True)
+            subcol = col.row()
+            row = subcol
 
-            row = col_smooth_lbl.row()
+            row = subcol.row()
+            row.label(text="Mod Axis:")
+
+            #row = subcol.row()
             row.prop(context.scene, "axis_mod", text="")
+
+            col = layout.column(align=True)
+            subcol = col.row()
+            row = subcol
+            row.label(text="Solidify:")
+
+            col = layout.column(align=True)
+            subcol = col.column()
+            row = subcol
+            row.prop(context.scene, "solid_offset", text="Offset")
+
+            row = subcol.row()
+            row.prop(context.scene, "solid_thickness", text="Thickness")
+
+            if context.view_layer.objects.active:
+
+                col.operator('wm.mod_edit_ot_operator', text='Add Modifiers', icon="MODIFIER")
 
             row = col.column()
 
@@ -67,18 +82,8 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
             col.prop(context.scene, "mod_screw", text="", icon="MOD_SCREW")
             
             col = colm.row()
-            col.label(text="Solidify")
-            col.prop(context.scene, "mod_solid", text="", icon="MOD_SOLIDIFY")
-
-            colm = flow.column()
-
-            col = colm.row()
             col.label(text="Mirror")
             col.prop(context.scene, "mod_mirror", text="", icon="MOD_MIRROR")
-
-            col = colm.row()
-            col.label(text="Bevel")
-            col.prop(context.scene, "mod_bevel", text="", icon="MOD_BEVEL")
 
             colm = flow.column()
 
@@ -86,21 +91,25 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
             col.label(text="Subsurface")
             col.prop(context.scene, "mod_subsurf", text="", icon="MOD_SUBSURF")
 
+            col = colm.row()
+            col.label(text="Solidify")
+            col.prop(context.scene, "mod_solid", text="", icon="MOD_SOLIDIFY")
+
+            colm = flow.column()
+
+            col = colm.row()
+            col.label(text="Bevel")
+            col.prop(context.scene, "mod_bevel", text="", icon="MOD_BEVEL")
+
             row = subcol.column()
 
             row_smooth = row.row()
             col_smooth_lbl = row_smooth.row()
             row = col_smooth_lbl.row()
 
-            if context.view_layer.objects.active:
-
-                row_smooth.operator('wm.mod_solidify_plane_edit_ot_operator', text='Add Modifiers', icon="MODIFIER")
-
-            #col = colm.row()
-            #col = layout.row(align=True)
             #if context.view_layer.objects.active:
-                #row.operator('wm.mod_add_object_ot_operator', text='Add Modifiers', icon="MODIFIER")
-            #row.operator('wm.mod_solidify_plane_edit_ot_operator', text='Add Modifiers', icon="MODIFIER")
+
+                #row_smooth.operator('wm.mod_edit_ot_operator', text='Add Modifiers', icon="MODIFIER")
 
         layout.use_property_split = True
         layout.use_property_decorate = False  # No animation.
@@ -150,6 +159,9 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
         #OB.select_set(action='SELECT')
         #obj = context.object
 
+        solid_offset = context.scene.solid_offset
+        solid_thickness = context.scene.solid_thickness
+
         check_settings = context.scene.check_settings
         check_mods = context.scene.check_mods
         check_adds = context.scene.check_adds
@@ -175,12 +187,32 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
         else:
             subcol.prop(context.scene, "check_settings", text="Settings", icon="DOWNARROW_HLT")
 
-            row_smooth = subcol.row()
-            col_smooth_lbl = row_smooth.row()
-            col_smooth_lbl.label(text="Mod Axis:")
+            col = layout.column(align=True)
+            subcol = col.row()
+            row = subcol
 
-            row = col_smooth_lbl.row()
+            row = subcol.row()
+            row.label(text="Mod Axis:")
+
+            #row = subcol.row()
             row.prop(context.scene, "axis_mod", text="")
+
+            col = layout.column(align=True)
+            subcol = col.row()
+            row = subcol
+            row.label(text="Solidify:")
+
+            col = layout.column(align=True)
+            subcol = col.column()
+            row = subcol
+            row.prop(context.scene, "solid_offset", text="Offset")
+
+            row = subcol.row()
+            row.prop(context.scene, "solid_thickness", text="Thickness")
+
+            if context.view_layer.objects.active:
+
+                col.operator('wm.mod_object_ot_operator', text='Add Modifiers', icon="MODIFIER")
 
             row = col.column()
 
@@ -195,18 +227,8 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
             col.prop(context.scene, "mod_screw", text="", icon="MOD_SCREW")
             
             col = colm.row()
-            col.label(text="Solidify")
-            col.prop(context.scene, "mod_solid", text="", icon="MOD_SOLIDIFY")
-
-            colm = flow.column()
-
-            col = colm.row()
             col.label(text="Mirror")
             col.prop(context.scene, "mod_mirror", text="", icon="MOD_MIRROR")
-
-            col = colm.row()
-            col.label(text="Bevel")
-            col.prop(context.scene, "mod_bevel", text="", icon="MOD_BEVEL")
 
             colm = flow.column()
 
@@ -214,15 +236,17 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
             col.label(text="Subsurface")
             col.prop(context.scene, "mod_subsurf", text="", icon="MOD_SUBSURF")
 
+            col = colm.row()
+            col.label(text="Solidify")
+            col.prop(context.scene, "mod_solid", text="", icon="MOD_SOLIDIFY")
+
+            colm = flow.column()
+
+            col = colm.row()
+            col.label(text="Bevel")
+            col.prop(context.scene, "mod_bevel", text="", icon="MOD_BEVEL")
+
             row = subcol.column()
-
-            row_smooth = row.row()
-            col_smooth_lbl = row_smooth.row()
-            row = col_smooth_lbl.row()
-
-            if context.view_layer.objects.active:
-
-                row_smooth.operator('wm.mod_add_object_ot_operator', text='Add Modifiers', icon="MODIFIER")
 
         layout.use_property_split = True
         layout.use_property_decorate = False  # No animation.
