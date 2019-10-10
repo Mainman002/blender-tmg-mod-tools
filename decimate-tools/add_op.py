@@ -70,6 +70,24 @@ class ADD_Solid_Plane_Object_OT_Operator(bpy.types.Operator):
             bpy.context.object.modifiers["Solidify"].show_on_cage = True
             bpy.context.object.modifiers["Solidify"].show_expanded = False
         
+        if mod_mirror == True:
+            bpy.ops.object.modifier_add(type='MIRROR')
+            bpy.context.object.modifiers["Mirror"].use_axis[0] = False
+
+            if axis_mode == "X":
+                bpy.context.object.modifiers["Mirror"].use_axis[0] = True
+                bpy.context.object.modifiers["Mirror"].use_bisect_axis[0] = True
+            elif axis_mode == "Y":
+                bpy.context.object.modifiers["Mirror"].use_axis[1] = True
+                bpy.context.object.modifiers["Mirror"].use_bisect_axis[1] = True
+            elif axis_mode == "Z":
+                bpy.context.object.modifiers["Mirror"].use_axis[2] = True
+                bpy.context.object.modifiers["Mirror"].use_bisect_axis[2] = True
+            
+            bpy.context.object.modifiers["Mirror"].use_clip = True
+            bpy.context.object.modifiers["Mirror"].show_expanded = False
+
+
         if mod_bevel == True:
             bpy.ops.object.modifier_add(type='BEVEL')
             bpy.context.object.modifiers["Bevel"].segments = 3
@@ -606,9 +624,9 @@ class ADD_Pipe_Spline_Y_OT_Operator(bpy.types.Operator):
             bpy.context.object.modifiers["Solidify"].show_expanded = False
 
         bpy.ops.object.modifier_add(type='SMOOTH')
-        bpy.context.object.modifiers["Smooth"].show_viewport = True
-        bpy.context.object.modifiers["Smooth"].show_expanded = False
-        bpy.context.object.modifiers["Smooth"].show_in_editmode = True
+        bpy.context.object.modifiers["Smooth.001"].show_viewport = True
+        bpy.context.object.modifiers["Smooth.001"].show_expanded = False
+        bpy.context.object.modifiers["Smooth.001"].show_in_editmode = True
 
         if mod_bevel == True:
             bpy.ops.object.modifier_add(type='BEVEL')

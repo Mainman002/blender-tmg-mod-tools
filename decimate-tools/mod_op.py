@@ -21,168 +21,197 @@ class MOD_Object_OT_Operator(bpy.types.Operator):
 
         obj = bpy.context.active_object
 
+        for nr, obj in enumerate(bpy.context.selected_objects):
 
-        #self.mod = obj.modifiers.get("Screw")
-        #if self.mod is 'Screw':
-            # otherwise add a modifier to selected object
-            #obj.modifiers.remove(name='Screw', type='SCREW')
-        
-        #self.mod = obj.modifiers.get("Solidify")
-        #if self.mod is 'Solidify':
-            # otherwise add a modifier to selected object
-            #obj.modifiers.remove(name='Solidify', type='SOLIDIFY')
+            types = obj.type
 
-        #self.mod = obj.modifiers.get("Mirror")
-        #if self.mod is 'Mirror':
-            # otherwise add a modifier to selected object
-            #obj.modifiers.remove(name='Mirror', type='MIRROR')
+            if types == "MESH":
+                if mod_screw == True:
+                    mod = obj.modifiers.get("Screw")
+                    if mod is None:
+                        obj.modifiers.new(name='Screw', type='SCREW')
 
-        #self.mod = obj.modifiers.get("Bevel")
-        #if self.mod is 'Bevel':
-            # otherwise add a modifier to selected object
-            #obj.modifiers.remove(name='Bevel', type='BEVEL')
+                    obj.modifiers["Screw"].axis = 'Y'
+                    obj.modifiers["Screw"].use_normal_calculate = True
+                    obj.modifiers["Screw"].show_expanded = False
+                    obj.modifiers["Screw"].use_merge_vertices = True
 
-        #self.mod = obj.modifiers.get("Subdivision")
-        #if self.mod is 'Subdivision':
-            # otherwise add a modifier to selected object
-            #obj.modifiers.remove(name='Subdivision', type='SUBSURF')
+                if mod_mirror == True:
+                    if mod_solid == True:
 
-        #self.mod = obj.modifiers.get("Triangulate")
-        #if self.mod is 'Triangulate':
-            # otherwise add a modifier to selected object
-            #obj.modifiers.remove(name='Triangulate', type='TRIANGULATE')
+                        mod = obj.modifiers.get("Solidify")
+                        if mod is None:
+                            obj.modifiers.new(name='Solidify', type='SOLIDIFY')
 
-        #self.mod = obj.modifiers.get("Weighted Normal")
-        #if self.mod is 'Weighted Normal':
-            # otherwise add a modifier to selected object
-            #obj.modifiers.remove(name='Weighted Normal', type='WEIGHTED_NORMAL')
+                        obj.modifiers["Solidify"].offset = solid_offset
+                        obj.modifiers["Solidify"].thickness = solid_thickness
+                        obj.modifiers["Solidify"].use_even_offset = True
+                        obj.modifiers["Solidify"].use_quality_normals = True
+                        obj.modifiers["Solidify"].use_rim_only = True
+                        obj.modifiers["Solidify"].show_expanded = False
+
+                        mod = obj.modifiers.get("Mirror")
+                        if mod is None:
+                            obj.modifiers.new(name='Mirror', type='MIRROR')
+
+                    obj.modifiers["Mirror"].use_axis[0] = False
+
+                    if axis_mode == "X":
+                        obj.modifiers["Mirror"].use_axis[0] = True
+                        obj.modifiers["Mirror"].use_bisect_axis[0] = True
+                    elif axis_mode == "Y":
+                        obj.modifiers["Mirror"].use_axis[1] = True
+                        obj.modifiers["Mirror"].use_bisect_axis[1] = True
+                    elif axis_mode == "Z":
+                        obj.modifiers["Mirror"].use_axis[2] = True
+                        obj.modifiers["Mirror"].use_bisect_axis[2] = True
+                    
+                    obj.modifiers["Mirror"].use_clip = True
+                    obj.modifiers["Mirror"].show_expanded = False
+                else:
+                    if mod_solid == True:
+
+                        mod = obj.modifiers.get("Solidify")
+                        if mod is None:
+                            obj.modifiers.new(name='Solidify', type='SOLIDIFY')
+
+                        obj.modifiers["Solidify"].offset = solid_offset
+                        obj.modifiers["Solidify"].thickness = solid_thickness
+                        obj.modifiers["Solidify"].use_even_offset = True
+                        obj.modifiers["Solidify"].use_quality_normals = True
+                        obj.modifiers["Solidify"].show_expanded = False
+                
+                if mod_bevel == True:
+
+                    mod = obj.modifiers.get("Bevel")
+                    if mod is None:
+                        obj.modifiers.new(name='Bevel', type='BEVEL')
+
+                    obj.modifiers["Bevel"].segments = 3
+                    obj.modifiers["Bevel"].limit_method = 'ANGLE'
+                    obj.modifiers["Bevel"].angle_limit = 0.785398
+                    obj.modifiers["Bevel"].width = 0.035
+                    obj.modifiers["Bevel"].offset_type = 'WIDTH'
+                    obj.modifiers["Bevel"].miter_outer = 'MITER_ARC'
+                    obj.modifiers["Bevel"].show_expanded = False
+
+                if mod_subsurf == True:
+
+                    mod = obj.modifiers.get("Subdivision")
+                    if mod is None:
+                        obj.modifiers.new(name='Subdivision', type='SUBSURF')
+                    
+                    obj.modifiers["Subdivision"].levels = 2
+                    obj.modifiers["Subdivision"].show_expanded = False
+                    obj.modifiers["Subdivision"].show_in_editmode = False
+                
+                mod = obj.modifiers.get("Triangulate")
+                if mod is None:
+                    obj.modifiers.new(name='Triangulate', type='TRIANGULATE')
+
+                obj.modifiers["Triangulate"].keep_custom_normals = True
+                obj.modifiers["Triangulate"].quad_method = 'BEAUTY'
+                obj.modifiers["Triangulate"].show_expanded = False
+                obj.modifiers["Triangulate"].show_in_editmode = False
+
+                mod = obj.modifiers.get("Weighted Normal")
+                if mod is None:
+                    obj.modifiers.new(name='Weighted Normal', type='WEIGHTED_NORMAL')
+
+                obj.modifiers["Weighted Normal"].keep_sharp = True
+                obj.modifiers["Weighted Normal"].mode = 'FACE_AREA_WITH_ANGLE'
+                obj.modifiers["Weighted Normal"].show_expanded = False
+                obj.modifiers["Weighted Normal"].show_in_editmode = False
+
+                bpy.ops.object.shade_smooth()
+                obj.data.use_auto_smooth = True
+                obj.data.auto_smooth_angle = 0.785398
 
 
-        #sel = bpy.context.selected_objects
-        #act = bpy.context.active_object
+            elif types == "CURVE":
+                if mod_screw == True:
+                    mod = obj.modifiers.get("Screw")
+                    if mod is None:
+                        obj.modifiers.new(name='Screw', type='SCREW')
 
-        #for obj in sel:
-            #if obj != act:
-                #bpy.context.active_object = obj #sets the obj accessible to bpy.ops
-                #bpy.ops.object.modifier_add(type='SOLIDIFY')
-                #bpy.context.object.modifiers["Solidify"].thickness = 0.1
+                    obj.modifiers["Screw"].axis = 'Y'
+                    obj.modifiers["Screw"].use_normal_calculate = True
+                    obj.modifiers["Screw"].show_expanded = False
+                    obj.modifiers["Screw"].use_merge_vertices = True
 
-        #obj = bpy.context.view_layer.objects.active
+                if mod_mirror == True:
+                    mod = obj.modifiers.get("Mirror")
+                    if mod is None:
+                        obj.modifiers.new(name='Mirror', type='MIRROR')
 
-        #bpy.context.object.modifiers["Solidify.001"].name = "Solidify.001"
+                    obj.modifiers["Mirror"].use_axis[0] = False
 
-        if mod_screw == True:
+                    if axis_mode == "X":
+                        obj.modifiers["Mirror"].use_axis[0] = True
+                        obj.modifiers["Mirror"].use_bisect_axis[0] = True
+                    elif axis_mode == "Y":
+                        obj.modifiers["Mirror"].use_axis[1] = True
+                        obj.modifiers["Mirror"].use_bisect_axis[1] = True
+                    elif axis_mode == "Z":
+                        obj.modifiers["Mirror"].use_axis[2] = True
+                        obj.modifiers["Mirror"].use_bisect_axis[2] = True
+                    
+                    obj.modifiers["Mirror"].use_clip = True
+                    obj.modifiers["Mirror"].show_expanded = False
 
-            self.mod = obj.modifiers.get("Screw")
-            if self.mod is None:
-                # otherwise add a modifier to selected object
-                obj.modifiers.new(name='Screw', type='SCREW')
+                    if mod_solid == True:
 
-            bpy.context.object.modifiers["Screw"].axis = 'Y'
-            bpy.context.object.modifiers["Screw"].use_normal_calculate = True
-            bpy.context.object.modifiers["Screw"].show_expanded = False
-            bpy.context.object.modifiers["Screw"].use_merge_vertices = True
-            #bpy.context.object.modifiers["Screw"].show_in_editmode = False
+                        mod = obj.modifiers.get("Solidify")
+                        if mod is None:
+                            obj.modifiers.new(name='Solidify', type='SOLIDIFY')
 
-        if mod_mirror == True:
-            if mod_solid == True:
+                        obj.modifiers["Solidify"].offset = solid_offset
+                        obj.modifiers["Solidify"].thickness = solid_thickness
+                        obj.modifiers["Solidify"].use_even_offset = True
+                        obj.modifiers["Solidify"].use_quality_normals = True
+                        
+                        if mod_mirror == True:
+                            obj.modifiers["Solidify"].use_rim_only = True
+                        else:
+                            obj.modifiers["Solidify"].use_rim_only = False
 
-                self.mod = obj.modifiers.get("Solidify")
-                if self.mod is None:
-                    # otherwise add a modifier to selected object
-                    obj.modifiers.new(name='Solidify', type='SOLIDIFY')
+                        obj.modifiers["Solidify"].show_expanded = False
+                
+                if mod_bevel == True:
 
-                bpy.context.object.modifiers["Solidify"].offset = solid_offset
-                bpy.context.object.modifiers["Solidify"].thickness = solid_thickness
-                bpy.context.object.modifiers["Solidify"].use_even_offset = True
-                bpy.context.object.modifiers["Solidify"].use_quality_normals = True
-                bpy.context.object.modifiers["Solidify"].use_rim_only = True
-                bpy.context.object.modifiers["Solidify"].show_expanded = False
+                    mod = obj.modifiers.get("Bevel")
+                    if mod is None:
+                        obj.modifiers.new(name='Bevel', type='BEVEL')
 
-                self.mod = obj.modifiers.get("Mirror")
-                if self.mod is None:
-                    # otherwise add a modifier to selected object
-                    obj.modifiers.new(name='Mirror', type='MIRROR')
+                    obj.modifiers["Bevel"].segments = 3
+                    obj.modifiers["Bevel"].limit_method = 'ANGLE'
+                    obj.modifiers["Bevel"].angle_limit = 0.785398
+                    obj.modifiers["Bevel"].width = 0.035
+                    obj.modifiers["Bevel"].offset_type = 'WIDTH'
+                    obj.modifiers["Bevel"].miter_outer = 'MITER_ARC'
+                    obj.modifiers["Bevel"].show_expanded = False
 
-            bpy.context.object.modifiers["Mirror"].use_axis[0] = False
+                if mod_subsurf == True:
 
-            if axis_mode == "X":
-                bpy.context.object.modifiers["Mirror"].use_axis[0] = True
-                bpy.context.object.modifiers["Mirror"].use_bisect_axis[0] = True
-            elif axis_mode == "Y":
-                bpy.context.object.modifiers["Mirror"].use_axis[1] = True
-                bpy.context.object.modifiers["Mirror"].use_bisect_axis[1] = True
-            elif axis_mode == "Z":
-                bpy.context.object.modifiers["Mirror"].use_axis[2] = True
-                bpy.context.object.modifiers["Mirror"].use_bisect_axis[2] = True
-            
-            bpy.context.object.modifiers["Mirror"].use_clip = True
-            bpy.context.object.modifiers["Mirror"].show_expanded = False
-        else:
-            if mod_solid == True:
+                    mod = obj.modifiers.get("Subdivision")
+                    if mod is None:
+                        obj.modifiers.new(name='Subdivision', type='SUBSURF')
+                    
+                    obj.modifiers["Subdivision"].levels = 2
+                    obj.modifiers["Subdivision"].show_expanded = False
+                    obj.modifiers["Subdivision"].show_in_editmode = False
+                
+                mod = obj.modifiers.get("Triangulate")
+                if mod is None:
+                    obj.modifiers.new(name='Triangulate', type='TRIANGULATE')
 
-                self.mod = obj.modifiers.get("Solidify")
-                if self.mod is None:
-                    # otherwise add a modifier to selected object
-                    obj.modifiers.new(name='Solidify', type='SOLIDIFY')
+                obj.modifiers["Triangulate"].keep_custom_normals = True
+                obj.modifiers["Triangulate"].quad_method = 'BEAUTY'
+                obj.modifiers["Triangulate"].show_expanded = False
+                obj.modifiers["Triangulate"].show_in_editmode = False
 
-                bpy.context.object.modifiers["Solidify"].offset = solid_offset
-                bpy.context.object.modifiers["Solidify"].thickness = solid_thickness
-                bpy.context.object.modifiers["Solidify"].use_even_offset = True
-                bpy.context.object.modifiers["Solidify"].use_quality_normals = True
-                bpy.context.object.modifiers["Solidify"].show_expanded = False
-                #bpy.context.object.modifiers["Solidify"].show_in_editmode = False
-        
-        if mod_bevel == True:
+                bpy.ops.object.shade_smooth()
 
-            self.mod = obj.modifiers.get("Bevel")
-            if self.mod is None:
-                 # otherwise add a modifier to selected object
-                obj.modifiers.new(name='Bevel', type='BEVEL')
-
-            bpy.context.object.modifiers["Bevel"].segments = 3
-            bpy.context.object.modifiers["Bevel"].limit_method = 'ANGLE'
-            bpy.context.object.modifiers["Bevel"].angle_limit = 0.785398
-            bpy.context.object.modifiers["Bevel"].width = 0.035
-            bpy.context.object.modifiers["Bevel"].offset_type = 'WIDTH'
-            bpy.context.object.modifiers["Bevel"].miter_outer = 'MITER_ARC'
-            bpy.context.object.modifiers["Bevel"].show_expanded = False
-            #bpy.context.object.modifiers["Bevel"].show_in_editmode = False
-
-        if mod_subsurf == True:
-
-            self.mod = obj.modifiers.get("Subdivision")
-            if self.mod is None:
-                 # otherwise add a modifier to selected object
-                obj.modifiers.new(name='Subdivision', type='SUBSURF')
-            
-            bpy.context.object.modifiers["Subdivision"].levels = 2
-            bpy.context.object.modifiers["Subdivision"].show_expanded = False
-            bpy.context.object.modifiers["Subdivision"].show_in_editmode = False
-        
-        self.mod = obj.modifiers.get("Triangulate")
-        if self.mod is None:
-            # otherwise add a modifier to selected object
-            obj.modifiers.new(name='Triangulate', type='TRIANGULATE')
-
-        bpy.context.object.modifiers["Triangulate"].keep_custom_normals = True
-        bpy.context.object.modifiers["Triangulate"].quad_method = 'BEAUTY'
-        bpy.context.object.modifiers["Triangulate"].show_expanded = False
-        bpy.context.object.modifiers["Triangulate"].show_in_editmode = False
-
-        self.mod = obj.modifiers.get("Weighted Normal")
-        if self.mod is None:
-            # otherwise add a modifier to selected object
-            obj.modifiers.new(name='Weighted Normal', type='WEIGHTED_NORMAL')
-
-        bpy.context.object.modifiers["Weighted Normal"].keep_sharp = True
-        bpy.context.object.modifiers["Weighted Normal"].mode = 'FACE_AREA_WITH_ANGLE'
-        bpy.context.object.modifiers["Weighted Normal"].show_expanded = False
-        bpy.context.object.modifiers["Weighted Normal"].show_in_editmode = False
-
-        bpy.ops.object.shade_smooth()
-        bpy.context.object.data.use_auto_smooth = True
-        bpy.context.object.data.auto_smooth_angle = 0.785398
 
         return {'FINISHED'}
         return {'FINISHED'}
@@ -197,8 +226,6 @@ class MOD_Edit_OT_Operator(bpy.types.Operator):
 
     def execute(self, context):
 
-        obj = bpy.context.active_object
-
         solid_offset = context.scene.solid_offset
         solid_thickness = context.scene.solid_thickness
 
@@ -209,114 +236,200 @@ class MOD_Edit_OT_Operator(bpy.types.Operator):
         mod_bevel = context.scene.mod_bevel
         mod_subsurf = context.scene.mod_subsurf
 
+        obj = bpy.context.active_object
+
         bpy.ops.mesh.select_all(action='SELECT')
         bpy.ops.mesh.faces_shade_smooth()
 
-        if mod_mirror == True:
+        for nr, obj in enumerate(bpy.context.selected_objects):
 
-            if mod_solid == True:
+            types = obj.type
 
-                self.mod = obj.modifiers.get("Solidify")
-                if self.mod is None:
-                    # otherwise add a modifier to selected object
-                    obj.modifiers.new(name='Solidify', type='SOLIDIFY')
+            if types == "MESH":
+                if mod_screw == True:
+                    mod = obj.modifiers.get("Screw")
+                    if mod is None:
+                        obj.modifiers.new(name='Screw', type='SCREW')
+
+                    obj.modifiers["Screw"].axis = 'Y'
+                    obj.modifiers["Screw"].use_normal_calculate = True
+                    obj.modifiers["Screw"].show_expanded = False
+                    obj.modifiers["Screw"].use_merge_vertices = True
+
+                if mod_mirror == True:
+                    if mod_solid == True:
+
+                        mod = obj.modifiers.get("Solidify")
+                        if mod is None:
+                            obj.modifiers.new(name='Solidify', type='SOLIDIFY')
+
+                        obj.modifiers["Solidify"].offset = solid_offset
+                        obj.modifiers["Solidify"].thickness = solid_thickness
+                        obj.modifiers["Solidify"].use_even_offset = True
+                        obj.modifiers["Solidify"].use_quality_normals = True
+                        obj.modifiers["Solidify"].use_rim_only = True
+                        obj.modifiers["Solidify"].show_expanded = False
+
+                        mod = obj.modifiers.get("Mirror")
+                        if mod is None:
+                            obj.modifiers.new(name='Mirror', type='MIRROR')
+
+                    obj.modifiers["Mirror"].use_axis[0] = False
+
+                    if axis_mode == "X":
+                        obj.modifiers["Mirror"].use_axis[0] = True
+                        obj.modifiers["Mirror"].use_bisect_axis[0] = True
+                    elif axis_mode == "Y":
+                        obj.modifiers["Mirror"].use_axis[1] = True
+                        obj.modifiers["Mirror"].use_bisect_axis[1] = True
+                    elif axis_mode == "Z":
+                        obj.modifiers["Mirror"].use_axis[2] = True
+                        obj.modifiers["Mirror"].use_bisect_axis[2] = True
+                    
+                    obj.modifiers["Mirror"].use_clip = True
+                    obj.modifiers["Mirror"].show_expanded = False
+                else:
+                    if mod_solid == True:
+
+                        mod = obj.modifiers.get("Solidify")
+                        if mod is None:
+                            obj.modifiers.new(name='Solidify', type='SOLIDIFY')
+
+                        obj.modifiers["Solidify"].offset = solid_offset
+                        obj.modifiers["Solidify"].thickness = solid_thickness
+                        obj.modifiers["Solidify"].use_even_offset = True
+                        obj.modifiers["Solidify"].use_quality_normals = True
+                        obj.modifiers["Solidify"].show_expanded = False
                 
-                bpy.context.object.modifiers["Solidify"].offset = solid_offset
-                bpy.context.object.modifiers["Solidify"].thickness = solid_thickness
-                bpy.context.object.modifiers["Solidify"].use_even_offset = True
-                bpy.context.object.modifiers["Solidify"].use_quality_normals = True
-                bpy.context.object.modifiers["Solidify"].use_rim_only = True
-                bpy.context.object.modifiers["Solidify"].show_expanded = False
+                if mod_bevel == True:
 
-            self.mod = obj.modifiers.get("Mirror")
-            if self.mod is None:
-                # otherwise add a modifier to selected object
-                obj.modifiers.new(name='Mirror', type='MIRROR')
-            
-            bpy.context.object.modifiers["Mirror"].use_axis[0] = False
-            bpy.context.object.modifiers["Mirror"].use_axis[2] = True
-            bpy.context.object.modifiers["Mirror"].use_bisect_axis[2] = True
-            bpy.context.object.modifiers["Mirror"].use_clip = True
-            bpy.context.object.modifiers["Mirror"].show_expanded = False
+                    mod = obj.modifiers.get("Bevel")
+                    if mod is None:
+                        obj.modifiers.new(name='Bevel', type='BEVEL')
 
-        else:
-            if mod_solid == True:
+                    obj.modifiers["Bevel"].segments = 3
+                    obj.modifiers["Bevel"].limit_method = 'ANGLE'
+                    obj.modifiers["Bevel"].angle_limit = 0.785398
+                    obj.modifiers["Bevel"].width = 0.035
+                    obj.modifiers["Bevel"].offset_type = 'WIDTH'
+                    obj.modifiers["Bevel"].miter_outer = 'MITER_ARC'
+                    obj.modifiers["Bevel"].show_expanded = False
 
-                self.mod = obj.modifiers.get("Solidify")
-                if self.mod is None:
-                    # otherwise add a modifier to selected object
-                    obj.modifiers.new(name='Solidify', type='SOLIDIFY')
+                if mod_subsurf == True:
 
-                bpy.context.object.modifiers["Solidify"].offset = solid_offset
-                bpy.context.object.modifiers["Solidify"].use_even_offset = True
-                bpy.context.object.modifiers["Solidify"].use_quality_normals = True
-                bpy.context.object.modifiers["Solidify"].thickness = solid_thickness
-                bpy.context.object.modifiers["Solidify"].show_expanded = False
-                bpy.context.object.modifiers["Solidify"].show_on_cage = True
+                    mod = obj.modifiers.get("Subdivision")
+                    if mod is None:
+                        obj.modifiers.new(name='Subdivision', type='SUBSURF')
+                    
+                    obj.modifiers["Subdivision"].levels = 2
+                    obj.modifiers["Subdivision"].show_expanded = False
+                    obj.modifiers["Subdivision"].show_in_editmode = False
+                
+                mod = obj.modifiers.get("Triangulate")
+                if mod is None:
+                    obj.modifiers.new(name='Triangulate', type='TRIANGULATE')
 
-        if mod_screw == True:
+                obj.modifiers["Triangulate"].keep_custom_normals = True
+                obj.modifiers["Triangulate"].quad_method = 'BEAUTY'
+                obj.modifiers["Triangulate"].show_expanded = False
+                obj.modifiers["Triangulate"].show_in_editmode = False
 
-            self.mod = obj.modifiers.get("Screw")
-            if self.mod is None:
-                # otherwise add a modifier to selected object
-                obj.modifiers.new(name='Screw', type='SCREW')
+                mod = obj.modifiers.get("Weighted Normal")
+                if mod is None:
+                    obj.modifiers.new(name='Weighted Normal', type='WEIGHTED_NORMAL')
 
-            bpy.context.object.modifiers["Screw"].axis = 'Y'
-            bpy.context.object.modifiers["Screw"].use_normal_calculate = True
-            bpy.context.object.modifiers["Screw"].show_expanded = False
-            bpy.context.object.modifiers["Screw"].use_merge_vertices = True
-            #bpy.context.object.modifiers["Screw"].show_in_editmode = False
+                obj.modifiers["Weighted Normal"].keep_sharp = True
+                obj.modifiers["Weighted Normal"].mode = 'FACE_AREA_WITH_ANGLE'
+                obj.modifiers["Weighted Normal"].show_expanded = False
+                obj.modifiers["Weighted Normal"].show_in_editmode = False
 
-        if mod_bevel == True:
-            
-            self.mod = obj.modifiers.get("Bevel")
-            if self.mod is None:
-                 # otherwise add a modifier to selected object
-                obj.modifiers.new(name='Bevel', type='BEVEL')
+                #bpy.ops.object.shade_smooth()
+                obj.data.use_auto_smooth = True
+                obj.data.auto_smooth_angle = 0.785398
 
-            bpy.context.object.modifiers["Bevel"].segments = 2
-            bpy.context.object.modifiers["Bevel"].segments = 3
-            bpy.context.object.modifiers["Bevel"].limit_method = 'ANGLE'
-            bpy.context.object.modifiers["Bevel"].angle_limit = 0.785398
-            bpy.context.object.modifiers["Bevel"].offset_type = 'WIDTH'
-            bpy.context.object.modifiers["Bevel"].miter_outer = 'MITER_ARC'
-            bpy.context.object.modifiers["Bevel"].width = 0.04
-            bpy.context.object.modifiers["Bevel"].show_in_editmode = False
-            bpy.context.object.modifiers["Bevel"].show_expanded = False
 
-        if mod_subsurf == True:
-            
-            self.mod = obj.modifiers.get("Subdivision")
-            if self.mod is None:
-                 # otherwise add a modifier to selected object
-                obj.modifiers.new(name='Subdivision', type='SUBSURF')
+            elif types == "CURVE":
+                if mod_screw == True:
+                    mod = obj.modifiers.get("Screw")
+                    if mod is None:
+                        obj.modifiers.new(name='Screw', type='SCREW')
 
-            bpy.context.object.modifiers["Subdivision"].levels = 2
-            bpy.context.object.modifiers["Subdivision"].show_in_editmode = False
-            bpy.context.object.modifiers["Subdivision"].show_expanded = False
+                    obj.modifiers["Screw"].axis = 'Y'
+                    obj.modifiers["Screw"].use_normal_calculate = True
+                    obj.modifiers["Screw"].show_expanded = False
+                    obj.modifiers["Screw"].use_merge_vertices = True
 
-        self.mod = obj.modifiers.get("Triangulate")
-        if self.mod is None:
-            # otherwise add a modifier to selected object
-            obj.modifiers.new(name='Triangulate', type='TRIANGULATE')
+                if mod_mirror == True:
+                    mod = obj.modifiers.get("Mirror")
+                    if mod is None:
+                        obj.modifiers.new(name='Mirror', type='MIRROR')
 
-        bpy.context.object.modifiers["Triangulate"].keep_custom_normals = True
-        bpy.context.object.modifiers["Triangulate"].quad_method = 'BEAUTY'
-        bpy.context.object.modifiers["Triangulate"].show_expanded = False
+                    obj.modifiers["Mirror"].use_axis[0] = False
 
-        self.mod = obj.modifiers.get("Weighted Normal")
-        if self.mod is None:
-            # otherwise add a modifier to selected object
-            obj.modifiers.new(name='Weighted Normal', type='WEIGHTED_NORMAL')
+                    if axis_mode == "X":
+                        obj.modifiers["Mirror"].use_axis[0] = True
+                        obj.modifiers["Mirror"].use_bisect_axis[0] = True
+                    elif axis_mode == "Y":
+                        obj.modifiers["Mirror"].use_axis[1] = True
+                        obj.modifiers["Mirror"].use_bisect_axis[1] = True
+                    elif axis_mode == "Z":
+                        obj.modifiers["Mirror"].use_axis[2] = True
+                        obj.modifiers["Mirror"].use_bisect_axis[2] = True
+                    
+                    obj.modifiers["Mirror"].use_clip = True
+                    obj.modifiers["Mirror"].show_expanded = False
 
-        bpy.context.object.modifiers["Weighted Normal"].keep_sharp = True
-        bpy.context.object.modifiers["Weighted Normal"].mode = 'FACE_AREA_WITH_ANGLE'
-        bpy.context.object.modifiers["Triangulate"].show_in_editmode = False
-        bpy.context.object.modifiers["Weighted Normal"].show_in_editmode = False
-        bpy.context.object.modifiers["Weighted Normal"].show_expanded = False
+                    if mod_solid == True:
 
-        bpy.context.object.data.use_auto_smooth = True
-        bpy.context.object.data.auto_smooth_angle = 0.785398
+                        mod = obj.modifiers.get("Solidify")
+                        if mod is None:
+                            obj.modifiers.new(name='Solidify', type='SOLIDIFY')
+
+                        obj.modifiers["Solidify"].offset = solid_offset
+                        obj.modifiers["Solidify"].thickness = solid_thickness
+                        obj.modifiers["Solidify"].use_even_offset = True
+                        obj.modifiers["Solidify"].use_quality_normals = True
+                        
+                        if mod_mirror == True:
+                            obj.modifiers["Solidify"].use_rim_only = True
+                        else:
+                            obj.modifiers["Solidify"].use_rim_only = False
+
+                        obj.modifiers["Solidify"].show_expanded = False
+                
+                if mod_bevel == True:
+
+                    mod = obj.modifiers.get("Bevel")
+                    if mod is None:
+                        obj.modifiers.new(name='Bevel', type='BEVEL')
+
+                    obj.modifiers["Bevel"].segments = 3
+                    obj.modifiers["Bevel"].limit_method = 'ANGLE'
+                    obj.modifiers["Bevel"].angle_limit = 0.785398
+                    obj.modifiers["Bevel"].width = 0.035
+                    obj.modifiers["Bevel"].offset_type = 'WIDTH'
+                    obj.modifiers["Bevel"].miter_outer = 'MITER_ARC'
+                    obj.modifiers["Bevel"].show_expanded = False
+
+                if mod_subsurf == True:
+
+                    mod = obj.modifiers.get("Subdivision")
+                    if mod is None:
+                        obj.modifiers.new(name='Subdivision', type='SUBSURF')
+                    
+                    obj.modifiers["Subdivision"].levels = 2
+                    obj.modifiers["Subdivision"].show_expanded = False
+                    obj.modifiers["Subdivision"].show_in_editmode = False
+                
+                mod = obj.modifiers.get("Triangulate")
+                if mod is None:
+                    obj.modifiers.new(name='Triangulate', type='TRIANGULATE')
+
+                obj.modifiers["Triangulate"].keep_custom_normals = True
+                obj.modifiers["Triangulate"].quad_method = 'BEAUTY'
+                obj.modifiers["Triangulate"].show_expanded = False
+                obj.modifiers["Triangulate"].show_in_editmode = False
+
 
         return {'FINISHED'}
         return {'FINISHED'}
