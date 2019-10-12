@@ -1,5 +1,33 @@
 import bpy
 
+#bpy.ops.object.convert(target='MESH')
+
+
+class MOD_Apply_Object_OT_Operator(bpy.types.Operator):
+    bl_idname = 'wm.mod_apply_object_ot_operator'
+    bl_label = 'Decimate Panel'
+    bl_description = 'Apply Modifiers to object.'
+
+    def execute(self, context):
+
+        obj = bpy.context.active_object
+
+        for nr, obj in enumerate(bpy.context.selected_objects):
+
+            types = obj.type
+
+            if bpy.context.object.mode == "OBJECT":
+                bpy.ops.object.convert(target='MESH')
+            elif bpy.context.object.mode == "EDIT":
+                bpy.ops.object.mode_set(mode="OBJECT")
+                bpy.ops.object.convert(target='MESH')
+                bpy.ops.object.mode_set(mode="EDIT")
+
+
+        return {'FINISHED'}
+        return {'FINISHED'}
+
+
 class MOD_Object_OT_Operator(bpy.types.Operator):
     bl_idname = 'wm.mod_object_ot_operator'
     bl_label = 'Decimate Panel'
@@ -121,6 +149,9 @@ class MOD_Object_OT_Operator(bpy.types.Operator):
                 obj.modifiers["Weighted Normal"].show_expanded = False
                 obj.modifiers["Weighted Normal"].show_in_editmode = False
 
+                obj.data.use_auto_smooth = True
+                obj.data.auto_smooth_angle = 0.785398
+
 
             elif types == "CURVE":
                 if mod_screw == True:
@@ -134,9 +165,22 @@ class MOD_Object_OT_Operator(bpy.types.Operator):
                     obj.modifiers["Screw"].use_merge_vertices = True
 
                 if mod_mirror == True:
-                    mod = obj.modifiers.get("Mirror")
-                    if mod is None:
-                        obj.modifiers.new(name='Mirror', type='MIRROR')
+                    if mod_solid == True:
+
+                        mod = obj.modifiers.get("Solidify")
+                        if mod is None:
+                            obj.modifiers.new(name='Solidify', type='SOLIDIFY')
+
+                        obj.modifiers["Solidify"].offset = solid_offset
+                        obj.modifiers["Solidify"].thickness = solid_thickness
+                        obj.modifiers["Solidify"].use_even_offset = True
+                        obj.modifiers["Solidify"].use_quality_normals = True
+                        obj.modifiers["Solidify"].use_rim_only = True
+                        obj.modifiers["Solidify"].show_expanded = False
+
+                        mod = obj.modifiers.get("Mirror")
+                        if mod is None:
+                            obj.modifiers.new(name='Mirror', type='MIRROR')
 
                     obj.modifiers["Mirror"].use_axis[0] = False
 
@@ -152,7 +196,7 @@ class MOD_Object_OT_Operator(bpy.types.Operator):
                     
                     obj.modifiers["Mirror"].use_clip = True
                     obj.modifiers["Mirror"].show_expanded = False
-
+                else:
                     if mod_solid == True:
 
                         mod = obj.modifiers.get("Solidify")
@@ -163,12 +207,6 @@ class MOD_Object_OT_Operator(bpy.types.Operator):
                         obj.modifiers["Solidify"].thickness = solid_thickness
                         obj.modifiers["Solidify"].use_even_offset = True
                         obj.modifiers["Solidify"].use_quality_normals = True
-                        
-                        if mod_mirror == True:
-                            obj.modifiers["Solidify"].use_rim_only = True
-                        else:
-                            obj.modifiers["Solidify"].use_rim_only = False
-
                         obj.modifiers["Solidify"].show_expanded = False
                 
                 if mod_bevel == True:
@@ -210,8 +248,8 @@ class MOD_Object_OT_Operator(bpy.types.Operator):
                 bpy.ops.mesh.select_all(action='SELECT')
                 bpy.ops.mesh.faces_shade_smooth()
 
-            obj.data.use_auto_smooth = True
-            obj.data.auto_smooth_angle = 0.785398
+            #obj.data.use_auto_smooth = True
+            #obj.data.auto_smooth_angle = 0.785398
 
 
         return {'FINISHED'}

@@ -61,6 +61,12 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
             colm = View_Flow.column()
 
             View_Col = colm.row()
+            View_Col.label(text="Apply Modifiers:")
+            View_Col.operator('wm.mod_apply_object_ot_operator', text='', icon='MODIFIER')
+
+            colm = View_Flow.column()
+
+            View_Col = colm.row()
             View_Col.label(text="Distraction Free View:")
             View_Col.operator('wm.ui_distraction_free_ot_operator', text='', icon='RESTRICT_RENDER_OFF')
 
@@ -286,6 +292,12 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
 
             View_Col.use_property_split = True
             View_Flow = View_Col.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
+
+            colm = View_Flow.column()
+
+            View_Col = colm.row()
+            View_Col.label(text="Apply Modifiers:")
+            View_Col.operator('wm.mod_apply_object_ot_operator', text='', icon='MODIFIER')
 
             colm = View_Flow.column()
 

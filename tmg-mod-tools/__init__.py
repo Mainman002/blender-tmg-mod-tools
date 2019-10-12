@@ -100,7 +100,7 @@ bpy.types.Scene.axis_mod = EnumProperty(
     )
 
 
-classes = ( DEC_Edge_OT_Operator, DEC_Verts_OT_Operator, MOD_Object_OT_Operator, ADD_Solid_Plane_Object_OT_Operator, ADD_Solid_Circle_Object_OT_Operator, ADD_Arch_Object_X_OT_Operator, ADD_Arch_Object_Y_OT_Operator, ADD_Arch_Object_Z_OT_Operator, ADD_Pipe_Line_Object_Y_OT_Operator, ADD_Pipe_Line_Object_Z_OT_Operator, ADD_Basic_Spline_Y_OT_Operator, ADD_Pipe_Spline_Y_OT_Operator, ADD_Spline_Folow_Y_OT_Operator, DEC_PT_Object_Panel, DEC_PT_Edit_Panel, UI_Distraction_Free_OT_Operator )
+classes = ( DEC_Edge_OT_Operator, DEC_Verts_OT_Operator, MOD_Object_OT_Operator, MOD_Apply_Object_OT_Operator, ADD_Solid_Plane_Object_OT_Operator, ADD_Solid_Circle_Object_OT_Operator, ADD_Arch_Object_X_OT_Operator, ADD_Arch_Object_Y_OT_Operator, ADD_Arch_Object_Z_OT_Operator, ADD_Pipe_Line_Object_Y_OT_Operator, ADD_Pipe_Line_Object_Z_OT_Operator, ADD_Basic_Spline_Y_OT_Operator, ADD_Pipe_Spline_Y_OT_Operator, ADD_Spline_Folow_Y_OT_Operator, DEC_PT_Object_Panel, DEC_PT_Edit_Panel, UI_Distraction_Free_OT_Operator )
 
 register, unregister = bpy.utils.register_classes_factory(classes)
     
