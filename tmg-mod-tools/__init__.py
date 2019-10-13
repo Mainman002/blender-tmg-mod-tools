@@ -3,7 +3,7 @@ bl_info = {
     "author" : "Johnathan Mueller, Jayanam",
     "descrtion" : "Checker decimate edges in your selected edge loops.",
     "blender" : (2, 80, 0),
-    "version" : (0, 1, 2),
+    "version" : (0, 1, 3),
     "location" : "View3D (EditMode) > Sidebar > Edit Tab",
     "warning" : "",
     "category" : "Mesh"
@@ -16,6 +16,7 @@ from . ui_op import *
 from . dec_op import *
 from . mod_op import * 
 from . add_op import * 
+from . tool_op import * 
 from . dec_panel import * 
 
 #### Menu Float Sliders #########################
@@ -57,6 +58,10 @@ bpy.types.Scene.check_splines = BoolProperty(name="Menu toggle add splines tab",
 bpy.types.Scene.check_decimations = BoolProperty(name="Menu toggle decimate tools tab",
                 default=False,
                 description="Menu show | hide decimate tools tab.")
+
+bpy.types.Scene.check_tools = BoolProperty(name="Menu toggle tools tab",
+                default=False,
+                description="Menu show | hide tools tab.")
 
 #### Modifier Checkboxes #########################
 
@@ -100,7 +105,7 @@ bpy.types.Scene.axis_mod = EnumProperty(
     )
 
 
-classes = ( DEC_Edge_OT_Operator, DEC_Verts_OT_Operator, MOD_Object_OT_Operator, MOD_Apply_Object_OT_Operator, ADD_Solid_Plane_Object_OT_Operator, ADD_Solid_Circle_Object_OT_Operator, ADD_Arch_Object_X_OT_Operator, ADD_Arch_Object_Y_OT_Operator, ADD_Arch_Object_Z_OT_Operator, ADD_Pipe_Line_Object_Y_OT_Operator, ADD_Pipe_Line_Object_Z_OT_Operator, ADD_Basic_Spline_Y_OT_Operator, ADD_Pipe_Spline_Y_OT_Operator, ADD_Spline_Folow_Y_OT_Operator, DEC_PT_Object_Panel, DEC_PT_Edit_Panel, UI_Distraction_Free_OT_Operator )
+classes = ( DEC_Edge_OT_Operator, DEC_Verts_OT_Operator, MOD_Object_OT_Operator, MOD_Apply_Object_OT_Operator, ADD_Solid_Plane_Object_OT_Operator, ADD_Solid_Circle_Object_OT_Operator, ADD_Arch_Object_X_OT_Operator, ADD_Arch_Object_Y_OT_Operator, ADD_Arch_Object_Z_OT_Operator, ADD_Pipe_Line_Object_Y_OT_Operator, ADD_Pipe_Line_Object_Z_OT_Operator, ADD_Basic_Spline_Y_OT_Operator, ADD_Pipe_Spline_Y_OT_Operator, ADD_Spline_Folow_Y_OT_Operator, DEC_PT_Object_Panel, DEC_PT_Edit_Panel, TOOL_Inset_Edit_OT_Operator, UI_Distraction_Free_OT_Operator )
 
 register, unregister = bpy.utils.register_classes_factory(classes)
     

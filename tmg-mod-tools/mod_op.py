@@ -62,50 +62,40 @@ class MOD_Object_OT_Operator(bpy.types.Operator):
                     obj.modifiers["Screw"].show_expanded = False
                     obj.modifiers["Screw"].use_merge_vertices = True
 
-                if mod_mirror == True:
-                    if mod_solid == True:
+                if mod_solid == True:
+                    mod = obj.modifiers.get("Solidify")
+                    if mod is None:
+                        obj.modifiers.new(name='Solidify', type='SOLIDIFY')
 
-                        mod = obj.modifiers.get("Solidify")
-                        if mod is None:
-                            obj.modifiers.new(name='Solidify', type='SOLIDIFY')
+                    obj.modifiers["Solidify"].offset = solid_offset
+                    obj.modifiers["Solidify"].thickness = solid_thickness
+                    obj.modifiers["Solidify"].use_even_offset = True
+                    obj.modifiers["Solidify"].use_quality_normals = True
+                    obj.modifiers["Solidify"].show_expanded = False
 
-                        obj.modifiers["Solidify"].offset = solid_offset
-                        obj.modifiers["Solidify"].thickness = solid_thickness
-                        obj.modifiers["Solidify"].use_even_offset = True
-                        obj.modifiers["Solidify"].use_quality_normals = True
+                    if mod_mirror == True:
                         obj.modifiers["Solidify"].use_rim_only = True
-                        obj.modifiers["Solidify"].show_expanded = False
+                    else:
+                        obj.modifiers["Solidify"].use_rim_only = False
 
-                        mod = obj.modifiers.get("Mirror")
-                        if mod is None:
-                            obj.modifiers.new(name='Mirror', type='MIRROR')
+                if mod_mirror == True:
+                    mod = obj.modifiers.get("Mirror")
+                    if mod is None:
+                        obj.modifiers.new(name='Mirror', type='MIRROR')
 
-                    obj.modifiers["Mirror"].use_axis[0] = False
+                        obj.modifiers["Mirror"].use_axis[0] = False
 
-                    if axis_mode == "X":
-                        obj.modifiers["Mirror"].use_axis[0] = True
-                        obj.modifiers["Mirror"].use_bisect_axis[0] = True
-                    elif axis_mode == "Y":
-                        obj.modifiers["Mirror"].use_axis[1] = True
-                        obj.modifiers["Mirror"].use_bisect_axis[1] = True
-                    elif axis_mode == "Z":
-                        obj.modifiers["Mirror"].use_axis[2] = True
-                        obj.modifiers["Mirror"].use_bisect_axis[2] = True
-                    
-                    obj.modifiers["Mirror"].use_clip = True
-                    obj.modifiers["Mirror"].show_expanded = False
-                else:
-                    if mod_solid == True:
-
-                        mod = obj.modifiers.get("Solidify")
-                        if mod is None:
-                            obj.modifiers.new(name='Solidify', type='SOLIDIFY')
-
-                        obj.modifiers["Solidify"].offset = solid_offset
-                        obj.modifiers["Solidify"].thickness = solid_thickness
-                        obj.modifiers["Solidify"].use_even_offset = True
-                        obj.modifiers["Solidify"].use_quality_normals = True
-                        obj.modifiers["Solidify"].show_expanded = False
+                        if axis_mode == "X":
+                            obj.modifiers["Mirror"].use_axis[0] = True
+                            obj.modifiers["Mirror"].use_bisect_axis[0] = True
+                        elif axis_mode == "Y":
+                            obj.modifiers["Mirror"].use_axis[1] = True
+                            obj.modifiers["Mirror"].use_bisect_axis[1] = True
+                        elif axis_mode == "Z":
+                            obj.modifiers["Mirror"].use_axis[2] = True
+                            obj.modifiers["Mirror"].use_bisect_axis[2] = True
+                        
+                        obj.modifiers["Mirror"].show_expanded = False
                 
                 if mod_bevel == True:
 
@@ -165,22 +155,9 @@ class MOD_Object_OT_Operator(bpy.types.Operator):
                     obj.modifiers["Screw"].use_merge_vertices = True
 
                 if mod_mirror == True:
-                    if mod_solid == True:
-
-                        mod = obj.modifiers.get("Solidify")
-                        if mod is None:
-                            obj.modifiers.new(name='Solidify', type='SOLIDIFY')
-
-                        obj.modifiers["Solidify"].offset = solid_offset
-                        obj.modifiers["Solidify"].thickness = solid_thickness
-                        obj.modifiers["Solidify"].use_even_offset = True
-                        obj.modifiers["Solidify"].use_quality_normals = True
-                        obj.modifiers["Solidify"].use_rim_only = True
-                        obj.modifiers["Solidify"].show_expanded = False
-
-                        mod = obj.modifiers.get("Mirror")
-                        if mod is None:
-                            obj.modifiers.new(name='Mirror', type='MIRROR')
+                    mod = obj.modifiers.get("Mirror")
+                    if mod is None:
+                        obj.modifiers.new(name='Mirror', type='MIRROR')
 
                     obj.modifiers["Mirror"].use_axis[0] = False
 
@@ -196,18 +173,22 @@ class MOD_Object_OT_Operator(bpy.types.Operator):
                     
                     obj.modifiers["Mirror"].use_clip = True
                     obj.modifiers["Mirror"].show_expanded = False
-                else:
-                    if mod_solid == True:
 
-                        mod = obj.modifiers.get("Solidify")
-                        if mod is None:
-                            obj.modifiers.new(name='Solidify', type='SOLIDIFY')
+                if mod_solid == True:
+                    mod = obj.modifiers.get("Solidify")
+                    if mod is None:
+                        obj.modifiers.new(name='Solidify', type='SOLIDIFY')
 
-                        obj.modifiers["Solidify"].offset = solid_offset
-                        obj.modifiers["Solidify"].thickness = solid_thickness
-                        obj.modifiers["Solidify"].use_even_offset = True
-                        obj.modifiers["Solidify"].use_quality_normals = True
-                        obj.modifiers["Solidify"].show_expanded = False
+                    obj.modifiers["Solidify"].offset = solid_offset
+                    obj.modifiers["Solidify"].thickness = solid_thickness
+                    obj.modifiers["Solidify"].use_even_offset = True
+                    obj.modifiers["Solidify"].use_quality_normals = True
+                    obj.modifiers["Solidify"].show_expanded = False
+
+                    if mod_mirror == True:
+                        obj.modifiers["Solidify"].use_rim_only = True
+                    else:
+                        obj.modifiers["Solidify"].use_rim_only = False
                 
                 if mod_bevel == True:
 

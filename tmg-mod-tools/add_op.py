@@ -48,6 +48,11 @@ class ADD_Solid_Plane_Object_OT_Operator(bpy.types.Operator):
             bpy.context.object.modifiers["Solidify"].show_on_cage = True
             bpy.context.object.modifiers["Solidify"].show_expanded = False
         
+            if mod_mirror == True:
+                bpy.context.object.modifiers["Solidify"].use_rim_only = True
+            else:
+                bpy.context.object.modifiers["Solidify"].use_rim_only = False
+
         if mod_mirror == True:
             bpy.ops.object.modifier_add(type='MIRROR')
             bpy.context.object.modifiers["Mirror"].use_axis[0] = False
@@ -132,6 +137,28 @@ class ADD_Solid_Circle_Object_OT_Operator(bpy.types.Operator):
             bpy.context.object.modifiers["Solidify"].thickness = solid_thickness
             bpy.context.object.modifiers["Solidify"].show_on_cage = True
             bpy.context.object.modifiers["Solidify"].show_expanded = False
+
+            if mod_mirror == True:
+                bpy.context.object.modifiers["Solidify"].use_rim_only = True
+            else:
+                bpy.context.object.modifiers["Solidify"].use_rim_only = False
+
+        if mod_mirror == True:
+            bpy.ops.object.modifier_add(type='MIRROR')
+            bpy.context.object.modifiers["Mirror"].use_axis[0] = False
+
+            if axis_mode == "X":
+                bpy.context.object.modifiers["Mirror"].use_axis[0] = True
+                bpy.context.object.modifiers["Mirror"].use_bisect_axis[0] = True
+            elif axis_mode == "Y":
+                bpy.context.object.modifiers["Mirror"].use_axis[1] = True
+                bpy.context.object.modifiers["Mirror"].use_bisect_axis[1] = True
+            elif axis_mode == "Z":
+                bpy.context.object.modifiers["Mirror"].use_axis[2] = True
+                bpy.context.object.modifiers["Mirror"].use_bisect_axis[2] = True
+            
+            bpy.context.object.modifiers["Mirror"].use_clip = True
+            bpy.context.object.modifiers["Mirror"].show_expanded = False
 
         if mod_bevel == True:
             bpy.ops.object.modifier_add(type='BEVEL')

@@ -258,6 +258,7 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
         check_adds = context.scene.check_adds
         check_splines = context.scene.check_splines
         check_decimations = context.scene.check_decimations
+        check_tools = context.scene.check_tools
 
         axis_mode = context.scene.axis_mod
         mod_solid = context.scene.mod_solid
@@ -506,6 +507,33 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
 
                 DecTools_Col = DecTools_ColM.row()
                 DecTools_Col.operator('wm.dec_verts_ot_operator', text='Decimate Verts')
+
+
+        #### Tools Tab  ######################################
+
+        Tools_Col = Master_Col.column(align=True)
+        Tools_SubCol = Tools_Col.column()
+        Tools_Row = Tools_Col.row()
+
+        #### Tools Tab  ##########################################################################################################
+
+        if check_tools == False:
+            Tools_Col.prop(context.scene, "check_tools", text="Tools", icon="RIGHTARROW")
+        else:
+            Tools_Col.prop(context.scene, "check_tools", text="Tools", icon="DOWNARROW_HLT")
+
+            Tools_Col = Master_Col.column() ###### Box if needed for Settings Panel #############
+            Tools_SubCol = Tools_Col.column(align=True)
+
+            Tools_Col.use_property_split = True
+            Tools_Flow = Tools_Col.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
+
+            Tools_ColM = Tools_Flow.column()
+
+            Tools_Col = Tools_ColM.row()
+
+            Tools_Col = Tools_ColM.row()
+            Tools_Col.operator('wm.tool_inset_edit_ot_operator', text='Inset individual faces')
 
 
     #objectmode
