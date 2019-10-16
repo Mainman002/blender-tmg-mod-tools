@@ -533,7 +533,22 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
             Tools_Col = Tools_ColM.row()
 
             Tools_Col = Tools_ColM.row()
-            Tools_Col.operator('wm.tool_inset_edit_ot_operator', text='Inset individual faces')
+            Tools_Col.operator('wm.tool_inset_edit_ot_operator', text='Inset faces')
+
+            Tools_ColM = Tools_Flow.column()
+
+            Tools_Col = Tools_ColM.row()
+            Tools_Col.operator('wm.tool_inset_depth_edit_ot_operator', text='Inset faces with depth')
+
+            Tools_ColM = Tools_Flow.column()
+
+            Tools_Col = Tools_ColM.row()
+            Tools_Col.operator('wm.tool_inset_individual_edit_ot_operator', text='Inset individual faces')
+
+            Tools_ColM = Tools_Flow.column()
+
+            Tools_Col = Tools_ColM.row()
+            Tools_Col.operator('wm.tool_bevel_edge_edit_ot_operator', text='Bevel selected')
 
 
     #objectmode
