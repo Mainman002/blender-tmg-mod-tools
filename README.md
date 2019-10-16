@@ -5,7 +5,7 @@
 
 ### Release zip here -> 
 
-![v0.1.1 Release](https://github.com/Mainman002/blender-decimate-tools/releases/tag/0.1.1)
+![v0.1.3 Release](https://github.com/Mainman002/blender-decimate-tools/releases/tag/0.1.3)
 
 ### youtube video showing what it can do -> 
 
