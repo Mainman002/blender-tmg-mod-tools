@@ -20,6 +20,7 @@ class ADD_Solid_Plane_Object_OT_Operator(bpy.types.Operator):
     bl_idname = 'wm.add_solid_plane_object_ot_operator'
     bl_label = 'Decimate Panel'
     bl_description = 'Add Solid Plane.'
+    bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
 
@@ -108,6 +109,7 @@ class ADD_Solid_Circle_Object_OT_Operator(bpy.types.Operator):
     bl_idname = 'wm.add_solid_circle_object_ot_operator'
     bl_label = 'Decimate Panel'
     bl_description = 'Add Solid Circle.'
+    bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
 
@@ -197,6 +199,7 @@ class ADD_Arch_Object_X_OT_Operator(bpy.types.Operator):
     bl_idname = 'wm.add_arch_object_x_ot_operator'
     bl_label = 'Decimate Panel'
     bl_description = 'Add Arch.'
+    bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
 
@@ -268,6 +271,7 @@ class ADD_Arch_Object_Y_OT_Operator(bpy.types.Operator):
     bl_idname = 'wm.add_arch_object_y_ot_operator'
     bl_label = 'Decimate Panel'
     bl_description = 'Add Arch.'
+    bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
 
@@ -336,6 +340,7 @@ class ADD_Arch_Object_Z_OT_Operator(bpy.types.Operator):
     bl_idname = 'wm.add_arch_object_z_ot_operator'
     bl_label = 'Decimate Panel'
     bl_description = 'Add Arch.'
+    bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
 
@@ -406,6 +411,7 @@ class ADD_Pipe_Line_Object_Y_OT_Operator(bpy.types.Operator):
     bl_idname = 'wm.add_pipe_line_object_y_ot_operator'
     bl_label = 'Decimate Panel'
     bl_description = 'Add Spiral Line.'
+    bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
 
@@ -483,6 +489,7 @@ class ADD_Pipe_Line_Object_Z_OT_Operator(bpy.types.Operator):
     bl_idname = 'wm.add_pipe_line_object_z_ot_operator'
     bl_label = 'Decimate Panel'
     bl_description = 'Add Spiral Line.'
+    bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
 
@@ -568,6 +575,7 @@ class ADD_Basic_Spline_Y_OT_Operator(bpy.types.Operator):
     bl_idname = 'wm.add_basic_spline_y_ot_operator'
     bl_label = 'Decimate Panel'
     bl_description = 'Add Spline.'
+    bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
 
@@ -630,6 +638,7 @@ class ADD_Pipe_Spline_Y_OT_Operator(bpy.types.Operator):
     bl_idname = 'wm.add_pipe_spline_y_ot_operator'
     bl_label = 'Decimate Panel'
     bl_description = 'Add Solidified Spline.'
+    bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
 
@@ -706,6 +715,7 @@ class ADD_Spline_Folow_Y_OT_Operator(bpy.types.Operator):
     bl_idname = 'wm.add_spline_folow_y_ot_operator'
     bl_label = 'Decimate Panel'
     bl_description = 'Add cube following spline path.'
+    bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
 

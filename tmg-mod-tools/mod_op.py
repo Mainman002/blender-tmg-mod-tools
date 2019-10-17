@@ -1,12 +1,11 @@
 import bpy
 
-#bpy.ops.object.convert(target='MESH')
-
 
 class MOD_Apply_Object_OT_Operator(bpy.types.Operator):
     bl_idname = 'wm.mod_apply_object_ot_operator'
     bl_label = 'Decimate Panel'
     bl_description = 'Apply Modifiers to object.'
+    bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
 
@@ -32,11 +31,13 @@ class MOD_Object_OT_Operator(bpy.types.Operator):
     bl_idname = 'wm.mod_object_ot_operator'
     bl_label = 'Decimate Panel'
     bl_description = 'Add Modifiers to object.'
+    bl_options = {'REGISTER', 'UNDO'}
 
     def execute(self, context):
 
         solid_offset = context.scene.solid_offset
         solid_thickness = context.scene.solid_thickness
+        bevel_width = context.scene.bevel_width
 
         axis_mode = context.scene.axis_mod
         mod_screw = context.scene.mod_screw
@@ -106,7 +107,7 @@ class MOD_Object_OT_Operator(bpy.types.Operator):
                     obj.modifiers["Bevel"].segments = 3
                     obj.modifiers["Bevel"].limit_method = 'ANGLE'
                     obj.modifiers["Bevel"].angle_limit = 0.785398
-                    obj.modifiers["Bevel"].width = 0.035
+                    obj.modifiers["Bevel"].width = bevel_width
                     obj.modifiers["Bevel"].offset_type = 'WIDTH'
                     obj.modifiers["Bevel"].miter_outer = 'MITER_ARC'
                     obj.modifiers["Bevel"].show_expanded = False
@@ -199,7 +200,7 @@ class MOD_Object_OT_Operator(bpy.types.Operator):
                     obj.modifiers["Bevel"].segments = 3
                     obj.modifiers["Bevel"].limit_method = 'ANGLE'
                     obj.modifiers["Bevel"].angle_limit = 0.785398
-                    obj.modifiers["Bevel"].width = 0.035
+                    obj.modifiers["Bevel"].width = bevel_width
                     obj.modifiers["Bevel"].offset_type = 'WIDTH'
                     obj.modifiers["Bevel"].miter_outer = 'MITER_ARC'
                     obj.modifiers["Bevel"].show_expanded = False
