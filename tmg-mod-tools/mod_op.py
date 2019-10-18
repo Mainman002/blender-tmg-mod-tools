@@ -13,14 +13,16 @@ class MOD_Apply_Object_OT_Operator(bpy.types.Operator):
 
         for nr, obj in enumerate(bpy.context.selected_objects):
 
-            types = obj.type
+            if obj is not "empty":
+                types = obj.type
 
-            if bpy.context.object.mode == "OBJECT":
-                bpy.ops.object.convert(target='MESH')
-            elif bpy.context.object.mode == "EDIT":
-                bpy.ops.object.mode_set(mode="OBJECT")
-                bpy.ops.object.convert(target='MESH')
-                bpy.ops.object.mode_set(mode="EDIT")
+                if types == "MESH":
+                    if bpy.context.object.mode == "OBJECT":
+                        bpy.ops.object.convert(target='MESH')
+                    elif bpy.context.object.mode == "EDIT":
+                        bpy.ops.object.mode_set(mode="OBJECT")
+                        bpy.ops.object.convert(target='MESH')
+                        bpy.ops.object.mode_set(mode="EDIT")
 
 
         return {'FINISHED'}
