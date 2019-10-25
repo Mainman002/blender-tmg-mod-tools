@@ -28,21 +28,30 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
         solid_offset = context.scene.solid_offset
         solid_thickness = context.scene.solid_thickness
         bevel_width = context.scene.bevel_width
+        bevel_segments = context.scene.bevel_segments
         #bevel_width = context.object.modifiers["Bevel"].width
         #bevel_width = context.object.modifiers["Bevel"].width
 
         check_view = context.scene.check_view
         check_modifiers = context.scene.check_modifiers
+        check_modSettings = context.scene.check_modSettings
         check_mods = context.scene.check_mods
         check_adds = context.scene.check_adds
         check_splines = context.scene.check_splines
 
         axis_mode = context.scene.axis_mod
+        angle_limit = context.scene.angle_limit
         mod_solid = context.scene.mod_solid
         mod_bevel = context.scene.mod_bevel
         mod_subsurf = context.scene.mod_subsurf
+        subsurf_vlevel = context.scene.subsurf_vlevel
+        subsurf_rlevel = context.scene.subsurf_rlevel
+        mod_triangulate = context.scene.mod_triangulate
+        mod_weightednormals = context.scene.mod_weightednormals
 
         ui_viewMode = context.scene.ui_viewMode
+        ui_wireMode = context.scene.ui_wireMode
+        view_mod = context.scene.view_mod
 
         scene = context.scene
 
@@ -79,26 +88,34 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
             View_Col.use_property_split = True
             View_Flow = View_Col.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
 
-            colm = View_Flow.column()
+            colm = View_Flow.box()
 
             View_Col = colm.row()
             View_Col.label(text="Apply Modifiers:")
             View_Col.operator('wm.mod_apply_object_ot_operator', text='', icon='MODIFIER')
 
-            #colm = View_Flow.column()
-
-            #View_Col = colm.row()
-            #View_Col.label(text="Update Modifiers:")
-            #View_Col.operator('object.bevel_width', text='', icon='MODIFIER')
-            #View_Col.operator('update_bevel', text='Updater', icon='MODIFIER')
-            #View_Col.operator("object.mod_update_ot", text='Updater')
-            #self.View_Col.prop(bpy.types.Scene, "testprop")
-
-            colm = View_Flow.column()
+            colm = View_Flow.box()
 
             View_Col = colm.row()
             View_Col.label(text="Distraction Free View:")
             View_Col.operator('wm.ui_distraction_free_ot_operator', text='', icon='RESTRICT_RENDER_OFF')
+
+            colm = View_Flow.box()
+
+            View_Col = colm.row()
+            View_Col.label(text="Wireframe View:")
+            View_Col.operator('wm.ui_wireframe_ot_operator', text='', icon='SHADING_WIRE')
+
+            colm = View_Flow.box()
+
+            View_Col = colm.row()
+            View_Col.label(text="Object View:")
+
+            #colm = View_Flow.box()
+
+            #View_Col = colm.row()
+            View_Col.prop(context.scene, "view_mod", text="")
+            View_Col.operator('wm.ui_view_mode_ot_operator', text='', icon='MOD_BOOLEAN')
 
         #### Modifiers Tab Panel Layout Controllers #########################
 
@@ -113,67 +130,12 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
         else:
             Modifiers_Col.prop(context.scene, "check_modifiers", text="Modifiers", icon="DOWNARROW_HLT")
 
-            Modifiers_Col = Master_Col.column() ###### Box if needed for Modifiers Panel #############
-            Modifiers_Subcol = Modifiers_Col.column(align=True)
-
-            Modifiers_Row = Modifiers_Subcol.row()
-            Modifiers_Row.label(text="Mod Axis:")
-
-            Modifiers_Row = Modifiers_Subcol.row()
-            Modifiers_Row.prop(context.scene, "axis_mod", text="")
-
-            Modifiers_Row = Modifiers_Subcol.row()
-            Modifiers_Row.label(text="Solidify:")
-
-            Modifiers_Row = Modifiers_Subcol.column()
-
-            Modifiers_Col.use_property_split = True
-            Modifiers_Flow = Modifiers_Col.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
-
-            colm = Modifiers_Flow.column()
-
-            Modifiers_Col = colm.row()
-            Modifiers_Col.label(text="Offset")
-            Modifiers_Col.prop(context.scene, "solid_offset", text="")
-
-            #colm = Modifiers_Flow.column()
-
-            #Modifiers_Col = colm.row()
-            #Modifiers_Col.label(text="Bevel Width")
-            #Modifiers_Col.prop(context.scene, "bevel_width", text="", slider=True)
-
-            #colm = Modifiers_Flow.column()
-
-            #Modifiers_Col = colm.row()
-            #Modifiers_Col.prop(context.scene, "bevel_width", expand=True)
-
-            #colm = Modifiers_Flow.column()
-
-            #Modifiers_Col = colm.row()
-            #Modifiers_Col.prop(context.object.modifiers["Bevel"], "width", text="Bevel width", slider=True)
-
-            #colm = Modifiers_Flow.column()
-
-            #Modifiers_Col = colm.row()
-            #Modifiers_Col.prop(scene, "frame_start")
-            #mod = obj.modifiers.get("Bevel")
-            #if mod is None:
-                #return
-            #else:
-                #Modifiers_Col.prop(context.object.modifiers["Bevel"], "width", text="Bevel width", slider=True)
-
-            colm = Modifiers_Flow.column()
-
-            Modifiers_Col = colm.row()
-            Modifiers_Col.label(text="Thickness")
-            Modifiers_Col.prop(context.scene, "solid_thickness", text="")
-
-            Modifiers_Col = Master_Col.column()  ###### Box if needed for Modifiers Panel #############
+            Modifiers_Col = Master_Col.box()  ###### Box if needed for Modifiers Panel #############
 
             if context.view_layer.objects.active:
 
                 Modifiers_Col.operator('wm.mod_object_ot_operator', text='Add Modifiers', icon="MODIFIER")
- 
+
             Modifiers_Col.use_property_split = True
             Modifiers_Flow2 = Modifiers_Col.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=False, align=True)
 
@@ -203,7 +165,158 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
             Modifiers_Col.label(text="Bevel")
             Modifiers_Col.prop(context.scene, "mod_bevel", text="", icon="MOD_BEVEL")
 
+            Modifiers_Col = Mod_ColM.row()
+            Modifiers_Col.label(text="Triangulate")
+            Modifiers_Col.prop(context.scene, "mod_triangulate", text="", icon="MOD_TRIANGULATE")
+
             Mod_ColM = Modifiers_Flow2.column()
+
+            Modifiers_Col = Mod_ColM.row()
+            Modifiers_Col.label(text="Normal Edit")
+            Modifiers_Col.prop(context.scene, "mod_weightednormals", text="", icon="MOD_NORMALEDIT")
+
+            Mod_ColM = Modifiers_Flow2.column()
+
+        #### Modifier Settings Tab Panel Layout Controllers #########################
+
+        ModSettings_Col = Master_Col.column(align=True)
+        ModSettings_Subcol = ModSettings_Col.column()
+        ModSettings_Row = ModSettings_Col.row()
+
+        #### Modifier Settings Tab  ############################################################################################################
+
+        if check_modSettings == False:
+            ModSettings_Col.prop(context.scene, "check_modSettings", text="Mod Settings", icon="RIGHTARROW")
+        else:
+            ModSettings_Col.prop(context.scene, "check_modSettings", text="Mod Settings", icon="DOWNARROW_HLT")
+
+            ModSettings_Col = Master_Col.column() ###### Box if needed for Modifiers Panel #############
+            ModSettings_Subcol = ModSettings_Col.column(align=True)
+
+            ModSettings_Row = ModSettings_Subcol.row() #angle_limit
+            ModSettings_Row.label(text="Global Settings:")
+
+            ModSettings_Row = ModSettings_Subcol.box()
+
+            ModSettings_Row.use_property_split = True
+            ModSettings_Flow = ModSettings_Row.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
+
+            colm = ModSettings_Flow.column()
+
+            ModSettings_Col = colm.row()
+            ModSettings_Col.label(text="Mod Axis:")
+
+            colm = ModSettings_Flow.column()
+
+            ModSettings_Col = colm.row()
+            ModSettings_Col.prop(context.scene, "axis_mod", text="")
+
+            colm = ModSettings_Flow.column()
+
+            ModSettings_Col = colm.row()
+            ModSettings_Col.label(text="Angle Limit:")
+
+            colm = ModSettings_Flow.column()
+
+            ModSettings_Col = colm.row()
+            ModSettings_Col.prop(context.scene, "angle_limit", text="")
+
+            if mod_solid == True:
+
+                ModSettings_Col = Master_Col.column() ###### Box if needed for Modifiers Panel #############
+                ModSettings_Subcol = ModSettings_Col.column(align=True)
+
+                ModSettings_Row = ModSettings_Subcol.row() #angle_limit
+                ModSettings_Row.label(text="Solidify:")
+
+                ModSettings_Row = ModSettings_Subcol.box()
+
+                ModSettings_Row.use_property_split = True
+                ModSettings_Flow = ModSettings_Row.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
+
+                colm = ModSettings_Flow.column()
+
+                ModSettings_Col = colm.row()
+                ModSettings_Col.label(text="Offset")
+
+                colm = ModSettings_Flow.column()
+
+                ModSettings_Col = colm.row()
+                ModSettings_Col.prop(context.scene, "solid_offset", text="")
+
+                colm = ModSettings_Flow.column()
+
+                ModSettings_Col = colm.row()
+                ModSettings_Col.label(text="Thickness")
+
+                colm = ModSettings_Flow.column()
+
+                ModSettings_Col = colm.row()
+                ModSettings_Col.prop(context.scene, "solid_thickness", text="")
+
+            if mod_subsurf == True:
+                ModSettings_Col = Master_Col.column() ###### Box if needed for Modifiers Panel #############
+                ModSettings_Subcol = ModSettings_Col.column(align=True)
+
+                ModSettings_Row = ModSettings_Subcol.row() #angle_limit
+                ModSettings_Row.label(text="Subsurf:")
+
+                ModSettings_Row = ModSettings_Subcol.box()
+
+                ModSettings_Row.use_property_split = True
+                ModSettings_Flow = ModSettings_Row.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
+
+                colm = ModSettings_Flow.column()
+
+                ModSettings_Col = colm.row()
+                ModSettings_Col.label(text="View")
+
+                colm = ModSettings_Flow.column()
+
+                ModSettings_Col = colm.row()
+                ModSettings_Col.prop(context.scene, "subsurf_vlevel", text="")
+
+                colm = ModSettings_Flow.column()
+
+                ModSettings_Col = colm.row()
+                ModSettings_Col.label(text="Render")
+
+                colm = ModSettings_Flow.column()
+
+                ModSettings_Col = colm.row()
+                ModSettings_Col.prop(context.scene, "subsurf_rlevel", text="")
+
+            if mod_bevel == True:
+                ModSettings_Col = Master_Col.column() ###### Box if needed for Modifiers Panel #############
+                ModSettings_Subcol = ModSettings_Col.column(align=True)
+
+                ModSettings_Row = ModSettings_Subcol.row() #angle_limit
+                ModSettings_Row.label(text="Bevel:")
+
+                ModSettings_Row = ModSettings_Subcol.box()
+
+                ModSettings_Row.use_property_split = True
+                ModSettings_Flow = ModSettings_Row.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
+
+                colm = ModSettings_Flow.column()
+
+                ModSettings_Col = colm.row()
+                ModSettings_Col.label(text="Segments")
+
+                colm = ModSettings_Flow.column()
+
+                ModSettings_Col = colm.row()
+                ModSettings_Col.prop(context.scene, "bevel_segments", text="")
+
+                colm = ModSettings_Flow.column()
+
+                ModSettings_Col = colm.row()
+                ModSettings_Col.label(text="Width")
+
+                colm = ModSettings_Flow.column()
+
+                ModSettings_Col = colm.row()
+                ModSettings_Col.prop(context.scene, "bevel_width", text="")
 
         #### Add Objects Tab Panel Layout Controllers #########################
 
@@ -218,48 +331,55 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
         else:
             AddObjects_Col.prop(context.scene, "check_adds", text="Add Objects", icon="DOWNARROW_HLT")
 
-            AddObjects_Col = Master_Col.column() ###### Box if needed for Add Objects Panel #############
-            AddObjects_SubCol = AddObjects_Col.column(align=True)
+            View_Col = Master_Col.column() ###### Box if needed for View Panel #############
+            View_Subcol = View_Col.column(align=True)
 
-            AddObjects_Col.use_property_split = True
-            AddObjects_Flow = AddObjects_Col.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
+            View_Col.use_property_split = True
+            View_Flow = View_Col.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
 
-            AddObjects_ColM = AddObjects_Flow.column()
+            colm = View_Flow.box()
 
-            AddObjects_Col = AddObjects_ColM.row()
-            AddObjects_Col.operator('wm.add_solid_plane_object_ot_operator', text='Add Plane Object')
+            View_Col = colm.row()
+            View_Col.label(text="Add Plane")
+            View_Col.operator('wm.add_solid_plane_object_ot_operator', text='', icon='MESH_PLANE')
 
-            AddObjects_ColM = AddObjects_Flow.column()
+            colm = View_Flow.box()
 
-            AddObjects_Col = AddObjects_ColM.row()
-            AddObjects_Col.operator('wm.add_solid_circle_object_ot_operator', text='Add Circle Object')
+            View_Col = colm.row()
+            View_Col.label(text="Add Circle")
+            View_Col.operator('wm.add_solid_circle_object_ot_operator', text='', icon='MESH_CIRCLE')
 
-            AddObjects_ColM = AddObjects_Flow.column()
+            colm = View_Flow.box()
 
             if axis_mode == "X": # Y
 
-                AddObjects_Col = AddObjects_ColM.row()
-                AddObjects_Col.operator('wm.add_arch_object_x_ot_operator', text='Add Arch Object')
+                View_Col = colm.row()
+                View_Col.label(text="Add Arch")
+                View_Col.operator('wm.add_arch_object_x_ot_operator', text='', icon='SURFACE_NCURVE')
 
             elif axis_mode == "Y": # Y
 
-                AddObjects_Col = AddObjects_ColM.row()
-                AddObjects_Col.operator('wm.add_arch_object_y_ot_operator', text='Add Arch Object')
+                View_Col = colm.row()
+                View_Col.label(text="Add Arch")
+                View_Col.operator('wm.add_arch_object_y_ot_operator', text='', icon='SURFACE_NCURVE')
 
-                AddObjects_ColM = AddObjects_Flow.column()
+                colm = View_Flow.box()
 
-                AddObjects_Col = AddObjects_ColM.row() 
-                AddObjects_Col.operator('wm.add_pipe_line_object_y_ot_operator', text='Add Pipe Object')
+                View_Col = colm.row()
+                View_Col.label(text="Add Pipe")
+                View_Col.operator('wm.add_pipe_line_object_y_ot_operator', text='', icon='OUTLINER_OB_CURVE')
 
             elif axis_mode == "Z": # Z
 
-                AddObjects_Col = AddObjects_ColM.row()
-                AddObjects_Col.operator('wm.add_arch_object_z_ot_operator', text='Add Arch Object')
+                View_Col = colm.row()
+                View_Col.label(text="Add Arch")
+                View_Col.operator('wm.add_arch_object_z_ot_operator', text='', icon='SURFACE_NCURVE')
 
-                AddObjects_ColM = AddObjects_Flow.column()
+                colm = View_Flow.box()
 
-                AddObjects_Col = AddObjects_ColM.row()
-                AddObjects_Col.operator('wm.add_pipe_line_object_z_ot_operator', text='Add Pipe Object')
+                View_Col = colm.row()
+                View_Col.label(text="Add Pipe")
+                View_Col.operator('wm.add_pipe_line_object_z_ot_operator', text='', icon='OUTLINER_OB_CURVE')
 
         #### Add Splines Tab Panel Layout Controllers #########################
 
@@ -282,11 +402,17 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
                 AddSplines_Col.use_property_split = True
                 AddSplines_Flow = AddSplines_Col.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
 
-                AddSplines_Col = AddSplines_Flow.row()
-                AddSplines_Col.operator('wm.add_basic_spline_y_ot_operator', text='Add Basic Spline')
+                colm = AddSplines_Flow.box()
 
-                AddSplines_Col = AddSplines_Flow.row()
-                AddSplines_Col.operator('wm.add_pipe_spline_y_ot_operator', text='Add Smooth Spline')
+                AddSplines_Col = colm.row()
+                AddSplines_Col.label(text="Add Basic Spline")
+                AddSplines_Col.operator('wm.add_basic_spline_y_ot_operator', text='', icon='CURVE_PATH')
+
+                colm = AddSplines_Flow.box()
+
+                AddSplines_Col = colm.row()
+                AddSplines_Col.label(text="Add Smooth Spline")
+                AddSplines_Col.operator('wm.add_pipe_spline_y_ot_operator', text='', icon='CURVE_BEZCURVE')
 
                 #AddSplines_Col = AddSplines_Flow.row()
                 #AddSplines_Col.operator('wm.add_spline_folow_y_ot_operator', text='Add Spline Follow Cube')
@@ -314,6 +440,7 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
 
         check_view = context.scene.check_view
         check_modifiers = context.scene.check_modifiers
+        check_modSettings = context.scene.check_modSettings
         check_mods = context.scene.check_mods
         check_adds = context.scene.check_adds
         check_splines = context.scene.check_splines
@@ -327,7 +454,16 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
         axis_mode = context.scene.axis_mod
         mod_solid = context.scene.mod_solid
         mod_bevel = context.scene.mod_bevel
+        bevel_segments = context.scene.bevel_segments
         mod_subsurf = context.scene.mod_subsurf
+        subsurf_vlevel = context.scene.subsurf_vlevel
+        subsurf_rlevel = context.scene.subsurf_rlevel
+        mod_triangulate = context.scene.mod_triangulate
+        mod_weightednormals = context.scene.mod_weightednormals
+
+        ui_viewMode = context.scene.ui_viewMode
+        ui_wireMode = context.scene.ui_wireMode
+        view_mod = context.scene.view_mod
 
         layout = self.layout
 
@@ -358,17 +494,34 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
             View_Col.use_property_split = True
             View_Flow = View_Col.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
 
-            colm = View_Flow.column()
+            colm = View_Flow.box()
 
             View_Col = colm.row()
             View_Col.label(text="Apply Modifiers:")
             View_Col.operator('wm.mod_apply_object_ot_operator', text='', icon='MODIFIER')
 
-            colm = View_Flow.column()
+            colm = View_Flow.box()
 
             View_Col = colm.row()
             View_Col.label(text="Distraction Free View:")
             View_Col.operator('wm.ui_distraction_free_ot_operator', text='', icon='RESTRICT_RENDER_OFF')
+
+            colm = View_Flow.box()
+
+            View_Col = colm.row()
+            View_Col.label(text="Wireframe View:")
+            View_Col.operator('wm.ui_wireframe_ot_operator', text='', icon='SHADING_WIRE')
+
+            colm = View_Flow.box()
+
+            View_Col = colm.row()
+            View_Col.label(text="Object View:")
+
+            #colm = View_Flow.box()
+
+            #View_Col = colm.row()
+            View_Col.prop(context.scene, "view_mod", text="")
+            View_Col.operator('wm.ui_view_mode_ot_operator', text='', icon='MOD_BOOLEAN')
 
         #### Modifiers Tab Panel Layout Controllers #########################
 
@@ -383,43 +536,12 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
         else:
             Modifiers_Col.prop(context.scene, "check_modifiers", text="Modifiers", icon="DOWNARROW_HLT")
 
-            Modifiers_Col = Master_Col.column() ###### Box if needed for Modifiers Panel #############
-            Modifiers_Subcol = Modifiers_Col.column(align=True)
-
-            Modifiers_Row = Modifiers_Subcol.row()
-            Modifiers_Row.label(text="Mod Axis:")
-
-            Modifiers_Row = Modifiers_Subcol.row()
-            Modifiers_Row.prop(context.scene, "axis_mod", text="")
-
-            Modifiers_Row = Modifiers_Subcol.row()
-            Modifiers_Row.label(text="Solidify:")
-
-            Modifiers_Row = Modifiers_Subcol.column()
-
-            Modifiers_Col.use_property_split = True
-            Modifiers_Flow = Modifiers_Col.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
-
-            colm = Modifiers_Flow.column()
-
-            Modifiers_Col = colm.row()
-            Modifiers_Col.label(text="Offset")
-            Modifiers_Col.prop(context.scene, "solid_offset", text="")
-
-            colm = Modifiers_Flow.column()
-
-            Modifiers_Col = colm.row()
-            Modifiers_Col.label(text="Thickness")
-            Modifiers_Col.prop(context.scene, "solid_thickness", text="")
-
-            Modifiers_Col = Master_Col.column()  ###### Box if needed for Modifiers Panel #############
+            Modifiers_Col = Master_Col.box()  ###### Box if needed for Modifiers Panel #############
 
             if context.view_layer.objects.active:
 
                 Modifiers_Col.operator('wm.mod_object_ot_operator', text='Add Modifiers', icon="MODIFIER")
 
-            Modifiers_Row = Modifiers_Col.column()
- 
             Modifiers_Col.use_property_split = True
             Modifiers_Flow2 = Modifiers_Col.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=False, align=True)
 
@@ -449,7 +571,158 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
             Modifiers_Col.label(text="Bevel")
             Modifiers_Col.prop(context.scene, "mod_bevel", text="", icon="MOD_BEVEL")
 
+            Modifiers_Col = Mod_ColM.row()
+            Modifiers_Col.label(text="Triangulate")
+            Modifiers_Col.prop(context.scene, "mod_triangulate", text="", icon="MOD_TRIANGULATE")
+
             Mod_ColM = Modifiers_Flow2.column()
+
+            Modifiers_Col = Mod_ColM.row()
+            Modifiers_Col.label(text="Normal Edit")
+            Modifiers_Col.prop(context.scene, "mod_weightednormals", text="", icon="MOD_NORMALEDIT")
+
+            Mod_ColM = Modifiers_Flow2.column()
+
+        #### Modifier Settings Tab Panel Layout Controllers #########################
+
+        ModSettings_Col = Master_Col.column(align=True)
+        ModSettings_Subcol = ModSettings_Col.column()
+        ModSettings_Row = ModSettings_Col.row()
+
+        #### Modifier Settings Tab  ############################################################################################################
+
+        if check_modSettings == False:
+            ModSettings_Col.prop(context.scene, "check_modSettings", text="Mod Settings", icon="RIGHTARROW")
+        else:
+            ModSettings_Col.prop(context.scene, "check_modSettings", text="Mod Settings", icon="DOWNARROW_HLT")
+
+            ModSettings_Col = Master_Col.column() ###### Box if needed for Modifiers Panel #############
+            ModSettings_Subcol = ModSettings_Col.column(align=True)
+
+            ModSettings_Row = ModSettings_Subcol.row() #angle_limit
+            ModSettings_Row.label(text="Global Settings:")
+
+            ModSettings_Row = ModSettings_Subcol.box()
+
+            ModSettings_Row.use_property_split = True
+            ModSettings_Flow = ModSettings_Row.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
+
+            colm = ModSettings_Flow.column()
+
+            ModSettings_Col = colm.row()
+            ModSettings_Col.label(text="Mod Axis:")
+
+            colm = ModSettings_Flow.column()
+
+            ModSettings_Col = colm.row()
+            ModSettings_Col.prop(context.scene, "axis_mod", text="")
+
+            colm = ModSettings_Flow.column()
+
+            ModSettings_Col = colm.row()
+            ModSettings_Col.label(text="Angle Limit:")
+
+            colm = ModSettings_Flow.column()
+
+            ModSettings_Col = colm.row()
+            ModSettings_Col.prop(context.scene, "angle_limit", text="")
+
+            if mod_solid == True:
+
+                ModSettings_Col = Master_Col.column() ###### Box if needed for Modifiers Panel #############
+                ModSettings_Subcol = ModSettings_Col.column(align=True)
+
+                ModSettings_Row = ModSettings_Subcol.row() #angle_limit
+                ModSettings_Row.label(text="Solidify:")
+
+                ModSettings_Row = ModSettings_Subcol.box()
+
+                ModSettings_Row.use_property_split = True
+                ModSettings_Flow = ModSettings_Row.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
+
+                colm = ModSettings_Flow.column()
+
+                ModSettings_Col = colm.row()
+                ModSettings_Col.label(text="Offset")
+
+                colm = ModSettings_Flow.column()
+
+                ModSettings_Col = colm.row()
+                ModSettings_Col.prop(context.scene, "solid_offset", text="")
+
+                colm = ModSettings_Flow.column()
+
+                ModSettings_Col = colm.row()
+                ModSettings_Col.label(text="Thickness")
+
+                colm = ModSettings_Flow.column()
+
+                ModSettings_Col = colm.row()
+                ModSettings_Col.prop(context.scene, "solid_thickness", text="")
+
+            if mod_subsurf == True:
+                ModSettings_Col = Master_Col.column() ###### Box if needed for Modifiers Panel #############
+                ModSettings_Subcol = ModSettings_Col.column(align=True)
+
+                ModSettings_Row = ModSettings_Subcol.row() #angle_limit
+                ModSettings_Row.label(text="Subsurf:")
+
+                ModSettings_Row = ModSettings_Subcol.box()
+
+                ModSettings_Row.use_property_split = True
+                ModSettings_Flow = ModSettings_Row.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
+
+                colm = ModSettings_Flow.column()
+
+                ModSettings_Col = colm.row()
+                ModSettings_Col.label(text="View")
+
+                colm = ModSettings_Flow.column()
+
+                ModSettings_Col = colm.row()
+                ModSettings_Col.prop(context.scene, "subsurf_vlevel", text="")
+
+                colm = ModSettings_Flow.column()
+
+                ModSettings_Col = colm.row()
+                ModSettings_Col.label(text="Render")
+
+                colm = ModSettings_Flow.column()
+
+                ModSettings_Col = colm.row()
+                ModSettings_Col.prop(context.scene, "subsurf_rlevel", text="")
+
+            if mod_bevel == True:
+                ModSettings_Col = Master_Col.column() ###### Box if needed for Modifiers Panel #############
+                ModSettings_Subcol = ModSettings_Col.column(align=True)
+
+                ModSettings_Row = ModSettings_Subcol.row() #angle_limit
+                ModSettings_Row.label(text="Bevel:")
+
+                ModSettings_Row = ModSettings_Subcol.box()
+
+                ModSettings_Row.use_property_split = True
+                ModSettings_Flow = ModSettings_Row.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
+
+                colm = ModSettings_Flow.column()
+
+                ModSettings_Col = colm.row()
+                ModSettings_Col.label(text="Segments")
+
+                colm = ModSettings_Flow.column()
+
+                ModSettings_Col = colm.row()
+                ModSettings_Col.prop(context.scene, "bevel_segments", text="")
+
+                colm = ModSettings_Flow.column()
+
+                ModSettings_Col = colm.row()
+                ModSettings_Col.label(text="Width")
+
+                colm = ModSettings_Flow.column()
+
+                ModSettings_Col = colm.row()
+                ModSettings_Col.prop(context.scene, "bevel_width", text="")
 
         #### Add Objects Tab  #############################################
 
@@ -464,48 +737,55 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
         else:
             AddObjects_Col.prop(context.scene, "check_adds", text="Add Objects", icon="DOWNARROW_HLT")
 
-            AddObjects_Col = Master_Col.column() ###### Box if needed for Settings Panel #############
-            AddObjects_SubCol = AddObjects_Col.column(align=True)
+            View_Col = Master_Col.column() ###### Box if needed for View Panel #############
+            View_Subcol = View_Col.column(align=True)
 
-            AddObjects_Col.use_property_split = True
-            AddObjects_Flow = AddObjects_Col.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
+            View_Col.use_property_split = True
+            View_Flow = View_Col.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
 
-            AddObjects_ColM = AddObjects_Flow.column()
+            colm = View_Flow.box()
 
-            AddObjects_Col = AddObjects_ColM.row()
-            AddObjects_Col.operator('wm.add_solid_plane_object_ot_operator', text='Add Plane Object')
+            View_Col = colm.row()
+            View_Col.label(text="Add Plane")
+            View_Col.operator('wm.add_solid_plane_object_ot_operator', text='', icon='MESH_PLANE')
 
-            AddObjects_ColM = AddObjects_Flow.column()
+            colm = View_Flow.box()
 
-            AddObjects_Col = AddObjects_ColM.row()
-            AddObjects_Col.operator('wm.add_solid_circle_object_ot_operator', text='Add Circle Object')
+            View_Col = colm.row()
+            View_Col.label(text="Add Circle")
+            View_Col.operator('wm.add_solid_circle_object_ot_operator', text='', icon='MESH_CIRCLE')
 
-            AddObjects_ColM = AddObjects_Flow.column()
+            colm = View_Flow.box()
 
             if axis_mode == "X": # Y
 
-                AddObjects_Col = AddObjects_ColM.row()
-                AddObjects_Col.operator('wm.add_arch_object_x_ot_operator', text='Add Arch Object')
+                View_Col = colm.row()
+                View_Col.label(text="Add Arch")
+                View_Col.operator('wm.add_arch_object_x_ot_operator', text='', icon='SURFACE_NCURVE')
 
             elif axis_mode == "Y": # Y
 
-                AddObjects_Col = AddObjects_ColM.row()
-                AddObjects_Col.operator('wm.add_arch_object_y_ot_operator', text='Add Arch Object')
+                View_Col = colm.row()
+                View_Col.label(text="Add Arch")
+                View_Col.operator('wm.add_arch_object_y_ot_operator', text='', icon='SURFACE_NCURVE')
 
-                AddObjects_ColM = AddObjects_Flow.column()
+                colm = View_Flow.box()
 
-                AddObjects_Col = AddObjects_ColM.row() 
-                AddObjects_Col.operator('wm.add_pipe_line_object_y_ot_operator', text='Add Pipe Object')
+                View_Col = colm.row()
+                View_Col.label(text="Add Pipe")
+                View_Col.operator('wm.add_pipe_line_object_y_ot_operator', text='', icon='OUTLINER_OB_CURVE')
 
             elif axis_mode == "Z": # Z
 
-                AddObjects_Col = AddObjects_ColM.row()
-                AddObjects_Col.operator('wm.add_arch_object_z_ot_operator', text='Add Arch Object')
+                View_Col = colm.row()
+                View_Col.label(text="Add Arch")
+                View_Col.operator('wm.add_arch_object_z_ot_operator', text='', icon='SURFACE_NCURVE')
 
-                AddObjects_ColM = AddObjects_Flow.column()
+                colm = View_Flow.box()
 
-                AddObjects_Col = AddObjects_ColM.row()
-                AddObjects_Col.operator('wm.add_pipe_line_object_z_ot_operator', text='Add Pipe Object')
+                View_Col = colm.row()
+                View_Col.label(text="Add Pipe")
+                View_Col.operator('wm.add_pipe_line_object_z_ot_operator', text='', icon='OUTLINER_OB_CURVE')
 
         #### Add Splines Tab  ######################################
 
@@ -522,17 +802,23 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
             if axis_mode == "Y": # Y:
                 AddSplines_Col.prop(context.scene, "check_splines", text="Add Splines", icon="DOWNARROW_HLT")
 
-                AddSplines_Col = Master_Col.column() ###### Box if needed for Settings Panel #############
+                AddSplines_Col = Master_Col.column() ###### Box if needed for Add Splines Panel #############
                 AddSplines_SubCol = AddSplines_Col.column(align=True)
 
                 AddSplines_Col.use_property_split = True
                 AddSplines_Flow = AddSplines_Col.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
 
-                AddSplines_Col = AddSplines_Flow.row()
-                AddSplines_Col.operator('wm.add_basic_spline_y_ot_operator', text='Add Basic Spline')
+                colm = AddSplines_Flow.box()
 
-                AddSplines_Col = AddSplines_Flow.row()
-                AddSplines_Col.operator('wm.add_pipe_spline_y_ot_operator', text='Add Smooth Spline')
+                AddSplines_Col = colm.row()
+                AddSplines_Col.label(text="Add Basic Spline")
+                AddSplines_Col.operator('wm.add_basic_spline_y_ot_operator', text='', icon='CURVE_PATH')
+
+                colm = AddSplines_Flow.box()
+
+                AddSplines_Col = colm.row()
+                AddSplines_Col.label(text="Add Smooth Spline")
+                AddSplines_Col.operator('wm.add_pipe_spline_y_ot_operator', text='', icon='CURVE_BEZCURVE')
 
         #### Decimate Tools Tab  ######################################
 
@@ -565,7 +851,17 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
                 DecTools_ColM = DecTools_Flow.column()
 
                 DecTools_Col = DecTools_ColM.row()
+                DecTools_Col.operator('wm.dec_verts_random_ot_operator', text='Checker Decimate Verts')
+
+                DecTools_ColM = DecTools_Flow.column()
+
+                DecTools_Col = DecTools_ColM.row()
                 DecTools_Col.operator('wm.dec_edge_ot_operator', text='Decimate Edges')
+
+                DecTools_ColM = DecTools_Flow.column()
+
+                DecTools_Col = DecTools_ColM.row()
+                DecTools_Col.operator('wm.dec_edge_random_ot_operator', text='Checker Decimate Edges')
 
             elif sel_mode[0]: # vertex
 
@@ -722,6 +1018,8 @@ class Dec_Object_Modifier_Panel(bpy.types.Panel):
         mod_solid = context.scene.mod_solid
         mod_bevel = context.scene.mod_bevel
         mod_subsurf = context.scene.mod_subsurf
+        subsurf_vlevel = context.scene.subsurf_vlevel
+        subsurf_rlevel = context.scene.subsurf_rlevel
 
 
 

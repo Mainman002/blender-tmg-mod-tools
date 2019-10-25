@@ -9,14 +9,16 @@ class MOD_Apply_Object_OT_Operator(bpy.types.Operator):
 
     def execute(self, context):
 
-        obj = bpy.context.active_object
+        obj = bpy.context.view_layer.objects.active
+        #sel_mode = context.tool_settings.mesh_select_mode
+        #obj = bpy.context.active_object
 
         for nr, obj in enumerate(bpy.context.selected_objects):
 
             if obj is not "empty":
                 types = obj.type
 
-                if types == "MESH":
+                if types == "MESH" or "CURVE" or "TEXT" or "METABALL":
                     if bpy.context.object.mode == "OBJECT":
                         bpy.ops.object.convert(target='MESH')
                     elif bpy.context.object.mode == "EDIT":
@@ -25,8 +27,8 @@ class MOD_Apply_Object_OT_Operator(bpy.types.Operator):
                         bpy.ops.object.mode_set(mode="EDIT")
 
 
-        return {'FINISHED'}
-        return {'FINISHED'}
+            return {'FINISHED'}
+            return {'FINISHED'}
 
 
 class MOD_Object_OT_Operator(bpy.types.Operator):
@@ -42,11 +44,17 @@ class MOD_Object_OT_Operator(bpy.types.Operator):
         bevel_width = context.scene.bevel_width
 
         axis_mode = context.scene.axis_mod
+        angle_limit = context.scene.angle_limit
         mod_screw = context.scene.mod_screw
         mod_solid = context.scene.mod_solid
         mod_mirror = context.scene.mod_mirror
         mod_bevel = context.scene.mod_bevel
+        bevel_segments = context.scene.bevel_segments
         mod_subsurf = context.scene.mod_subsurf
+        subsurf_vlevel = context.scene.subsurf_vlevel
+        subsurf_rlevel = context.scene.subsurf_rlevel
+        mod_triangulate = context.scene.mod_triangulate
+        mod_weightednormals = context.scene.mod_weightednormals
 
         obj = bpy.context.active_object
 
@@ -106,9 +114,9 @@ class MOD_Object_OT_Operator(bpy.types.Operator):
                     if mod is None:
                         obj.modifiers.new(name='Bevel', type='BEVEL')
 
-                    obj.modifiers["Bevel"].segments = 3
+                    obj.modifiers["Bevel"].segments = bevel_segments
                     obj.modifiers["Bevel"].limit_method = 'ANGLE'
-                    obj.modifiers["Bevel"].angle_limit = 0.785398
+                    obj.modifiers["Bevel"].angle_limit = angle_limit
                     obj.modifiers["Bevel"].width = bevel_width
                     obj.modifiers["Bevel"].offset_type = 'WIDTH'
                     obj.modifiers["Bevel"].miter_outer = 'MITER_ARC'
@@ -120,27 +128,30 @@ class MOD_Object_OT_Operator(bpy.types.Operator):
                     if mod is None:
                         obj.modifiers.new(name='Subdivision', type='SUBSURF')
                     
-                    obj.modifiers["Subdivision"].levels = 2
+                    obj.modifiers["Subdivision"].levels = subsurf_vlevel
+                    obj.modifiers["Subdivision"].render_levels = subsurf_rlevel
                     obj.modifiers["Subdivision"].show_expanded = False
                     obj.modifiers["Subdivision"].show_in_editmode = False
                 
-                mod = obj.modifiers.get("Triangulate")
-                if mod is None:
-                    obj.modifiers.new(name='Triangulate', type='TRIANGULATE')
+                if mod_triangulate == True:
+                    mod = obj.modifiers.get("Triangulate")
+                    if mod is None:
+                        obj.modifiers.new(name='Triangulate', type='TRIANGULATE')
 
-                obj.modifiers["Triangulate"].keep_custom_normals = True
-                obj.modifiers["Triangulate"].quad_method = 'BEAUTY'
-                obj.modifiers["Triangulate"].show_expanded = False
-                obj.modifiers["Triangulate"].show_in_editmode = False
+                    obj.modifiers["Triangulate"].keep_custom_normals = True
+                    obj.modifiers["Triangulate"].quad_method = 'BEAUTY'
+                    obj.modifiers["Triangulate"].show_expanded = False
+                    obj.modifiers["Triangulate"].show_in_editmode = False
 
-                mod = obj.modifiers.get("Weighted Normal")
-                if mod is None:
-                    obj.modifiers.new(name='Weighted Normal', type='WEIGHTED_NORMAL')
+                if mod_weightednormals == True:
+                    mod = obj.modifiers.get("Weighted Normal")
+                    if mod is None:
+                        obj.modifiers.new(name='Weighted Normal', type='WEIGHTED_NORMAL')
 
-                obj.modifiers["Weighted Normal"].keep_sharp = True
-                obj.modifiers["Weighted Normal"].mode = 'FACE_AREA_WITH_ANGLE'
-                obj.modifiers["Weighted Normal"].show_expanded = False
-                obj.modifiers["Weighted Normal"].show_in_editmode = False
+                    obj.modifiers["Weighted Normal"].keep_sharp = True
+                    obj.modifiers["Weighted Normal"].mode = 'FACE_AREA_WITH_ANGLE'
+                    obj.modifiers["Weighted Normal"].show_expanded = False
+                    obj.modifiers["Weighted Normal"].show_in_editmode = False
 
                 obj.data.use_auto_smooth = True
                 obj.data.auto_smooth_angle = 0.785398
@@ -201,7 +212,7 @@ class MOD_Object_OT_Operator(bpy.types.Operator):
 
                     obj.modifiers["Bevel"].segments = 3
                     obj.modifiers["Bevel"].limit_method = 'ANGLE'
-                    obj.modifiers["Bevel"].angle_limit = 0.785398
+                    obj.modifiers["Bevel"].angle_limit = angle_limit
                     obj.modifiers["Bevel"].width = bevel_width
                     obj.modifiers["Bevel"].offset_type = 'WIDTH'
                     obj.modifiers["Bevel"].miter_outer = 'MITER_ARC'
@@ -213,18 +224,20 @@ class MOD_Object_OT_Operator(bpy.types.Operator):
                     if mod is None:
                         obj.modifiers.new(name='Subdivision', type='SUBSURF')
                     
-                    obj.modifiers["Subdivision"].levels = 2
+                    obj.modifiers["Subdivision"].levels = subsurf_vlevel
+                    obj.modifiers["Subdivision"].render_levels = subsurf_rlevel
                     obj.modifiers["Subdivision"].show_expanded = False
                     obj.modifiers["Subdivision"].show_in_editmode = False
                 
-                mod = obj.modifiers.get("Triangulate")
-                if mod is None:
-                    obj.modifiers.new(name='Triangulate', type='TRIANGULATE')
+                if mod_triangulate == True:
+                    mod = obj.modifiers.get("Triangulate")
+                    if mod is None:
+                        obj.modifiers.new(name='Triangulate', type='TRIANGULATE')
 
-                obj.modifiers["Triangulate"].keep_custom_normals = True
-                obj.modifiers["Triangulate"].quad_method = 'BEAUTY'
-                obj.modifiers["Triangulate"].show_expanded = False
-                obj.modifiers["Triangulate"].show_in_editmode = False
+                    obj.modifiers["Triangulate"].keep_custom_normals = True
+                    obj.modifiers["Triangulate"].quad_method = 'BEAUTY'
+                    obj.modifiers["Triangulate"].show_expanded = False
+                    obj.modifiers["Triangulate"].show_in_editmode = False
 
             if bpy.context.object.mode == "OBJECT":
                 bpy.ops.object.shade_smooth()

@@ -31,7 +31,10 @@ class ADD_Solid_Plane_Object_OT_Operator(bpy.types.Operator):
         mod_solid = context.scene.mod_solid
         mod_mirror = context.scene.mod_mirror
         mod_bevel = context.scene.mod_bevel
+        bevel_segments = context.scene.bevel_segments
         mod_subsurf = context.scene.mod_subsurf
+        subsurf_vlevel = context.scene.subsurf_vlevel
+        subsurf_rlevel = context.scene.subsurf_rlevel
 
         obj = bpy.context.active_object
 
@@ -74,7 +77,7 @@ class ADD_Solid_Plane_Object_OT_Operator(bpy.types.Operator):
 
         if mod_bevel == True:
             bpy.ops.object.modifier_add(type='BEVEL')
-            bpy.context.object.modifiers["Bevel"].segments = 3
+            bpy.context.object.modifiers["Bevel"].segments = bevel_segments
             bpy.context.object.modifiers["Bevel"].limit_method = 'ANGLE'
             bpy.context.object.modifiers["Bevel"].width = 0.026
             bpy.context.object.modifiers["Bevel"].angle_limit = 0.785398
@@ -120,7 +123,10 @@ class ADD_Solid_Circle_Object_OT_Operator(bpy.types.Operator):
         mod_solid = context.scene.mod_solid
         mod_mirror = context.scene.mod_mirror
         mod_bevel = context.scene.mod_bevel
+        bevel_segments = context.scene.bevel_segments
         mod_subsurf = context.scene.mod_subsurf
+        subsurf_vlevel = context.scene.subsurf_vlevel
+        subsurf_rlevel = context.scene.subsurf_rlevel
 
         obj = bpy.context.active_object
 
@@ -164,7 +170,7 @@ class ADD_Solid_Circle_Object_OT_Operator(bpy.types.Operator):
 
         if mod_bevel == True:
             bpy.ops.object.modifier_add(type='BEVEL')
-            bpy.context.object.modifiers["Bevel"].segments = 3
+            bpy.context.object.modifiers["Bevel"].segments = bevel_segments
             bpy.context.object.modifiers["Bevel"].limit_method = 'ANGLE'
             bpy.context.object.modifiers["Bevel"].angle_limit = 0.785398
             bpy.context.object.modifiers["Bevel"].offset_type = 'WIDTH'
@@ -175,7 +181,8 @@ class ADD_Solid_Circle_Object_OT_Operator(bpy.types.Operator):
 
         if mod_subsurf == True:
             bpy.ops.object.modifier_add(type='SUBSURF')
-            bpy.context.object.modifiers["Subdivision"].levels = 2
+            bpy.context.object.modifiers["Subdivision"].levels = subsurf_vlevel
+            bpy.context.object.modifiers["Subdivision"].render_levels = subsurf_rlevel
             bpy.context.object.modifiers["Subdivision"].show_in_editmode = False
             bpy.context.object.modifiers["Subdivision"].show_expanded = False
 
@@ -210,7 +217,10 @@ class ADD_Arch_Object_X_OT_Operator(bpy.types.Operator):
         mod_solid = context.scene.mod_solid
         mod_mirror = context.scene.mod_mirror
         mod_bevel = context.scene.mod_bevel
+        bevel_segments = context.scene.bevel_segments
         mod_subsurf = context.scene.mod_subsurf
+        subsurf_vlevel = context.scene.subsurf_vlevel
+        subsurf_rlevel = context.scene.subsurf_rlevel
 
         obj = bpy.context.active_object
 
@@ -236,7 +246,7 @@ class ADD_Arch_Object_X_OT_Operator(bpy.types.Operator):
 
         if mod_bevel == True:
             bpy.ops.object.modifier_add(type='BEVEL')
-            bpy.context.object.modifiers["Bevel"].segments = 3
+            bpy.context.object.modifiers["Bevel"].segments = bevel_segments
             bpy.context.object.modifiers["Bevel"].width = 0.026
             bpy.context.object.modifiers["Bevel"].limit_method = 'ANGLE'
             bpy.context.object.modifiers["Bevel"].angle_limit = 0.785398
@@ -247,7 +257,8 @@ class ADD_Arch_Object_X_OT_Operator(bpy.types.Operator):
 
         if mod_subsurf == True:
             bpy.ops.object.modifier_add(type='SUBSURF')
-            bpy.context.object.modifiers["Subdivision"].levels = 2
+            bpy.context.object.modifiers["Subdivision"].levels = subsurf_vlevel
+            bpy.context.object.modifiers["Subdivision"].render_levels = subsurf_rlevel
             bpy.context.object.modifiers["Subdivision"].show_in_editmode = False
             bpy.context.object.modifiers["Subdivision"].show_expanded = False
 
@@ -282,7 +293,10 @@ class ADD_Arch_Object_Y_OT_Operator(bpy.types.Operator):
         mod_solid = context.scene.mod_solid
         mod_mirror = context.scene.mod_mirror
         mod_bevel = context.scene.mod_bevel
+        bevel_segments = context.scene.bevel_segments
         mod_subsurf = context.scene.mod_subsurf
+        subsurf_vlevel = context.scene.subsurf_vlevel
+        subsurf_rlevel = context.scene.subsurf_rlevel
 
         obj = bpy.context.active_object
 
@@ -305,7 +319,7 @@ class ADD_Arch_Object_Y_OT_Operator(bpy.types.Operator):
 
         if mod_bevel == True:
             bpy.ops.object.modifier_add(type='BEVEL')
-            bpy.context.object.modifiers["Bevel"].segments = 3
+            bpy.context.object.modifiers["Bevel"].segments = bevel_segments
             bpy.context.object.modifiers["Bevel"].width = 0.026
             bpy.context.object.modifiers["Bevel"].limit_method = 'ANGLE'
             bpy.context.object.modifiers["Bevel"].angle_limit = 0.785398
@@ -316,7 +330,8 @@ class ADD_Arch_Object_Y_OT_Operator(bpy.types.Operator):
 
         if mod_subsurf == True:
             bpy.ops.object.modifier_add(type='SUBSURF')
-            bpy.context.object.modifiers["Subdivision"].levels = 2
+            bpy.context.object.modifiers["Subdivision"].levels = subsurf_vlevel
+            bpy.context.object.modifiers["Subdivision"].render_levels = subsurf_rlevel
             bpy.context.object.modifiers["Subdivision"].show_in_editmode = False
             bpy.context.object.modifiers["Subdivision"].show_expanded = False
 
@@ -351,7 +366,10 @@ class ADD_Arch_Object_Z_OT_Operator(bpy.types.Operator):
         mod_solid = context.scene.mod_solid
         mod_mirror = context.scene.mod_mirror
         mod_bevel = context.scene.mod_bevel
+        bevel_segments = context.scene.bevel_segments
         mod_subsurf = context.scene.mod_subsurf
+        subsurf_vlevel = context.scene.subsurf_vlevel
+        subsurf_rlevel = context.scene.subsurf_rlevel
 
         obj = bpy.context.active_object
 
@@ -376,7 +394,7 @@ class ADD_Arch_Object_Z_OT_Operator(bpy.types.Operator):
 
         if mod_bevel == True:
             bpy.ops.object.modifier_add(type='BEVEL')
-            bpy.context.object.modifiers["Bevel"].segments = 3
+            bpy.context.object.modifiers["Bevel"].segments = bevel_segments
             bpy.context.object.modifiers["Bevel"].width = 0.026
             bpy.context.object.modifiers["Bevel"].limit_method = 'ANGLE'
             bpy.context.object.modifiers["Bevel"].angle_limit = 0.785398
@@ -387,7 +405,8 @@ class ADD_Arch_Object_Z_OT_Operator(bpy.types.Operator):
 
         if mod_subsurf == True:
             bpy.ops.object.modifier_add(type='SUBSURF')
-            bpy.context.object.modifiers["Subdivision"].levels = 2
+            bpy.context.object.modifiers["Subdivision"].levels = subsurf_vlevel
+            bpy.context.object.modifiers["Subdivision"].render_levels = subsurf_rlevel
             bpy.context.object.modifiers["Subdivision"].show_in_editmode = False
             bpy.context.object.modifiers["Subdivision"].show_expanded = False
 
@@ -422,7 +441,10 @@ class ADD_Pipe_Line_Object_Y_OT_Operator(bpy.types.Operator):
         mod_solid = context.scene.mod_solid
         mod_mirror = context.scene.mod_mirror
         mod_bevel = context.scene.mod_bevel
+        bevel_segments = context.scene.bevel_segments
         mod_subsurf = context.scene.mod_subsurf
+        subsurf_vlevel = context.scene.subsurf_vlevel
+        subsurf_rlevel = context.scene.subsurf_rlevel
 
         obj = bpy.context.active_object
 
@@ -454,7 +476,7 @@ class ADD_Pipe_Line_Object_Y_OT_Operator(bpy.types.Operator):
 
         if mod_bevel == True:
             bpy.ops.object.modifier_add(type='BEVEL')
-            bpy.context.object.modifiers["Bevel"].segments = 3
+            bpy.context.object.modifiers["Bevel"].segments = bevel_segments
             bpy.context.object.modifiers["Bevel"].width = 0.016
             bpy.context.object.modifiers["Bevel"].limit_method = 'ANGLE'
             bpy.context.object.modifiers["Bevel"].angle_limit = 0.785398
@@ -465,7 +487,8 @@ class ADD_Pipe_Line_Object_Y_OT_Operator(bpy.types.Operator):
 
         if mod_subsurf == True:
             bpy.ops.object.modifier_add(type='SUBSURF')
-            bpy.context.object.modifiers["Subdivision"].levels = 2
+            bpy.context.object.modifiers["Subdivision"].levels = subsurf_vlevel
+            bpy.context.object.modifiers["Subdivision"].render_levels = subsurf_rlevel
             bpy.context.object.modifiers["Subdivision"].show_in_editmode = False
             bpy.context.object.modifiers["Subdivision"].show_expanded = False
         
@@ -500,7 +523,10 @@ class ADD_Pipe_Line_Object_Z_OT_Operator(bpy.types.Operator):
         mod_solid = context.scene.mod_solid
         mod_mirror = context.scene.mod_mirror
         mod_bevel = context.scene.mod_bevel
+        bevel_segments = context.scene.bevel_segments
         mod_subsurf = context.scene.mod_subsurf
+        subsurf_vlevel = context.scene.subsurf_vlevel
+        subsurf_rlevel = context.scene.subsurf_rlevel
 
         obj = bpy.context.active_object
 
@@ -534,7 +560,7 @@ class ADD_Pipe_Line_Object_Z_OT_Operator(bpy.types.Operator):
 
         if mod_bevel == True:
             bpy.ops.object.modifier_add(type='BEVEL')
-            bpy.context.object.modifiers["Bevel"].segments = 3
+            bpy.context.object.modifiers["Bevel"].segments = bevel_segments
             bpy.context.object.modifiers["Bevel"].width = 0.016
             bpy.context.object.modifiers["Bevel"].limit_method = 'ANGLE'
             bpy.context.object.modifiers["Bevel"].angle_limit = 0.785398
@@ -545,7 +571,8 @@ class ADD_Pipe_Line_Object_Z_OT_Operator(bpy.types.Operator):
 
         if mod_subsurf == True:
             bpy.ops.object.modifier_add(type='SUBSURF')
-            bpy.context.object.modifiers["Subdivision"].levels = 2
+            bpy.context.object.modifiers["Subdivision"].levels = subsurf_vlevel
+            bpy.context.object.modifiers["Subdivision"].render_levels = subsurf_rlevel
             bpy.context.object.modifiers["Subdivision"].show_in_editmode = False
             bpy.context.object.modifiers["Subdivision"].show_expanded = False
 
@@ -586,7 +613,10 @@ class ADD_Basic_Spline_Y_OT_Operator(bpy.types.Operator):
         mod_solid = context.scene.mod_solid
         mod_mirror = context.scene.mod_mirror
         mod_bevel = context.scene.mod_bevel
+        bevel_segments = context.scene.bevel_segments
         mod_subsurf = context.scene.mod_subsurf
+        subsurf_vlevel = context.scene.subsurf_vlevel
+        subsurf_rlevel = context.scene.subsurf_rlevel
 
         obj = bpy.context.active_object
 
@@ -610,7 +640,7 @@ class ADD_Basic_Spline_Y_OT_Operator(bpy.types.Operator):
 
         if mod_bevel == True:
             bpy.ops.object.modifier_add(type='BEVEL')
-            bpy.context.object.modifiers["Bevel"].segments = 3
+            bpy.context.object.modifiers["Bevel"].segments = bevel_segments
             bpy.context.object.modifiers["Bevel"].show_in_editmode = False
             bpy.context.object.modifiers["Bevel"].limit_method = 'ANGLE'
             bpy.context.object.modifiers["Bevel"].width = 0.025
@@ -621,7 +651,8 @@ class ADD_Basic_Spline_Y_OT_Operator(bpy.types.Operator):
 
         if mod_subsurf == True:
             bpy.ops.object.modifier_add(type='SUBSURF')
-            bpy.context.object.modifiers["Subdivision"].levels = 2
+            bpy.context.object.modifiers["Subdivision"].levels = subsurf_vlevel
+            bpy.context.object.modifiers["Subdivision"].render_levels = subsurf_rlevel
             bpy.context.object.modifiers["Subdivision"].show_in_editmode = False
             bpy.context.object.modifiers["Subdivision"].show_expanded = False
 
@@ -649,7 +680,10 @@ class ADD_Pipe_Spline_Y_OT_Operator(bpy.types.Operator):
         mod_solid = context.scene.mod_solid
         mod_mirror = context.scene.mod_mirror
         mod_bevel = context.scene.mod_bevel
+        bevel_segments = context.scene.bevel_segments
         mod_subsurf = context.scene.mod_subsurf
+        subsurf_vlevel = context.scene.subsurf_vlevel
+        subsurf_rlevel = context.scene.subsurf_rlevel
 
         obj = bpy.context.active_object
 
@@ -684,7 +718,7 @@ class ADD_Pipe_Spline_Y_OT_Operator(bpy.types.Operator):
 
         if mod_bevel == True:
             bpy.ops.object.modifier_add(type='BEVEL')
-            bpy.context.object.modifiers["Bevel"].segments = 3
+            bpy.context.object.modifiers["Bevel"].segments = bevel_segments
             bpy.context.object.modifiers["Bevel"].show_in_editmode = False
             bpy.context.object.modifiers["Bevel"].limit_method = 'ANGLE'
             bpy.context.object.modifiers["Bevel"].width = 0.025
@@ -695,7 +729,8 @@ class ADD_Pipe_Spline_Y_OT_Operator(bpy.types.Operator):
 
         if mod_subsurf == True:
             bpy.ops.object.modifier_add(type='SUBSURF')
-            bpy.context.object.modifiers["Subdivision"].levels = 2
+            bpy.context.object.modifiers["Subdivision"].levels = subsurf_vlevel
+            bpy.context.object.modifiers["Subdivision"].render_levels = subsurf_rlevel
             bpy.context.object.modifiers["Subdivision"].show_in_editmode = False
             bpy.context.object.modifiers["Subdivision"].show_expanded = False
 
@@ -726,7 +761,10 @@ class ADD_Spline_Folow_Y_OT_Operator(bpy.types.Operator):
         mod_solid = context.scene.mod_solid
         mod_mirror = context.scene.mod_mirror
         mod_bevel = context.scene.mod_bevel
+        bevel_segments = context.scene.bevel_segments
         mod_subsurf = context.scene.mod_subsurf
+        subsurf_vlevel = context.scene.subsurf_vlevel
+        subsurf_rlevel = context.scene.subsurf_rlevel
 
         obj = bpy.context.active_object
 

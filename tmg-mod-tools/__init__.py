@@ -3,7 +3,7 @@ bl_info = {
     "author" : "Johnathan Mueller, Jayanam",
     "descrtion" : "Checker decimate edges in your selected edge loops.",
     "blender" : (2, 80, 0),
-    "version" : (0, 1, 5),
+    "version" : (0, 1, 6),
     "location" : "View3D (EditMode) > Sidebar > Edit Tab",
     "warning" : "",
     "category" : "Mesh"
@@ -25,6 +25,18 @@ from . dec_panel import *
 
 
 #### Menu Float Sliders #########################
+
+bpy.types.Scene.subsurf_rlevel = IntProperty(name="Menu subsurf render level slider",
+                default=2,
+                min=0,
+                max=6,
+                description="Menu subsurf render level slider.")
+
+bpy.types.Scene.subsurf_vlevel = IntProperty(name="Menu subsurf view level slider",
+                default=2,
+                min=0,
+                max=5,
+                description="Menu subsurf view level slider.")
 
 bpy.types.Scene.solid_offset = FloatProperty(name="Menu solidify offset slider",
                 default=1.0,
@@ -56,6 +68,18 @@ bpy.types.Scene.bevel_width = FloatProperty(name="Menu bevel width slider",
                 max=1.37,
                 description="Menu bevel width slider.")
 
+bpy.types.Scene.bevel_segments = IntProperty(name="Menu bevel segments slider",
+                default=3,
+                min=1,
+                max=6,
+                description="Menu bevel segments slider.")
+
+bpy.types.Scene.angle_limit = FloatProperty(name="Menu angle limit slider",
+                default=0.523599,
+                min=0.00174533,
+                max=3.14159,
+                description="Menu angle limit slider.")
+
 #### Menu Tabs #########################
 
 bpy.types.Scene.check_view = BoolProperty(name="Menu toggle view tab",
@@ -65,6 +89,10 @@ bpy.types.Scene.check_view = BoolProperty(name="Menu toggle view tab",
 bpy.types.Scene.check_modifiers = BoolProperty(name="Menu toggle modifiers tab",
                 default=False,
                 description="Menu show | hide modifier tab.")
+
+bpy.types.Scene.check_modSettings = BoolProperty(name="Menu toggle modifiers settings tab",
+                default=False,
+                description="Menu show | hide modifier settings tab.")
 
 bpy.types.Scene.check_mods = BoolProperty(name="Menu toggle modifiers tab",
                 default=False,
@@ -108,6 +136,14 @@ bpy.types.Scene.mod_subsurf = BoolProperty(name="Add subsurface modifier",
                 default=False,
                 description="Adds subsurface modifier")
 
+bpy.types.Scene.mod_triangulate = BoolProperty(name="Add triangulate modifier",
+                default=False,
+                description="Adds triangulate modifier")
+
+bpy.types.Scene.mod_weightednormals = BoolProperty(name="Add weighted normals modifier",
+                default=False,
+                description="Adds weighted normals modifier")
+
 #### Tools Checkboxes #########################
 
 bpy.types.Scene.check_inset_individual = BoolProperty(name="Inset individual check",
@@ -128,6 +164,10 @@ bpy.types.Scene.ui_viewMode = BoolProperty(name="Set view mode",
                 default=False,
                 description="Set view to distraction view / normal view mode")
 
+bpy.types.Scene.ui_wireMode = BoolProperty(name="Set wireframe view mode",
+                default=False,
+                description="Set wireframe view / normal view mode")
+
 #### Dropdown Buttons #########################
 
 bpy.types.Scene.axis_mod = EnumProperty(
@@ -141,17 +181,27 @@ bpy.types.Scene.axis_mod = EnumProperty(
     default='Y'
     )
 
+bpy.types.Scene.view_mod = EnumProperty(
+    name="View Mode",
+    description="Defines the Viewport mode for objects",
+    items=(
+        ('0', 'TEXTURED', 'TEXTURED View',0),
+        ('1', 'WIRE', 'WIRE View',1),
+        ('2', 'BOUNDS', 'BOUNDS View',2)
+        ),
+    default='0'
+    )
 
 classes = (
 
-DEC_Edge_OT_Operator, DEC_Verts_OT_Operator, 
+DEC_Edge_OT_Operator, DEC_Edge_Random_OT_Operator, DEC_Verts_OT_Operator, DEC_Verts_Random_OT_Operator, 
 MOD_Object_OT_Operator, MOD_Apply_Object_OT_Operator, 
 ADD_Solid_Plane_Object_OT_Operator, ADD_Solid_Circle_Object_OT_Operator, ADD_Arch_Object_X_OT_Operator, ADD_Arch_Object_Y_OT_Operator, 
 ADD_Arch_Object_Z_OT_Operator, ADD_Pipe_Line_Object_Y_OT_Operator, ADD_Pipe_Line_Object_Z_OT_Operator, 
 ADD_Basic_Spline_Y_OT_Operator, ADD_Pipe_Spline_Y_OT_Operator, ADD_Spline_Folow_Y_OT_Operator, 
 DEC_PT_Object_Panel, DEC_PT_Edit_Panel, 
 TOOL_Inset_Edit_OT_Operator, TOOL_Bevel_Edge_Edit_OT_Operator, TOOL_Remove_Doubles_Edit_OT_Operator, 
-UI_Distraction_Free_OT_Operator, Dec_Edit_Modifier_Panel, Dec_Object_Modifier_Panel 
+UI_Distraction_Free_OT_Operator, UI_Wireframe_OT_Operator, UI_View_Mode_OT_Operator, Dec_Edit_Modifier_Panel, Dec_Object_Modifier_Panel 
 
 )
 
