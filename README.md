@@ -3,9 +3,9 @@
 
 #### current version is supported for Blender 2.80 (stable)
 
-### Release zip here -> 
+### Alpha Release zip here -> 
 
-![v0.1.3 Release](https://github.com/Mainman002/blender-decimate-tools/releases/tag/0.1.3)
+![v0.1.7 Alpha Release](https://github.com/Mainman002/blender-decimate-tools/releases/tag/0.1.7)
 
 ### youtube video showing what it can do -> 
 
