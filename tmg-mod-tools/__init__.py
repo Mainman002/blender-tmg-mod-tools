@@ -3,7 +3,7 @@ bl_info = {
     "author" : "Johnathan Mueller, Jayanam",
     "descrtion" : "Checker decimate edges in your selected edge loops.",
     "blender" : (2, 80, 0),
-    "version" : (0, 1, 6),
+    "version" : (0, 1, 7),
     "location" : "View3D (EditMode) > Sidebar > Edit Tab",
     "warning" : "",
     "category" : "Mesh"
@@ -201,7 +201,8 @@ ADD_Arch_Object_Z_OT_Operator, ADD_Pipe_Line_Object_Y_OT_Operator, ADD_Pipe_Line
 ADD_Basic_Spline_Y_OT_Operator, ADD_Pipe_Spline_Y_OT_Operator, ADD_Spline_Folow_Y_OT_Operator, 
 DEC_PT_Object_Panel, DEC_PT_Edit_Panel, 
 TOOL_Inset_Edit_OT_Operator, TOOL_Bevel_Edge_Edit_OT_Operator, TOOL_Remove_Doubles_Edit_OT_Operator, 
-UI_Distraction_Free_OT_Operator, UI_Wireframe_OT_Operator, UI_View_Mode_OT_Operator, Dec_Edit_Modifier_Panel, Dec_Object_Modifier_Panel 
+UI_Distraction_Free_OT_Operator, UI_Wireframe_OT_Operator, UI_View_Mode_OT_Operator, Dec_Edit_Modifier_Panel, Dec_Object_Modifier_Panel,
+UI_Texel_Check_OT_Operator, Dec_Object_Materials_Panel 
 
 )
 

@@ -1,5 +1,8 @@
 import bpy
 from bpy.props import FloatProperty
+#from bpy.types import Menu, Panel, UIList
+#from rna_prop_ui import PropertyPanel
+#from bpy_extras.node_utils import find_node_input
 
 
 class DEC_PT_Object_Panel(bpy.types.Panel):
@@ -91,25 +94,31 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
             colm = View_Flow.box()
 
             View_Col = colm.row()
-            View_Col.label(text="Apply Modifiers:")
+            View_Col.label(text="Apply Modifiers")
             View_Col.operator('wm.mod_apply_object_ot_operator', text='', icon='MODIFIER')
 
             colm = View_Flow.box()
 
             View_Col = colm.row()
-            View_Col.label(text="Distraction Free View:")
+            View_Col.label(text="Distraction Free")
             View_Col.operator('wm.ui_distraction_free_ot_operator', text='', icon='RESTRICT_RENDER_OFF')
 
             colm = View_Flow.box()
 
             View_Col = colm.row()
-            View_Col.label(text="Wireframe View:")
+            View_Col.label(text="Wireframe")
             View_Col.operator('wm.ui_wireframe_ot_operator', text='', icon='SHADING_WIRE')
 
             colm = View_Flow.box()
 
             View_Col = colm.row()
-            View_Col.label(text="Object View:")
+            View_Col.label(text="Texel Check")
+            View_Col.operator('wm.ui_texel_check_ot_operator', text='', icon='UV_DATA')
+
+            colm = View_Flow.box()
+
+            View_Col = colm.row()
+            View_Col.label(text="Object")
 
             #colm = View_Flow.box()
 
@@ -194,7 +203,7 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
             ModSettings_Subcol = ModSettings_Col.column(align=True)
 
             ModSettings_Row = ModSettings_Subcol.row() #angle_limit
-            ModSettings_Row.label(text="Global Settings:")
+            ModSettings_Row.label(text="Global Settings")
 
             ModSettings_Row = ModSettings_Subcol.box()
 
@@ -204,7 +213,7 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
             colm = ModSettings_Flow.column()
 
             ModSettings_Col = colm.row()
-            ModSettings_Col.label(text="Mod Axis:")
+            ModSettings_Col.label(text="Mod Axis")
 
             colm = ModSettings_Flow.column()
 
@@ -214,7 +223,7 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
             colm = ModSettings_Flow.column()
 
             ModSettings_Col = colm.row()
-            ModSettings_Col.label(text="Angle Limit:")
+            ModSettings_Col.label(text="Angle Limit")
 
             colm = ModSettings_Flow.column()
 
@@ -227,7 +236,7 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
                 ModSettings_Subcol = ModSettings_Col.column(align=True)
 
                 ModSettings_Row = ModSettings_Subcol.row() #angle_limit
-                ModSettings_Row.label(text="Solidify:")
+                ModSettings_Row.label(text="Solidify")
 
                 ModSettings_Row = ModSettings_Subcol.box()
 
@@ -259,7 +268,7 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
                 ModSettings_Subcol = ModSettings_Col.column(align=True)
 
                 ModSettings_Row = ModSettings_Subcol.row() #angle_limit
-                ModSettings_Row.label(text="Subsurf:")
+                ModSettings_Row.label(text="Subsurf")
 
                 ModSettings_Row = ModSettings_Subcol.box()
 
@@ -291,7 +300,7 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
                 ModSettings_Subcol = ModSettings_Col.column(align=True)
 
                 ModSettings_Row = ModSettings_Subcol.row() #angle_limit
-                ModSettings_Row.label(text="Bevel:")
+                ModSettings_Row.label(text="Bevel")
 
                 ModSettings_Row = ModSettings_Subcol.box()
 
@@ -340,13 +349,13 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
             colm = View_Flow.box()
 
             View_Col = colm.row()
-            View_Col.label(text="Add Plane")
+            View_Col.label(text="Plane")
             View_Col.operator('wm.add_solid_plane_object_ot_operator', text='', icon='MESH_PLANE')
 
             colm = View_Flow.box()
 
             View_Col = colm.row()
-            View_Col.label(text="Add Circle")
+            View_Col.label(text="Circle")
             View_Col.operator('wm.add_solid_circle_object_ot_operator', text='', icon='MESH_CIRCLE')
 
             colm = View_Flow.box()
@@ -354,31 +363,31 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
             if axis_mode == "X": # Y
 
                 View_Col = colm.row()
-                View_Col.label(text="Add Arch")
+                View_Col.label(text="Arch")
                 View_Col.operator('wm.add_arch_object_x_ot_operator', text='', icon='SURFACE_NCURVE')
 
             elif axis_mode == "Y": # Y
 
                 View_Col = colm.row()
-                View_Col.label(text="Add Arch")
+                View_Col.label(text="Arch")
                 View_Col.operator('wm.add_arch_object_y_ot_operator', text='', icon='SURFACE_NCURVE')
 
                 colm = View_Flow.box()
 
                 View_Col = colm.row()
-                View_Col.label(text="Add Pipe")
+                View_Col.label(text="Pipe")
                 View_Col.operator('wm.add_pipe_line_object_y_ot_operator', text='', icon='OUTLINER_OB_CURVE')
 
             elif axis_mode == "Z": # Z
 
                 View_Col = colm.row()
-                View_Col.label(text="Add Arch")
+                View_Col.label(text="Arch")
                 View_Col.operator('wm.add_arch_object_z_ot_operator', text='', icon='SURFACE_NCURVE')
 
                 colm = View_Flow.box()
 
                 View_Col = colm.row()
-                View_Col.label(text="Add Pipe")
+                View_Col.label(text="Pipe")
                 View_Col.operator('wm.add_pipe_line_object_z_ot_operator', text='', icon='OUTLINER_OB_CURVE')
 
         #### Add Splines Tab Panel Layout Controllers #########################
@@ -405,13 +414,13 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
                 colm = AddSplines_Flow.box()
 
                 AddSplines_Col = colm.row()
-                AddSplines_Col.label(text="Add Basic Spline")
+                AddSplines_Col.label(text="Basic Spline")
                 AddSplines_Col.operator('wm.add_basic_spline_y_ot_operator', text='', icon='CURVE_PATH')
 
                 colm = AddSplines_Flow.box()
 
                 AddSplines_Col = colm.row()
-                AddSplines_Col.label(text="Add Smooth Spline")
+                AddSplines_Col.label(text="Smooth Spline")
                 AddSplines_Col.operator('wm.add_pipe_spline_y_ot_operator', text='', icon='CURVE_BEZCURVE')
 
                 #AddSplines_Col = AddSplines_Flow.row()
@@ -497,25 +506,31 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
             colm = View_Flow.box()
 
             View_Col = colm.row()
-            View_Col.label(text="Apply Modifiers:")
+            View_Col.label(text="Apply Modifiers")
             View_Col.operator('wm.mod_apply_object_ot_operator', text='', icon='MODIFIER')
 
             colm = View_Flow.box()
 
             View_Col = colm.row()
-            View_Col.label(text="Distraction Free View:")
+            View_Col.label(text="Distraction Free")
             View_Col.operator('wm.ui_distraction_free_ot_operator', text='', icon='RESTRICT_RENDER_OFF')
 
             colm = View_Flow.box()
 
             View_Col = colm.row()
-            View_Col.label(text="Wireframe View:")
+            View_Col.label(text="Wireframe")
             View_Col.operator('wm.ui_wireframe_ot_operator', text='', icon='SHADING_WIRE')
 
             colm = View_Flow.box()
 
             View_Col = colm.row()
-            View_Col.label(text="Object View:")
+            View_Col.label(text="Texel Check")
+            View_Col.operator('wm.ui_texel_check_ot_operator', text='', icon='UV_DATA')
+
+            colm = View_Flow.box()
+
+            View_Col = colm.row()
+            View_Col.label(text="Object")
 
             #colm = View_Flow.box()
 
@@ -600,7 +615,7 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
             ModSettings_Subcol = ModSettings_Col.column(align=True)
 
             ModSettings_Row = ModSettings_Subcol.row() #angle_limit
-            ModSettings_Row.label(text="Global Settings:")
+            ModSettings_Row.label(text="Global Settings")
 
             ModSettings_Row = ModSettings_Subcol.box()
 
@@ -610,7 +625,7 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
             colm = ModSettings_Flow.column()
 
             ModSettings_Col = colm.row()
-            ModSettings_Col.label(text="Mod Axis:")
+            ModSettings_Col.label(text="Mod Axis")
 
             colm = ModSettings_Flow.column()
 
@@ -620,7 +635,7 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
             colm = ModSettings_Flow.column()
 
             ModSettings_Col = colm.row()
-            ModSettings_Col.label(text="Angle Limit:")
+            ModSettings_Col.label(text="Angle Limit")
 
             colm = ModSettings_Flow.column()
 
@@ -633,7 +648,7 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
                 ModSettings_Subcol = ModSettings_Col.column(align=True)
 
                 ModSettings_Row = ModSettings_Subcol.row() #angle_limit
-                ModSettings_Row.label(text="Solidify:")
+                ModSettings_Row.label(text="Solidify")
 
                 ModSettings_Row = ModSettings_Subcol.box()
 
@@ -665,7 +680,7 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
                 ModSettings_Subcol = ModSettings_Col.column(align=True)
 
                 ModSettings_Row = ModSettings_Subcol.row() #angle_limit
-                ModSettings_Row.label(text="Subsurf:")
+                ModSettings_Row.label(text="Subsurf")
 
                 ModSettings_Row = ModSettings_Subcol.box()
 
@@ -697,7 +712,7 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
                 ModSettings_Subcol = ModSettings_Col.column(align=True)
 
                 ModSettings_Row = ModSettings_Subcol.row() #angle_limit
-                ModSettings_Row.label(text="Bevel:")
+                ModSettings_Row.label(text="Bevel")
 
                 ModSettings_Row = ModSettings_Subcol.box()
 
@@ -746,13 +761,13 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
             colm = View_Flow.box()
 
             View_Col = colm.row()
-            View_Col.label(text="Add Plane")
+            View_Col.label(text="Plane")
             View_Col.operator('wm.add_solid_plane_object_ot_operator', text='', icon='MESH_PLANE')
 
             colm = View_Flow.box()
 
             View_Col = colm.row()
-            View_Col.label(text="Add Circle")
+            View_Col.label(text="Circle")
             View_Col.operator('wm.add_solid_circle_object_ot_operator', text='', icon='MESH_CIRCLE')
 
             colm = View_Flow.box()
@@ -760,31 +775,31 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
             if axis_mode == "X": # Y
 
                 View_Col = colm.row()
-                View_Col.label(text="Add Arch")
+                View_Col.label(text="Arch")
                 View_Col.operator('wm.add_arch_object_x_ot_operator', text='', icon='SURFACE_NCURVE')
 
             elif axis_mode == "Y": # Y
 
                 View_Col = colm.row()
-                View_Col.label(text="Add Arch")
+                View_Col.label(text="Arch")
                 View_Col.operator('wm.add_arch_object_y_ot_operator', text='', icon='SURFACE_NCURVE')
 
                 colm = View_Flow.box()
 
                 View_Col = colm.row()
-                View_Col.label(text="Add Pipe")
+                View_Col.label(text="Pipe")
                 View_Col.operator('wm.add_pipe_line_object_y_ot_operator', text='', icon='OUTLINER_OB_CURVE')
 
             elif axis_mode == "Z": # Z
 
                 View_Col = colm.row()
-                View_Col.label(text="Add Arch")
+                View_Col.label(text="Arch")
                 View_Col.operator('wm.add_arch_object_z_ot_operator', text='', icon='SURFACE_NCURVE')
 
                 colm = View_Flow.box()
 
                 View_Col = colm.row()
-                View_Col.label(text="Add Pipe")
+                View_Col.label(text="Pipe")
                 View_Col.operator('wm.add_pipe_line_object_z_ot_operator', text='', icon='OUTLINER_OB_CURVE')
 
         #### Add Splines Tab  ######################################
@@ -811,13 +826,13 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
                 colm = AddSplines_Flow.box()
 
                 AddSplines_Col = colm.row()
-                AddSplines_Col.label(text="Add Basic Spline")
+                AddSplines_Col.label(text="Basic Spline")
                 AddSplines_Col.operator('wm.add_basic_spline_y_ot_operator', text='', icon='CURVE_PATH')
 
                 colm = AddSplines_Flow.box()
 
                 AddSplines_Col = colm.row()
-                AddSplines_Col.label(text="Add Smooth Spline")
+                AddSplines_Col.label(text="Smooth Spline")
                 AddSplines_Col.operator('wm.add_pipe_spline_y_ot_operator', text='', icon='CURVE_BEZCURVE')
 
         #### Decimate Tools Tab  ######################################
@@ -833,40 +848,44 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
         else:
             DecTools_Col.prop(context.scene, "check_decimations", text="Decimate", icon="DOWNARROW_HLT")
 
-            DecTools_Col = Master_Col.column() ###### Box if needed for Settings Panel #############
+            DecTools_Col = Master_Col.column() ###### Box if needed for Add Splines Panel #############
             DecTools_SubCol = DecTools_Col.column(align=True)
 
             DecTools_Col.use_property_split = True
             DecTools_Flow = DecTools_Col.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
 
-            DecTools_ColM = DecTools_Flow.column()
-
-            DecTools_Col = DecTools_ColM.row()
-
             if sel_mode[1]: # edge
 
-                DecTools_Col = DecTools_ColM.row()
-                DecTools_Col.operator('wm.dec_verts_ot_operator', text='Decimate Verts')
+                colm = DecTools_Flow.box()
 
-                DecTools_ColM = DecTools_Flow.column()
+                DecTools_Col = colm.row()
+                DecTools_Col.label(text="Verts")
+                DecTools_Col.operator('wm.dec_verts_ot_operator', text='', icon='VERTEXSEL')
 
-                DecTools_Col = DecTools_ColM.row()
-                DecTools_Col.operator('wm.dec_verts_random_ot_operator', text='Checker Decimate Verts')
+                colm = DecTools_Flow.box()
 
-                DecTools_ColM = DecTools_Flow.column()
+                DecTools_Col = colm.row()
+                DecTools_Col.label(text="Checker Verts")
+                DecTools_Col.operator('wm.dec_verts_random_ot_operator', text='', icon='STICKY_UVS_VERT')
 
-                DecTools_Col = DecTools_ColM.row()
-                DecTools_Col.operator('wm.dec_edge_ot_operator', text='Decimate Edges')
+                colm = DecTools_Flow.box()
 
-                DecTools_ColM = DecTools_Flow.column()
+                DecTools_Col = colm.row()
+                DecTools_Col.label(text="Edges")
+                DecTools_Col.operator('wm.dec_edge_ot_operator', text='', icon='EDGESEL')
 
-                DecTools_Col = DecTools_ColM.row()
-                DecTools_Col.operator('wm.dec_edge_random_ot_operator', text='Checker Decimate Edges')
+                colm = DecTools_Flow.box()
+
+                DecTools_Col = colm.row()
+                DecTools_Col.label(text="Checker Edges")
+                DecTools_Col.operator('wm.dec_edge_random_ot_operator', text='', icon='SNAP_EDGE')
 
             elif sel_mode[0]: # vertex
+                colm = DecTools_Flow.box()
 
-                DecTools_Col = DecTools_ColM.row()
-                DecTools_Col.operator('wm.dec_verts_ot_operator', text='Decimate Verts')
+                DecTools_Col = colm.row()
+                DecTools_Col.label(text="Verts")
+                DecTools_Col.operator('wm.dec_verts_ot_operator', text='', icon='VERTEXSEL')
 
 
         #### Tools Tab  ######################################
@@ -882,88 +901,72 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
         else:
             Tools_Col.prop(context.scene, "check_tools", text="Tools", icon="DOWNARROW_HLT")
 
-            Tools_Col = Master_Col.column() ###### Box if needed for Settings Panel #############
-            Tools_SubCol = Tools_Col.column(align=True)
+            Tools_Col = Master_Col.column() ###### Box if needed for Modifiers Panel #############
+            Tools_Subcol = Tools_Col.column(align=True)
 
-            Tools_Col = Master_Col.column()
+            Tools_Row = Tools_Subcol.row() #angle_limit
+            Tools_Row.label(text="Inset Settings")
 
-            Tools_Col = Master_Col.row()
-            Tools_Col.label(text="Inset Settings")
+            Tools_Row = Tools_Subcol.column()
 
-            Tools_Col = Master_Col.column()
+            Tools_Row.use_property_split = True
+            Tools_Flow = Tools_Row.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=False, align=True)
 
-            Tools_Col.use_property_split = True
-            Tools_Flow = Tools_Col.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
+            colm = Tools_Flow.box()
 
-            #Tools_ColM = Tools_Flow.column()
-
-            #Tools_Col = Tools_ColM.row()
-
-            #Tools_Col = Tools_ColM.row()
-            #Tools_Col.operator('wm.tool_inset_edit_ot_operator', text='Inset faces')
-
-            #Tools_ColM = Tools_Flow.column()
-
-            #Tools_Col = Tools_ColM.row()
-            #Tools_Col.label(text="Inset Settings")
-
-            Tools_ColM = Tools_Flow.column()
-
-            Tools_Col = Tools_ColM.row()
+            Tools_Col = colm.row()
             Tools_Col.label(text="Inset Depth")
             Tools_Col.prop(context.scene, "check_inset_depth", text="")
 
-            #Tools_ColM = Tools_Flow.column()
-
             if check_inset_depth == True:
-                Tools_Col = Tools_ColM.row()
+
+                Tools_Col = colm.row()
                 Tools_Col.label(text="Depth")
                 Tools_Col.prop(context.scene, "inset_depth", text="")
 
-                Tools_ColM = Tools_Flow.column()
+            colm = Tools_Flow.box()
 
-            Tools_Col = Tools_ColM.row()
+            Tools_Col = colm.row()
             Tools_Col.label(text="Inset Thickness")
             Tools_Col.prop(context.scene, "check_inset_thickness", text="")
 
-            #Tools_ColM = Tools_Flow.column()
-
             if check_inset_thickness == True:
-                Tools_Col = Tools_ColM.row()
+                Tools_Col = colm.row()
                 Tools_Col.label(text="Thickness")
                 Tools_Col.prop(context.scene, "inset_thickness", text="")
 
-                Tools_ColM = Tools_Flow.column()
+                #colm = Tools_Flow.column()
 
-            #Tools_ColM = Tools_Flow.column()
+            colm = Tools_Flow.box()
 
-            Tools_Col = Tools_ColM.row()
+            Tools_Col = colm.row()
             Tools_Col.label(text="Inset Individual")
             Tools_Col.prop(context.scene, "check_inset_individual", text="")
 
-            Tools_Apply_Col = Master_Col.column() ###### Box if needed for Settings Panel #############
+
+            Tools_Apply_Col = Master_Col.box() ###### Box if needed for Settings Panel #############
             Tools_Apply_SubCol = Tools_Apply_Col.column(align=True)
 
             Tools_Apply_Col.use_property_split = True
             Tools_Apply_Flow = Tools_Apply_Col.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
 
-            Tools_Apply_ColM = Tools_Apply_Flow.column()
+            #colm = Tools_Apply_Flow.column()
 
             if check_inset_depth == True or check_inset_thickness == True:
 
-                Tools_Apply_Col = Tools_Apply_ColM.row()
+                colm = Tools_Apply_Flow.column()
 
-                Tools_Apply_Col = Tools_Apply_ColM.row()
+                Tools_Apply_Col = colm.row()
                 Tools_Apply_Col.operator('wm.tool_inset_edit_ot_operator', text='Inset Selected')
 
-                Tools_Apply_ColM = Tools_Apply_Flow.column()
+            colm = Tools_Apply_Flow.column()
 
-            Tools_Apply_Col = Tools_Apply_ColM.row()
+            Tools_Apply_Col = colm.row()
             Tools_Apply_Col.operator('wm.tool_bevel_edge_edit_ot_operator', text='Bevel Selected')
 
-            Tools_Apply_ColM = Tools_Apply_Flow.column()
+            colm = Tools_Apply_Flow.column()
 
-            Tools_Apply_Col = Tools_Apply_ColM.row()
+            Tools_Apply_Col = colm.row()
             Tools_Apply_Col.operator('wm.tool_remove_doubles_edit_ot_operator', text='Remove Doubles')
 
 
@@ -4262,6 +4265,73 @@ class Dec_Edit_Modifier_Panel(bpy.types.Panel):
         col.prop(md, "face_influence")
 
 
+
+
+
+
+class Dec_Object_Materials_Panel(bpy.types.Panel):
+    bl_idname = 'object.dec_object_materials_panel'
+    bl_category = 'Edit'
+    bl_label = 'Materials Panel'
+    bl_context = "objectmode"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+
+    def draw(self, context):
+        #mat = bpy.context.object.active_material
+        #objs = []
+        #for obj in bpy.data.objects:
+            #for slot in obj.material_slots:
+                #if slot.material == mat:
+                    #objs.append(obj)
+
+
+        scene = context.scene
+
+        layout = self.layout
+
+        layout.use_property_split = True
+        layout.use_property_decorate = False  # No animation.
+
+        #layout = self.layout
+        #col = layout.column()
+        #col.prop(context.active_object, "MyInt")
+
+        #### Master Panel Layout Controllers ###############################
+
+        Master_Col = layout.column(align=True)
+        Master_Subcol = Master_Col.column()
+
+        #### View Tab Panel Layout Controllers #########################
+
+        View_Col = Master_Col.column(align=True)
+        View_Subcol = View_Col.column()
+        View_Row = View_Col.row()
+
+        #### View Tab  ############################################################################################################
+
+        #if check_view == False:
+            #View_Col.prop(context.scene, "check_view", text="View", icon="RIGHTARROW")
+        #else:
+            #View_Col.prop(context.scene, "check_view", text="View", icon="DOWNARROW_HLT")
+
+        View_Col = Master_Col.column() ###### Box if needed for View Panel #############
+        View_Subcol = View_Col.column(align=True)
+
+        View_Col.use_property_split = True
+        View_Flow = View_Col.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
+
+        colm = View_Flow.box()
+
+        View_Col = colm.row()
+        View_Col.label(text="Materials maybe?")
+            #View_Col.operator('wm.mod_apply_object_ot_operator', text='', icon='MODIFIER')
+            #View_Col.operator("object.material_slot_move", icon='TRIA_UP', text="").direction = 'UP'
+
+
+
+
+        
 
 
 
