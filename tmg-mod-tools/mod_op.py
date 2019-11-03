@@ -1,6 +1,5 @@
 import bpy
 
-
 class MOD_Apply_Object_OT_Operator(bpy.types.Operator):
     bl_idname = 'wm.mod_apply_object_ot_operator'
     bl_label = 'Decimate Panel'

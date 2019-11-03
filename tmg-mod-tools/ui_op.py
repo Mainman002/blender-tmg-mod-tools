@@ -66,13 +66,13 @@ class UI_View_Mode_OT_Operator(bpy.types.Operator):
             if obj is not "empty":
                 types = obj.type
 
-                if types == "MESH" or "CURVE" or "TEXT" or "METABALL":
-                    if bpy.context.scene.view_mod == '0':
-                        obj.display_type = 'TEXTURED'
-                    elif bpy.context.scene.view_mod == '1':
-                        obj.display_type = 'WIRE'
-                    elif bpy.context.scene.view_mod == '2':
-                        obj.display_type = 'BOUNDS'
+                #if types == "MESH" or "CURVE" or "TEXT" or "METABALL":
+                    #if bpy.context.scene.view_mod == '0':
+                        #obj.display_type = 'TEXTURED'
+                    #elif bpy.context.scene.view_mod == '1':
+                        #obj.display_type = 'WIRE'
+                    #elif bpy.context.scene.view_mod == '2':
+                        #obj.display_type = 'BOUNDS'
 
         return {'FINISHED'}
         return {'FINISHED'}

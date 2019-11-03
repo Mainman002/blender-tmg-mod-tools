@@ -1,39 +1,22 @@
 import bpy
 from bpy.props import FloatProperty
-#from bpy.types import Menu, Panel, UIList
-#from rna_prop_ui import PropertyPanel
-#from bpy_extras.node_utils import find_node_input
-
 
 class DEC_PT_Object_Panel(bpy.types.Panel):
-    bl_idname = 'object.dec_pt_object_panel'
+    bl_idname = 'OBJECT_PT_dec_object_panel'
     bl_category = 'Edit'
     bl_label = 'TMG Mod Tools'
     bl_context = "objectmode"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
 
-
-    def execute(self, context):
-        value = getattr(context, "object.bevel_width", None)
-        if value is not None:
-            dump(value, "object.bevel_width")
-            #bpy.ops.wm.mod_object_ot_operator()
-            bpy.context.scene.bevel_width = value
-
-
-
     def draw(self, context):
 
-        obj = bpy.context.view_layer.objects.active
         sel_mode = context.tool_settings.mesh_select_mode
 
         solid_offset = context.scene.solid_offset
         solid_thickness = context.scene.solid_thickness
         bevel_width = context.scene.bevel_width
         bevel_segments = context.scene.bevel_segments
-        #bevel_width = context.object.modifiers["Bevel"].width
-        #bevel_width = context.object.modifiers["Bevel"].width
 
         check_view = context.scene.check_view
         check_modifiers = context.scene.check_modifiers
@@ -54,18 +37,15 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
 
         ui_viewMode = context.scene.ui_viewMode
         ui_wireMode = context.scene.ui_wireMode
-        view_mod = context.scene.view_mod
 
         scene = context.scene
 
         layout = self.layout
 
+        obj = context.object
+
         layout.use_property_split = True
         layout.use_property_decorate = False  # No animation.
-
-        #layout = self.layout
-        #col = layout.column()
-        #col.prop(context.active_object, "MyInt")
 
         #### Master Panel Layout Controllers ###############################
 
@@ -115,16 +95,12 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
             View_Col.label(text="Texel Check")
             View_Col.operator('wm.ui_texel_check_ot_operator', text='', icon='UV_DATA')
 
-            colm = View_Flow.box()
-
-            View_Col = colm.row()
-            View_Col.label(text="Object")
-
-            #colm = View_Flow.box()
-
-            #View_Col = colm.row()
-            View_Col.prop(context.scene, "view_mod", text="")
-            View_Col.operator('wm.ui_view_mode_ot_operator', text='', icon='MOD_BOOLEAN')
+            obj = context.object
+            if obj is not None:
+                colm = View_Flow.box()
+                View_Col = colm.row()
+                View_Col.label(text="Object")
+                View_Col.prop(obj, "viewMode", index=2, text="")
 
         #### Modifiers Tab Panel Layout Controllers #########################
 
@@ -230,7 +206,7 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
             ModSettings_Col = colm.row()
             ModSettings_Col.prop(context.scene, "angle_limit", text="")
 
-            if mod_solid == True:
+            if mod_solid == True and context.active_object is not None:
 
                 ModSettings_Col = Master_Col.column() ###### Box if needed for Modifiers Panel #############
                 ModSettings_Subcol = ModSettings_Col.column(align=True)
@@ -260,10 +236,11 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
 
                 colm = ModSettings_Flow.column()
 
+                #if mod is not None:
                 ModSettings_Col = colm.row()
-                ModSettings_Col.prop(context.scene, "solid_thickness", text="")
+                ModSettings_Col.prop(obj, "solidifyThickness", index=2, text="", slider=True)
 
-            if mod_subsurf == True:
+            if mod_subsurf == True and context.active_object is not None:
                 ModSettings_Col = Master_Col.column() ###### Box if needed for Modifiers Panel #############
                 ModSettings_Subcol = ModSettings_Col.column(align=True)
 
@@ -278,12 +255,23 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
                 colm = ModSettings_Flow.column()
 
                 ModSettings_Col = colm.row()
-                ModSettings_Col.label(text="View")
+                ModSettings_Col.label(text="Subdivision Toggle")
 
                 colm = ModSettings_Flow.column()
 
                 ModSettings_Col = colm.row()
-                ModSettings_Col.prop(context.scene, "subsurf_vlevel", text="")
+                ModSettings_Col.prop(obj, "subdivisionToggle", index=2, text="")
+
+                colm = ModSettings_Flow.column()
+
+                ModSettings_Col = colm.row()
+                ModSettings_Col.label(text="View")
+
+                colm = ModSettings_Flow.column()
+
+                #if mod is not None:
+                ModSettings_Col = colm.row()
+                ModSettings_Col.prop(obj, "subdivisionView", index=2, text="")
 
                 colm = ModSettings_Flow.column()
 
@@ -292,15 +280,19 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
 
                 colm = ModSettings_Flow.column()
 
+                #if mod is not None:
                 ModSettings_Col = colm.row()
-                ModSettings_Col.prop(context.scene, "subsurf_rlevel", text="")
+                ModSettings_Col.prop(obj, "subdivisionRender", index=2, text="")
 
-            if mod_bevel == True:
+            if mod_bevel == True and context.active_object is not None:
                 ModSettings_Col = Master_Col.column() ###### Box if needed for Modifiers Panel #############
                 ModSettings_Subcol = ModSettings_Col.column(align=True)
 
                 ModSettings_Row = ModSettings_Subcol.row() #angle_limit
                 ModSettings_Row.label(text="Bevel")
+
+                ModSettings_Row = ModSettings_Subcol.row()
+                ModSettings_Row.prop(obj, "bevelToggle", index=2, text="", icon="MOD_BEVEL")
 
                 ModSettings_Row = ModSettings_Subcol.box()
 
@@ -315,17 +307,20 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
                 colm = ModSettings_Flow.column()
 
                 ModSettings_Col = colm.row()
-                ModSettings_Col.prop(context.scene, "bevel_segments", text="")
+                ModSettings_Col.prop(obj, "bevelSegments", index=2, text="")
 
                 colm = ModSettings_Flow.column()
+
+                mod = obj.modifiers.get("Bevel")
 
                 ModSettings_Col = colm.row()
                 ModSettings_Col.label(text="Width")
 
                 colm = ModSettings_Flow.column()
 
+                #if mod is not None:
                 ModSettings_Col = colm.row()
-                ModSettings_Col.prop(context.scene, "bevel_width", text="")
+                ModSettings_Col.prop(obj, "bevelWidth", index=2, text="", slider=True)
 
         #### Add Objects Tab Panel Layout Controllers #########################
 
@@ -431,7 +426,7 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
 
 
 class DEC_PT_Edit_Panel(bpy.types.Panel):
-    bl_idname = 'object.dec_pt_edit_panel'
+    bl_idname = 'OBJECT_PT_dec_edit_panel'
     bl_category = 'Edit'
     bl_label = 'TMG Mod Tools'
     bl_context = "mesh_edit"
@@ -462,8 +457,8 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
 
         axis_mode = context.scene.axis_mod
         mod_solid = context.scene.mod_solid
-        mod_bevel = context.scene.mod_bevel
-        bevel_segments = context.scene.bevel_segments
+        #mod_bevel = context.scene.mod_bevel
+        #bevel_segments = context.scene.bevel_segments
         mod_subsurf = context.scene.mod_subsurf
         subsurf_vlevel = context.scene.subsurf_vlevel
         subsurf_rlevel = context.scene.subsurf_rlevel
@@ -472,7 +467,7 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
 
         ui_viewMode = context.scene.ui_viewMode
         ui_wireMode = context.scene.ui_wireMode
-        view_mod = context.scene.view_mod
+        #view_mod = context.scene.view_mod
 
         layout = self.layout
 
@@ -527,16 +522,12 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
             View_Col.label(text="Texel Check")
             View_Col.operator('wm.ui_texel_check_ot_operator', text='', icon='UV_DATA')
 
-            colm = View_Flow.box()
-
-            View_Col = colm.row()
-            View_Col.label(text="Object")
-
-            #colm = View_Flow.box()
-
-            #View_Col = colm.row()
-            View_Col.prop(context.scene, "view_mod", text="")
-            View_Col.operator('wm.ui_view_mode_ot_operator', text='', icon='MOD_BOOLEAN')
+            obj = context.object
+            if obj is not None:
+                colm = View_Flow.box()
+                View_Col = colm.row()
+                View_Col.label(text="Object")
+                View_Col.prop(obj, "viewMode", index=2, text="")
 
         #### Modifiers Tab Panel Layout Controllers #########################
 
@@ -642,7 +633,7 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
             ModSettings_Col = colm.row()
             ModSettings_Col.prop(context.scene, "angle_limit", text="")
 
-            if mod_solid == True:
+            if mod_solid == True and context.active_object is not None:
 
                 ModSettings_Col = Master_Col.column() ###### Box if needed for Modifiers Panel #############
                 ModSettings_Subcol = ModSettings_Col.column(align=True)
@@ -672,10 +663,11 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
 
                 colm = ModSettings_Flow.column()
 
+                #if mod is not None:
                 ModSettings_Col = colm.row()
-                ModSettings_Col.prop(context.scene, "solid_thickness", text="")
+                ModSettings_Col.prop(obj, "solidifyThickness", index=2, text="", slider=True)
 
-            if mod_subsurf == True:
+            if mod_subsurf == True and context.active_object is not None:
                 ModSettings_Col = Master_Col.column() ###### Box if needed for Modifiers Panel #############
                 ModSettings_Subcol = ModSettings_Col.column(align=True)
 
@@ -690,12 +682,23 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
                 colm = ModSettings_Flow.column()
 
                 ModSettings_Col = colm.row()
-                ModSettings_Col.label(text="View")
+                ModSettings_Col.label(text="Subdivision Toggle")
 
                 colm = ModSettings_Flow.column()
 
                 ModSettings_Col = colm.row()
-                ModSettings_Col.prop(context.scene, "subsurf_vlevel", text="")
+                ModSettings_Col.prop(obj, "subdivisionToggle", index=2, text="")
+
+                colm = ModSettings_Flow.column()
+
+                ModSettings_Col = colm.row()
+                ModSettings_Col.label(text="View")
+
+                colm = ModSettings_Flow.column()
+
+                #if mod is not None:
+                ModSettings_Col = colm.row()
+                ModSettings_Col.prop(obj, "subdivisionView", index=2, text="")
 
                 colm = ModSettings_Flow.column()
 
@@ -704,10 +707,11 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
 
                 colm = ModSettings_Flow.column()
 
+                #if mod is not None:
                 ModSettings_Col = colm.row()
-                ModSettings_Col.prop(context.scene, "subsurf_rlevel", text="")
+                ModSettings_Col.prop(obj, "subdivisionRender", index=2, text="")
 
-            if mod_bevel == True:
+            if mod_bevel == True and context.active_object is not None:
                 ModSettings_Col = Master_Col.column() ###### Box if needed for Modifiers Panel #############
                 ModSettings_Subcol = ModSettings_Col.column(align=True)
 
@@ -722,22 +726,35 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
                 colm = ModSettings_Flow.column()
 
                 ModSettings_Col = colm.row()
+                ModSettings_Col.label(text="Bevel Toggle")
+
+                colm = ModSettings_Flow.column()
+
+                ModSettings_Col = colm.row()
+                ModSettings_Col.prop(obj, "bevelToggle", index=2, text="")
+
+                colm = ModSettings_Flow.column()
+
+                ModSettings_Col = colm.row()
                 ModSettings_Col.label(text="Segments")
 
                 colm = ModSettings_Flow.column()
 
                 ModSettings_Col = colm.row()
-                ModSettings_Col.prop(context.scene, "bevel_segments", text="")
+                ModSettings_Col.prop(obj, "bevelSegments", index=2, text="")
 
                 colm = ModSettings_Flow.column()
+
+                mod = obj.modifiers.get("Bevel")
 
                 ModSettings_Col = colm.row()
                 ModSettings_Col.label(text="Width")
 
                 colm = ModSettings_Flow.column()
 
+                #if mod is not None:
                 ModSettings_Col = colm.row()
-                ModSettings_Col.prop(context.scene, "bevel_width", text="")
+                ModSettings_Col.prop(obj, "bevelWidth", index=2, text="", slider=True)
 
         #### Add Objects Tab  #############################################
 
@@ -985,7 +1002,7 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
 
 
 class Dec_Object_Modifier_Panel(bpy.types.Panel):
-    bl_idname = 'object.dec_object_modifier_panel'
+    bl_idname = 'OBJECT_PT_dec_object_modifier_panel'
     bl_category = 'Edit'
     bl_label = 'Modifiers Panel'
     bl_context = "objectmode"
@@ -2643,7 +2660,7 @@ class Dec_Object_Modifier_Panel(bpy.types.Panel):
 
 
 class Dec_Edit_Modifier_Panel(bpy.types.Panel):
-    bl_idname = 'object.dec_edit_modifier_panel'
+    bl_idname = 'OBJECT_PT_dec_edit_modifier_panel'
     bl_category = 'Edit'
     bl_label = 'Modifiers Panel'
     bl_context = "mesh_edit"
@@ -4270,7 +4287,7 @@ class Dec_Edit_Modifier_Panel(bpy.types.Panel):
 
 
 class Dec_Object_Materials_Panel(bpy.types.Panel):
-    bl_idname = 'object.dec_object_materials_panel'
+    bl_idname = 'OBJECT_PT_dec_object_materials_panel'
     bl_category = 'Edit'
     bl_label = 'Materials Panel'
     bl_context = "objectmode"

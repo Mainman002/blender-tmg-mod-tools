@@ -79,7 +79,7 @@ class ADD_Solid_Plane_Object_OT_Operator(bpy.types.Operator):
             bpy.ops.object.modifier_add(type='BEVEL')
             bpy.context.object.modifiers["Bevel"].segments = bevel_segments
             bpy.context.object.modifiers["Bevel"].limit_method = 'ANGLE'
-            bpy.context.object.modifiers["Bevel"].width = 0.026
+            bpy.context.object.modifiers["Bevel"].width = 0.3
             bpy.context.object.modifiers["Bevel"].angle_limit = 0.785398
             bpy.context.object.modifiers["Bevel"].offset_type = 'WIDTH'
             bpy.context.object.modifiers["Bevel"].miter_outer = 'MITER_ARC'

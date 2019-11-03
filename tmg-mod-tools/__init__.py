@@ -3,7 +3,7 @@ bl_info = {
     "author" : "Johnathan Mueller, Jayanam",
     "descrtion" : "Checker decimate edges in your selected edge loops.",
     "blender" : (2, 80, 0),
-    "version" : (0, 1, 7),
+    "version" : (0, 1, 8),
     "location" : "View3D (EditMode) > Sidebar > Edit Tab",
     "warning" : "",
     "category" : "Mesh"
@@ -22,6 +22,177 @@ from . mod_op import *
 from . add_op import * 
 from . tool_op import * 
 from . dec_panel import * 
+
+
+##################### Update Defs Start #############################
+
+def objectStart_Values(self, context):
+    if context.active_object is not None:
+        ob = "None" #bpy.context.object
+        obs = ob
+        obj = bpy.context.active_object
+        objs = bpy.context.selected_objects
+        ob.location.z = 0.3
+        if ob.type == "Label":
+            ob.data.body = "Off"
+        mod = ob.modifiers.get("Bevel")
+        if mod is not None:
+            ob.modifiers["Bevel"].width = 0.3
+            ob.modifiers["Bevel"].segments = 3
+        mod = ob.modifiers.get("Solidify")
+        if mod is not None:
+            ob.modifiers["Solidify"].thickness = 0.3
+
+def myBool_changed(self, context):
+    if context.active_object is not None:
+        ob = context.object
+        if ob is not None:
+            if ob.myBool:
+                ob.data.body = "On"
+            else:
+                ob.data.body = "Off"
+
+def zlayer_changed(self, context):
+    if context.active_object is not None:
+        ob = context.object
+        zlayer = ob.zlayer
+        if zlayer > 0:
+            ob.location.z = float(zlayer) * 0.3
+        else:
+            ob.zlayer = 1
+
+##################### Update Bevel #############################
+
+def bevelToggle_changed(self, context):
+    if context.active_object is not None:
+        ob = context.object
+        bevelToggle = ob.bevelToggle
+        for nr, ob in enumerate(bpy.context.selected_objects):
+            mod = ob.modifiers.get("Bevel")
+            if ob is not None and mod is not None:
+                ob.modifiers["Bevel"].show_render = bool(bevelToggle)
+                ob.modifiers["Bevel"].show_viewport = bool(bevelToggle)
+                ob.modifiers["Bevel"].show_in_editmode = bool(bevelToggle)
+
+
+def bevelWidth_changed(self, context):
+    if context.active_object is not None:
+        ob = context.object
+        bevelWidth = ob.bevelWidth
+        if bevelWidth < 0.1:
+            ob.bevelWidth = 0.1
+        elif bevelWidth > 4.7:
+            ob.bevelWidth = 4.7
+        else:
+            for nr, ob in enumerate(bpy.context.selected_objects):
+                mod = ob.modifiers.get("Bevel")
+                if ob is not None and mod is not None:
+                    ob.modifiers["Bevel"].width = float(bevelWidth) * 0.3
+
+def bevelSegments_changed(self, context):
+    if context.active_object is not None:
+        ob = context.object
+        bevelSegments = ob.bevelSegments
+        for nr, ob in enumerate(bpy.context.selected_objects):
+            mod = ob.modifiers.get("Bevel")
+            if ob is not None and mod is not None:
+                ob.modifiers["Bevel"].segments = int(bevelSegments)
+
+##################### Update Subdivision #############################
+
+def subdivisionToggle_changed(self, context):
+    if context.active_object is not None:
+        ob = context.object
+        subdivisionToggle = ob.subdivisionToggle
+        for nr, ob in enumerate(bpy.context.selected_objects):
+            mod = ob.modifiers.get("Subdivision")
+            if ob is not None and mod is not None:
+                ob.modifiers["Subdivision"].show_viewport = bool(subdivisionToggle)
+
+def subdivisionView_changed(self, context):
+    if context.active_object is not None:
+        ob = context.object
+        subdivisionView = ob.subdivisionView
+        for nr, ob in enumerate(bpy.context.selected_objects):
+            mod = ob.modifiers.get("Subdivision")
+            if ob is not None and mod is not None:
+                ob.modifiers["Subdivision"].levels = int(subdivisionView)
+
+def subdivisionRender_changed(self, context):
+    if context.active_object is not None:
+        ob = context.object
+        subdivisionRender = ob.subdivisionRender
+        for nr, ob in enumerate(bpy.context.selected_objects):
+            mod = ob.modifiers.get("Subdivision")
+            if ob is not None and mod is not None:
+                ob.modifiers["Subdivision"].render_levels = int(subdivisionRender)
+
+##################### Update Solidify #############################
+
+def solidifyThickness_changed(self, context):
+    if context.active_object is not None:
+        ob = context.object
+        solidifyThickness = ob.solidifyThickness
+        if solidifyThickness < 0.1:
+            ob.solidifyThickness = 0.1
+        elif solidifyThickness > 4.7:
+            ob.solidifyThickness = 4.7
+        else:
+            for nr, ob in enumerate(bpy.context.selected_objects):
+                mod = ob.modifiers.get("Solidify")
+                if ob is not None and mod is not None:
+                    ob.modifiers["Solidify"].thickness = float(solidifyThickness) * 0.3
+
+##################### Update View Mode #############################
+
+def viewMode_changed(self, context):
+    if context.active_object is not None:
+        ob = context.object
+        viewMode = ob.viewMode
+        for nr, ob in enumerate(bpy.context.selected_objects):
+            types = ob.type
+            if ob is not "empty":
+                if types == "MESH" or "CURVE" or "TEXT" or "METABALL":
+                    ob.display_type = viewMode
+
+##################### Update Values #############################
+
+bpy.types.Object.myBool = bpy.props.BoolProperty(name = "Switch", default = False, update=myBool_changed)
+
+bpy.types.Object.zlayer = bpy.props.IntProperty(name = "Z Layer", default = 1, update=zlayer_changed)
+
+##### Bevel ##########
+bpy.types.Object.bevelToggle = bpy.props.BoolProperty(name = "Bevel Toggle", default = True, update=bevelToggle_changed)
+bpy.types.Object.bevelSegments = bpy.props.IntProperty(name = "Bevel Segments", default = 1, min = 1, max = 6, update=bevelSegments_changed)
+bpy.types.Object.bevelWidth = bpy.props.FloatProperty(name = "Bevel Width", default = 0.3, min = 0.1, max = 4.7, update=bevelWidth_changed)
+
+##### Subdivision ##########
+bpy.types.Object.subdivisionToggle = bpy.props.BoolProperty(name = "Subdivision Toggle", default = True, update=subdivisionToggle_changed)
+bpy.types.Object.subdivisionView = bpy.props.IntProperty(name = "Subdivision View Levels", default = 1, min = 0, max = 5, update=subdivisionView_changed)
+bpy.types.Object.subdivisionRender = bpy.props.IntProperty(name = "Subdivision Render Levels", default = 4, min = 0, max = 8, update=subdivisionRender_changed)
+
+
+##### Solidify ##########
+bpy.types.Object.solidifyThickness = bpy.props.FloatProperty(name = "Solidify Thickness", default = 0.3, min = 0.1, max = 4.7, update=solidifyThickness_changed)
+
+##### Object View Mode ##########
+bpy.types.Object.solidifyThickness = bpy.props.FloatProperty(name = "Solidify Thickness", default = 0.3, min = 0.1, max = 4.7, update=solidifyThickness_changed)
+
+
+bpy.types.Object.viewMode = bpy.props.EnumProperty(
+    name="View Mode",
+    description="Defines the Viewport mode for objects",
+    items=(
+        ('TEXTURED', 'TEXTURED', 'TEXTURED View',0),
+        ('WIRE', 'WIRE', 'WIRE View',1),
+        ('BOUNDS', 'BOUNDS', 'BOUNDS View',2)
+        ),
+    default='TEXTURED', 
+    update=viewMode_changed
+    )
+
+
+##################### Update Defs End #############################
 
 
 #### Menu Float Sliders #########################
@@ -179,17 +350,6 @@ bpy.types.Scene.axis_mod = EnumProperty(
         ('Z', 'Axis Z', 'Face the Z axis',2)
         ),
     default='Y'
-    )
-
-bpy.types.Scene.view_mod = EnumProperty(
-    name="View Mode",
-    description="Defines the Viewport mode for objects",
-    items=(
-        ('0', 'TEXTURED', 'TEXTURED View',0),
-        ('1', 'WIRE', 'WIRE View',1),
-        ('2', 'BOUNDS', 'BOUNDS View',2)
-        ),
-    default='0'
     )
 
 classes = (
