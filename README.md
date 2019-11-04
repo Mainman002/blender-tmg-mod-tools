@@ -9,7 +9,11 @@
 
 ### youtube video showing what it can do -> 
 
-https://youtu.be/D8FJvBc65Lk
+![TMG_Mod_Tools v0.1.8 live update slider test](https://youtu.be/vagXWfk5gwE)
+
+![TMG_Mod_Tools v0.1.6 alpha Guide / Tutorial](https://youtu.be/nr9dIqI0Ll4)
+                              
+![Decimate_Tools Update #3](https://youtu.be/D8FJvBc65Lk)
 
 ![TMG_Mod_Tools pic1](Preview-Images/01.png)
 
