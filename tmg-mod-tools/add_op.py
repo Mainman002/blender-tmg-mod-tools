@@ -24,17 +24,18 @@ class ADD_Solid_Plane_Object_OT_Operator(bpy.types.Operator):
 
     def execute(self, context):
 
-        solid_offset = context.scene.solid_offset
-        solid_thickness = context.scene.solid_thickness
-
+        solid_offset = 1
+        solid_thickness = 0.20
         axis_mode = context.scene.axis_mod
         mod_solid = context.scene.mod_solid
         mod_mirror = context.scene.mod_mirror
         mod_bevel = context.scene.mod_bevel
-        bevel_segments = context.scene.bevel_segments
+        bevel_segments = 3
         mod_subsurf = context.scene.mod_subsurf
-        subsurf_vlevel = context.scene.subsurf_vlevel
-        subsurf_rlevel = context.scene.subsurf_rlevel
+        subsurf_vlevel = 2
+        subsurf_rlevel = 3
+        mod_triangulate = context.scene.mod_triangulate
+        mod_weightednormals = context.scene.mod_weightednormals
 
         obj = bpy.context.active_object
 
@@ -42,6 +43,7 @@ class ADD_Solid_Plane_Object_OT_Operator(bpy.types.Operator):
             bpy.ops.object.mode_set(mode="OBJECT")
 
         bpy.ops.mesh.primitive_plane_add(size=2, enter_editmode=False, location=(0, 0, 0))
+        obj = bpy.context.active_object
 
         if mod_solid == True:
             bpy.ops.object.modifier_add(type='SOLIDIFY')
@@ -92,19 +94,23 @@ class ADD_Solid_Plane_Object_OT_Operator(bpy.types.Operator):
             bpy.context.object.modifiers["Subdivision"].show_expanded = False
             bpy.context.object.modifiers["Subdivision"].show_in_editmode = False
         
-        bpy.ops.object.modifier_add(type='TRIANGULATE')
-        bpy.context.object.modifiers["Triangulate"].keep_custom_normals = True
-        bpy.context.object.modifiers["Triangulate"].quad_method = 'FIXED'
-        bpy.context.object.modifiers["Triangulate"].show_in_editmode = False
-        bpy.context.object.modifiers["Triangulate"].show_expanded = False
+        if mod_triangulate == True:
+            bpy.ops.object.modifier_add(type='TRIANGULATE')
+            bpy.context.object.modifiers["Triangulate"].keep_custom_normals = True
+            bpy.context.object.modifiers["Triangulate"].quad_method = 'FIXED'
+            bpy.context.object.modifiers["Triangulate"].show_in_editmode = False
+            bpy.context.object.modifiers["Triangulate"].show_expanded = False
+        
         bpy.ops.object.modifier_add(type='WEIGHTED_NORMAL')
         bpy.context.object.modifiers["Weighted Normal"].keep_sharp = True
         bpy.context.object.modifiers["Weighted Normal"].mode = 'FACE_AREA_WITH_ANGLE'
         bpy.context.object.modifiers["Weighted Normal"].show_in_editmode = False
         bpy.context.object.modifiers["Weighted Normal"].show_expanded = False
+
         bpy.context.object.data.use_auto_smooth = True
         bpy.context.object.data.auto_smooth_angle = 0.785398
         bpy.ops.object.shade_smooth()
+        
         return {'FINISHED'}
         return {'FINISHED'}
 
@@ -116,17 +122,18 @@ class ADD_Solid_Circle_Object_OT_Operator(bpy.types.Operator):
 
     def execute(self, context):
 
-        solid_offset = context.scene.solid_offset
-        solid_thickness = context.scene.solid_thickness
-
+        solid_offset = 1
+        solid_thickness = 0.20
         axis_mode = context.scene.axis_mod
         mod_solid = context.scene.mod_solid
         mod_mirror = context.scene.mod_mirror
         mod_bevel = context.scene.mod_bevel
-        bevel_segments = context.scene.bevel_segments
+        bevel_segments = 3
         mod_subsurf = context.scene.mod_subsurf
-        subsurf_vlevel = context.scene.subsurf_vlevel
-        subsurf_rlevel = context.scene.subsurf_rlevel
+        subsurf_vlevel = 2
+        subsurf_rlevel = 3
+        mod_triangulate = context.scene.mod_triangulate
+        mod_weightednormals = context.scene.mod_weightednormals
 
         obj = bpy.context.active_object
 
@@ -186,19 +193,23 @@ class ADD_Solid_Circle_Object_OT_Operator(bpy.types.Operator):
             bpy.context.object.modifiers["Subdivision"].show_in_editmode = False
             bpy.context.object.modifiers["Subdivision"].show_expanded = False
 
-        bpy.ops.object.modifier_add(type='TRIANGULATE')
-        bpy.context.object.modifiers["Triangulate"].quad_method = 'FIXED'
-        bpy.context.object.modifiers["Triangulate"].keep_custom_normals = True
-        bpy.context.object.modifiers["Triangulate"].show_in_editmode = False
-        bpy.context.object.modifiers["Triangulate"].show_expanded = False
+        if mod_triangulate == True:
+            bpy.ops.object.modifier_add(type='TRIANGULATE')
+            bpy.context.object.modifiers["Triangulate"].quad_method = 'FIXED'
+            bpy.context.object.modifiers["Triangulate"].keep_custom_normals = True
+            bpy.context.object.modifiers["Triangulate"].show_in_editmode = False
+            bpy.context.object.modifiers["Triangulate"].show_expanded = False
+        
         bpy.ops.object.modifier_add(type='WEIGHTED_NORMAL')
         bpy.context.object.modifiers["Weighted Normal"].mode = 'FACE_AREA_WITH_ANGLE'
         bpy.context.object.modifiers["Weighted Normal"].keep_sharp = True
         bpy.context.object.modifiers["Weighted Normal"].show_in_editmode = False
         bpy.context.object.modifiers["Weighted Normal"].show_expanded = False
+
         bpy.context.object.data.use_auto_smooth = True
         bpy.context.object.data.auto_smooth_angle = 0.785398
         bpy.ops.object.shade_smooth()
+
         return {'FINISHED'}
         return {'FINISHED'}
 
@@ -210,17 +221,18 @@ class ADD_Arch_Object_X_OT_Operator(bpy.types.Operator):
 
     def execute(self, context):
 
-        solid_offset = context.scene.solid_offset
-        solid_thickness = context.scene.solid_thickness
-
+        solid_offset = 1
+        solid_thickness = 0.20
         axis_mode = context.scene.axis_mod
         mod_solid = context.scene.mod_solid
         mod_mirror = context.scene.mod_mirror
         mod_bevel = context.scene.mod_bevel
-        bevel_segments = context.scene.bevel_segments
+        bevel_segments = 3
         mod_subsurf = context.scene.mod_subsurf
-        subsurf_vlevel = context.scene.subsurf_vlevel
-        subsurf_rlevel = context.scene.subsurf_rlevel
+        subsurf_vlevel = 2
+        subsurf_rlevel = 3
+        mod_triangulate = context.scene.mod_triangulate
+        mod_weightednormals = context.scene.mod_weightednormals
 
         obj = bpy.context.active_object
 
@@ -262,19 +274,23 @@ class ADD_Arch_Object_X_OT_Operator(bpy.types.Operator):
             bpy.context.object.modifiers["Subdivision"].show_in_editmode = False
             bpy.context.object.modifiers["Subdivision"].show_expanded = False
 
-        bpy.ops.object.modifier_add(type='TRIANGULATE')
-        bpy.context.object.modifiers["Triangulate"].keep_custom_normals = True
-        bpy.context.object.modifiers["Triangulate"].quad_method = 'FIXED'
-        bpy.context.object.modifiers["Triangulate"].show_expanded = False
-        bpy.context.object.modifiers["Triangulate"].show_in_editmode = False
+        if mod_triangulate == True:
+            bpy.ops.object.modifier_add(type='TRIANGULATE')
+            bpy.context.object.modifiers["Triangulate"].keep_custom_normals = True
+            bpy.context.object.modifiers["Triangulate"].quad_method = 'FIXED'
+            bpy.context.object.modifiers["Triangulate"].show_expanded = False
+            bpy.context.object.modifiers["Triangulate"].show_in_editmode = False
+
         bpy.ops.object.modifier_add(type='WEIGHTED_NORMAL')
         bpy.context.object.modifiers["Weighted Normal"].keep_sharp = True
         bpy.context.object.modifiers["Weighted Normal"].mode = 'FACE_AREA_WITH_ANGLE'
         bpy.context.object.modifiers["Weighted Normal"].show_in_editmode = False
         bpy.context.object.modifiers["Weighted Normal"].show_expanded = False
+
         bpy.context.object.data.use_auto_smooth = True
         bpy.context.object.data.auto_smooth_angle = 0.785398
         bpy.ops.object.shade_smooth()
+
         return {'FINISHED'}
         return {'FINISHED'}
 
@@ -286,17 +302,18 @@ class ADD_Arch_Object_Y_OT_Operator(bpy.types.Operator):
 
     def execute(self, context):
 
-        solid_offset = context.scene.solid_offset
-        solid_thickness = context.scene.solid_thickness
-
+        solid_offset = 1
+        solid_thickness = 0.20
         axis_mode = context.scene.axis_mod
         mod_solid = context.scene.mod_solid
         mod_mirror = context.scene.mod_mirror
         mod_bevel = context.scene.mod_bevel
-        bevel_segments = context.scene.bevel_segments
+        bevel_segments = 3
         mod_subsurf = context.scene.mod_subsurf
-        subsurf_vlevel = context.scene.subsurf_vlevel
-        subsurf_rlevel = context.scene.subsurf_rlevel
+        subsurf_vlevel = 2
+        subsurf_rlevel = 3
+        mod_triangulate = context.scene.mod_triangulate
+        mod_weightednormals = context.scene.mod_weightednormals
 
         obj = bpy.context.active_object
 
@@ -335,19 +352,23 @@ class ADD_Arch_Object_Y_OT_Operator(bpy.types.Operator):
             bpy.context.object.modifiers["Subdivision"].show_in_editmode = False
             bpy.context.object.modifiers["Subdivision"].show_expanded = False
 
-        bpy.ops.object.modifier_add(type='TRIANGULATE')
-        bpy.context.object.modifiers["Triangulate"].keep_custom_normals = True
-        bpy.context.object.modifiers["Triangulate"].quad_method = 'FIXED'
-        bpy.context.object.modifiers["Triangulate"].show_expanded = False
-        bpy.context.object.modifiers["Triangulate"].show_in_editmode = False
+        if mod_triangulate == True:
+            bpy.ops.object.modifier_add(type='TRIANGULATE')
+            bpy.context.object.modifiers["Triangulate"].keep_custom_normals = True
+            bpy.context.object.modifiers["Triangulate"].quad_method = 'FIXED'
+            bpy.context.object.modifiers["Triangulate"].show_expanded = False
+            bpy.context.object.modifiers["Triangulate"].show_in_editmode = False
+        
         bpy.ops.object.modifier_add(type='WEIGHTED_NORMAL')
         bpy.context.object.modifiers["Weighted Normal"].keep_sharp = True
         bpy.context.object.modifiers["Weighted Normal"].mode = 'FACE_AREA_WITH_ANGLE'
         bpy.context.object.modifiers["Weighted Normal"].show_in_editmode = False
         bpy.context.object.modifiers["Weighted Normal"].show_expanded = False
+
         bpy.context.object.data.use_auto_smooth = True
         bpy.context.object.data.auto_smooth_angle = 0.785398
         bpy.ops.object.shade_smooth()
+
         return {'FINISHED'}
         return {'FINISHED'}
 
@@ -359,17 +380,18 @@ class ADD_Arch_Object_Z_OT_Operator(bpy.types.Operator):
 
     def execute(self, context):
 
-        solid_offset = context.scene.solid_offset
-        solid_thickness = context.scene.solid_thickness
-
+        solid_offset = 1
+        solid_thickness = 0.20
         axis_mode = context.scene.axis_mod
         mod_solid = context.scene.mod_solid
         mod_mirror = context.scene.mod_mirror
         mod_bevel = context.scene.mod_bevel
-        bevel_segments = context.scene.bevel_segments
+        bevel_segments = 3
         mod_subsurf = context.scene.mod_subsurf
-        subsurf_vlevel = context.scene.subsurf_vlevel
-        subsurf_rlevel = context.scene.subsurf_rlevel
+        subsurf_vlevel = 2
+        subsurf_rlevel = 3
+        mod_triangulate = context.scene.mod_triangulate
+        mod_weightednormals = context.scene.mod_weightednormals
 
         obj = bpy.context.active_object
 
@@ -410,19 +432,23 @@ class ADD_Arch_Object_Z_OT_Operator(bpy.types.Operator):
             bpy.context.object.modifiers["Subdivision"].show_in_editmode = False
             bpy.context.object.modifiers["Subdivision"].show_expanded = False
 
-        bpy.ops.object.modifier_add(type='TRIANGULATE')
-        bpy.context.object.modifiers["Triangulate"].keep_custom_normals = True
-        bpy.context.object.modifiers["Triangulate"].quad_method = 'FIXED'
-        bpy.context.object.modifiers["Triangulate"].show_expanded = False
-        bpy.context.object.modifiers["Triangulate"].show_in_editmode = False
+        if mod_triangulate == True:
+            bpy.ops.object.modifier_add(type='TRIANGULATE')
+            bpy.context.object.modifiers["Triangulate"].keep_custom_normals = True
+            bpy.context.object.modifiers["Triangulate"].quad_method = 'FIXED'
+            bpy.context.object.modifiers["Triangulate"].show_expanded = False
+            bpy.context.object.modifiers["Triangulate"].show_in_editmode = False
+
         bpy.ops.object.modifier_add(type='WEIGHTED_NORMAL')
         bpy.context.object.modifiers["Weighted Normal"].keep_sharp = True
         bpy.context.object.modifiers["Weighted Normal"].mode = 'FACE_AREA_WITH_ANGLE'
         bpy.context.object.modifiers["Weighted Normal"].show_in_editmode = False
         bpy.context.object.modifiers["Weighted Normal"].show_expanded = False
+
         bpy.context.object.data.use_auto_smooth = True
         bpy.context.object.data.auto_smooth_angle = 0.785398
         bpy.ops.object.shade_smooth()
+
         return {'FINISHED'}
         return {'FINISHED'}
 
@@ -434,17 +460,18 @@ class ADD_Pipe_Line_Object_Y_OT_Operator(bpy.types.Operator):
 
     def execute(self, context):
 
-        solid_offset = context.scene.solid_offset
-        solid_thickness = context.scene.solid_thickness
-
+        solid_offset = 1
+        solid_thickness = 0.20
         axis_mode = context.scene.axis_mod
         mod_solid = context.scene.mod_solid
         mod_mirror = context.scene.mod_mirror
         mod_bevel = context.scene.mod_bevel
-        bevel_segments = context.scene.bevel_segments
+        bevel_segments = 3
         mod_subsurf = context.scene.mod_subsurf
-        subsurf_vlevel = context.scene.subsurf_vlevel
-        subsurf_rlevel = context.scene.subsurf_rlevel
+        subsurf_vlevel = 2
+        subsurf_rlevel = 3
+        mod_triangulate = context.scene.mod_triangulate
+        mod_weightednormals = context.scene.mod_weightednormals
 
         obj = bpy.context.active_object
 
@@ -492,19 +519,23 @@ class ADD_Pipe_Line_Object_Y_OT_Operator(bpy.types.Operator):
             bpy.context.object.modifiers["Subdivision"].show_in_editmode = False
             bpy.context.object.modifiers["Subdivision"].show_expanded = False
         
-        bpy.ops.object.modifier_add(type='TRIANGULATE')
-        bpy.context.object.modifiers["Triangulate"].quad_method = 'FIXED'
-        bpy.context.object.modifiers["Triangulate"].keep_custom_normals = True
-        bpy.context.object.modifiers["Triangulate"].show_in_editmode = False
-        bpy.context.object.modifiers["Triangulate"].show_expanded = False
+        if mod_triangulate == True:
+            bpy.ops.object.modifier_add(type='TRIANGULATE')
+            bpy.context.object.modifiers["Triangulate"].quad_method = 'FIXED'
+            bpy.context.object.modifiers["Triangulate"].keep_custom_normals = True
+            bpy.context.object.modifiers["Triangulate"].show_in_editmode = False
+            bpy.context.object.modifiers["Triangulate"].show_expanded = False
+
         bpy.ops.object.modifier_add(type='WEIGHTED_NORMAL')
         bpy.context.object.modifiers["Weighted Normal"].mode = 'FACE_AREA_WITH_ANGLE'
         bpy.context.object.modifiers["Weighted Normal"].weight = 45
         bpy.context.object.modifiers["Weighted Normal"].keep_sharp = True
         bpy.context.object.modifiers["Weighted Normal"].show_in_editmode = False
         bpy.context.object.modifiers["Weighted Normal"].show_expanded = False
+
         bpy.context.object.data.use_auto_smooth = True
         bpy.context.object.data.auto_smooth_angle = 0.785398
+
         return {'FINISHED'}
         return {'FINISHED'}
 
@@ -516,17 +547,18 @@ class ADD_Pipe_Line_Object_Z_OT_Operator(bpy.types.Operator):
 
     def execute(self, context):
 
-        solid_offset = context.scene.solid_offset
-        solid_thickness = context.scene.solid_thickness
-
+        solid_offset = 1
+        solid_thickness = 0.20
         axis_mode = context.scene.axis_mod
         mod_solid = context.scene.mod_solid
         mod_mirror = context.scene.mod_mirror
         mod_bevel = context.scene.mod_bevel
-        bevel_segments = context.scene.bevel_segments
+        bevel_segments = 3
         mod_subsurf = context.scene.mod_subsurf
-        subsurf_vlevel = context.scene.subsurf_vlevel
-        subsurf_rlevel = context.scene.subsurf_rlevel
+        subsurf_vlevel = 2
+        subsurf_rlevel = 3
+        mod_triangulate = context.scene.mod_triangulate
+        mod_weightednormals = context.scene.mod_weightednormals
 
         obj = bpy.context.active_object
 
@@ -576,19 +608,23 @@ class ADD_Pipe_Line_Object_Z_OT_Operator(bpy.types.Operator):
             bpy.context.object.modifiers["Subdivision"].show_in_editmode = False
             bpy.context.object.modifiers["Subdivision"].show_expanded = False
 
-        bpy.ops.object.modifier_add(type='TRIANGULATE')
-        bpy.context.object.modifiers["Triangulate"].quad_method = 'FIXED'
-        bpy.context.object.modifiers["Triangulate"].keep_custom_normals = True
-        bpy.context.object.modifiers["Triangulate"].show_in_editmode = False
-        bpy.context.object.modifiers["Triangulate"].show_expanded = False
+        if mod_triangulate == True:
+            bpy.ops.object.modifier_add(type='TRIANGULATE')
+            bpy.context.object.modifiers["Triangulate"].quad_method = 'FIXED'
+            bpy.context.object.modifiers["Triangulate"].keep_custom_normals = True
+            bpy.context.object.modifiers["Triangulate"].show_in_editmode = False
+            bpy.context.object.modifiers["Triangulate"].show_expanded = False
+
         bpy.ops.object.modifier_add(type='WEIGHTED_NORMAL')
         bpy.context.object.modifiers["Weighted Normal"].mode = 'FACE_AREA_WITH_ANGLE'
         bpy.context.object.modifiers["Weighted Normal"].weight = 45
         bpy.context.object.modifiers["Weighted Normal"].keep_sharp = True
         bpy.context.object.modifiers["Weighted Normal"].show_in_editmode = False
         bpy.context.object.modifiers["Weighted Normal"].show_expanded = False
+
         bpy.context.object.data.use_auto_smooth = True
         bpy.context.object.data.auto_smooth_angle = 0.785398
+
         return {'FINISHED'}
         return {'FINISHED'}
 
@@ -606,17 +642,18 @@ class ADD_Basic_Spline_Y_OT_Operator(bpy.types.Operator):
 
     def execute(self, context):
 
-        solid_offset = context.scene.solid_offset
-        solid_thickness = context.scene.solid_thickness
-
+        solid_offset = 1
+        solid_thickness = 0.20
         axis_mode = context.scene.axis_mod
         mod_solid = context.scene.mod_solid
         mod_mirror = context.scene.mod_mirror
         mod_bevel = context.scene.mod_bevel
-        bevel_segments = context.scene.bevel_segments
+        bevel_segments = 3
         mod_subsurf = context.scene.mod_subsurf
-        subsurf_vlevel = context.scene.subsurf_vlevel
-        subsurf_rlevel = context.scene.subsurf_rlevel
+        subsurf_vlevel = 2
+        subsurf_rlevel = 3
+        mod_triangulate = context.scene.mod_triangulate
+        mod_weightednormals = context.scene.mod_weightednormals
 
         obj = bpy.context.active_object
 
@@ -656,12 +693,15 @@ class ADD_Basic_Spline_Y_OT_Operator(bpy.types.Operator):
             bpy.context.object.modifiers["Subdivision"].show_in_editmode = False
             bpy.context.object.modifiers["Subdivision"].show_expanded = False
 
-        bpy.ops.object.modifier_add(type='TRIANGULATE')
-        bpy.context.object.modifiers["Triangulate"].quad_method = 'FIXED'
-        bpy.context.object.modifiers["Triangulate"].keep_custom_normals = True
-        bpy.context.object.modifiers["Triangulate"].show_expanded = False
-        bpy.context.object.modifiers["Triangulate"].show_in_editmode = False
+        if mod_triangulate == True:
+            bpy.ops.object.modifier_add(type='TRIANGULATE')
+            bpy.context.object.modifiers["Triangulate"].quad_method = 'FIXED'
+            bpy.context.object.modifiers["Triangulate"].keep_custom_normals = True
+            bpy.context.object.modifiers["Triangulate"].show_expanded = False
+            bpy.context.object.modifiers["Triangulate"].show_in_editmode = False
+
         bpy.ops.object.shade_smooth()
+
         return {'FINISHED'}
         return {'FINISHED'}
 
@@ -673,17 +713,18 @@ class ADD_Pipe_Spline_Y_OT_Operator(bpy.types.Operator):
 
     def execute(self, context):
 
-        solid_offset = context.scene.solid_offset
-        solid_thickness = context.scene.solid_thickness
-
+        solid_offset = 1
+        solid_thickness = 0.20
         axis_mode = context.scene.axis_mod
         mod_solid = context.scene.mod_solid
         mod_mirror = context.scene.mod_mirror
         mod_bevel = context.scene.mod_bevel
-        bevel_segments = context.scene.bevel_segments
+        bevel_segments = 3
         mod_subsurf = context.scene.mod_subsurf
-        subsurf_vlevel = context.scene.subsurf_vlevel
-        subsurf_rlevel = context.scene.subsurf_rlevel
+        subsurf_vlevel = 2
+        subsurf_rlevel = 3
+        mod_triangulate = context.scene.mod_triangulate
+        mod_weightednormals = context.scene.mod_weightednormals
 
         obj = bpy.context.active_object
 
@@ -734,12 +775,15 @@ class ADD_Pipe_Spline_Y_OT_Operator(bpy.types.Operator):
             bpy.context.object.modifiers["Subdivision"].show_in_editmode = False
             bpy.context.object.modifiers["Subdivision"].show_expanded = False
 
-        bpy.ops.object.modifier_add(type='TRIANGULATE')
-        bpy.context.object.modifiers["Triangulate"].quad_method = 'FIXED'
-        bpy.context.object.modifiers["Triangulate"].keep_custom_normals = True
-        bpy.context.object.modifiers["Triangulate"].show_expanded = False
-        bpy.context.object.modifiers["Triangulate"].show_in_editmode = False
+        if mod_triangulate == True:
+            bpy.ops.object.modifier_add(type='TRIANGULATE')
+            bpy.context.object.modifiers["Triangulate"].quad_method = 'FIXED'
+            bpy.context.object.modifiers["Triangulate"].keep_custom_normals = True
+            bpy.context.object.modifiers["Triangulate"].show_expanded = False
+            bpy.context.object.modifiers["Triangulate"].show_in_editmode = False
+
         bpy.ops.object.shade_smooth()
+
         return {'FINISHED'}
         return {'FINISHED'}
 
@@ -754,17 +798,18 @@ class ADD_Spline_Folow_Y_OT_Operator(bpy.types.Operator):
 
     def execute(self, context):
 
-        solid_offset = context.scene.solid_offset
-        solid_thickness = context.scene.solid_thickness
-
+        solid_offset = 1
+        solid_thickness = 0.20
         axis_mode = context.scene.axis_mod
         mod_solid = context.scene.mod_solid
         mod_mirror = context.scene.mod_mirror
         mod_bevel = context.scene.mod_bevel
-        bevel_segments = context.scene.bevel_segments
+        bevel_segments = 3
         mod_subsurf = context.scene.mod_subsurf
-        subsurf_vlevel = context.scene.subsurf_vlevel
-        subsurf_rlevel = context.scene.subsurf_rlevel
+        subsurf_vlevel = 2
+        subsurf_rlevel = 3
+        mod_triangulate = context.scene.mod_triangulate
+        mod_weightednormals = context.scene.mod_weightednormals
 
         obj = bpy.context.active_object
 

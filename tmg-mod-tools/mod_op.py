@@ -38,20 +38,19 @@ class MOD_Object_OT_Operator(bpy.types.Operator):
 
     def execute(self, context):
 
-        solid_offset = context.scene.solid_offset
-        solid_thickness = context.scene.solid_thickness
-        bevel_width = context.scene.bevel_width
-
+        solid_offset = 1
+        solid_thickness = 0.20
         axis_mode = context.scene.axis_mod
-        angle_limit = context.scene.angle_limit
-        mod_screw = context.scene.mod_screw
+        bevel_segments = 3
+        bevel_width = 0.15
+        subsurf_vlevel = 2
+        subsurf_rlevel = 3
+        angle_limit = 0.523599
         mod_solid = context.scene.mod_solid
         mod_mirror = context.scene.mod_mirror
         mod_bevel = context.scene.mod_bevel
-        bevel_segments = context.scene.bevel_segments
         mod_subsurf = context.scene.mod_subsurf
-        subsurf_vlevel = context.scene.subsurf_vlevel
-        subsurf_rlevel = context.scene.subsurf_rlevel
+        mod_screw = context.scene.mod_screw
         mod_triangulate = context.scene.mod_triangulate
         mod_weightednormals = context.scene.mod_weightednormals
 
