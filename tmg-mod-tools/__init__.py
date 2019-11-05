@@ -92,6 +92,10 @@ def bevelToggle_changed(self, context):
     if context.active_object is not None:
         ob = context.object
         bevelToggle = ob.bevelToggle
+        context.scene.mod_bevel = bevelToggle
+        ob.bevelEToggle = bevelToggle
+        ob.bevelVToggle = bevelToggle
+        ob.bevelRToggle = bevelToggle
         for nr, ob in enumerate(bpy.context.selected_objects):
             mod = ob.modifiers.get("Bevel")
             if ob is not None and mod is not None:
@@ -146,6 +150,21 @@ def bevelSegments_changed(self, context):
 
 
 ##################### Update Subdivision #############################
+def subsurfToggle_changed(self, context):
+    if context.active_object is not None:
+        ob = context.object
+        subsurfToggle = ob.subsurfToggle
+        context.scene.mod_subsurf = subsurfToggle
+        ob.subsurfEToggle = subsurfToggle
+        ob.subsurfVToggle = subsurfToggle
+        ob.subsurfRToggle = subsurfToggle
+        for nr, ob in enumerate(bpy.context.selected_objects):
+            mod = ob.modifiers.get("Subdivision")
+            if ob is not None and mod is not None:
+                ob.modifiers["Subdivision"].show_render = bool(subsurfToggle)
+                ob.modifiers["Subdivision"].show_viewport = bool(subsurfToggle)
+                ob.modifiers["Subdivision"].show_in_editmode = bool(subsurfToggle)
+
 def subsurfRToggle_changed(self, context):
     if context.active_object is not None:
         ob = context.object
@@ -173,17 +192,6 @@ def subsurfEToggle_changed(self, context):
             if ob is not None and mod is not None:
                 ob.modifiers["Subdivision"].show_in_editmode = bool(subsurfEToggle)
 
-def subdivisionToggle_changed(self, context):
-    if context.active_object is not None:
-        ob = context.object
-        subdivisionToggle = ob.subdivisionToggle
-        for nr, ob in enumerate(bpy.context.selected_objects):
-            mod = ob.modifiers.get("Subdivision")
-            if ob is not None and mod is not None:
-                ob.modifiers["Subdivision"].show_render = bool(subdivisionToggle)
-                ob.modifiers["Subdivision"].show_viewport = bool(subdivisionToggle)
-                ob.modifiers["Subdivision"].show_in_editmode = bool(subdivisionToggle)
-
 def subdivisionView_changed(self, context):
     if context.active_object is not None:
         ob = context.object
@@ -204,6 +212,20 @@ def subdivisionRender_changed(self, context):
 
 
 ##################### Update Solidify #############################
+def solidifyToggle_changed(self, context):
+    if context.active_object is not None:
+        ob = context.object
+        solidifyToggle = ob.solidifyToggle
+        context.scene.mod_solid = solidifyToggle
+        ob.solidifyEToggle = solidifyToggle
+        ob.solidifyVToggle = solidifyToggle
+        ob.solidifyRToggle = solidifyToggle
+        for nr, ob in enumerate(bpy.context.selected_objects):
+            mod = ob.modifiers.get("Solidify")
+            if ob is not None and mod is not None:
+                ob.modifiers["Solidify"].show_render = bool(solidifyToggle)
+                ob.modifiers["Solidify"].show_viewport = bool(solidifyToggle)
+                ob.modifiers["Solidify"].show_in_editmode = bool(solidifyToggle)
 
 def solidifyRToggle_changed(self, context):
     if context.active_object is not None:
@@ -232,17 +254,6 @@ def solidifyEToggle_changed(self, context):
             if ob is not None and mod is not None:
                 ob.modifiers["Solidify"].show_in_editmode = bool(solidifyEToggle)
 
-def solidifyToggle_changed(self, context):
-    if context.active_object is not None:
-        ob = context.object
-        solidifyToggle = ob.solidifyToggle
-        for nr, ob in enumerate(bpy.context.selected_objects):
-            mod = ob.modifiers.get("Subdivision")
-            if ob is not None and mod is not None:
-                ob.modifiers["Solidify"].show_render = bool(solidifyToggle)
-                ob.modifiers["Solidify"].show_viewport = bool(solidifyToggle)
-                ob.modifiers["Solidify"].show_in_editmode = bool(solidifyToggle)
-
 
 def solidifyThickness_changed(self, context):
     if context.active_object is not None:
@@ -258,18 +269,23 @@ def solidifyOffset_changed(self, context):
     if context.active_object is not None:
         ob = context.object
         solidifyOffset = ob.solidifyOffset
+        #context.scene.mod_solidifyOffset = solidifyOffset
         for nr, ob in enumerate(bpy.context.selected_objects):
             mod = ob.modifiers.get("Solidify")
             if ob is not None and mod is not None:
                 ob.modifiers["Solidify"].offset = float(solidifyOffset) #* 0.3
 
 
-##################### Update Solidify #############################
+##################### Update Triangulate #############################
 
 def triangulateToggle_changed(self, context):
     if context.active_object is not None:
         ob = context.object
         triangulateToggle = ob.triangulateToggle
+        context.scene.mod_triangulate = triangulateToggle
+        ob.triangulateEToggle = triangulateToggle
+        ob.triangulateVToggle = triangulateToggle
+        ob.triangulateRToggle = triangulateToggle
         for nr, ob in enumerate(bpy.context.selected_objects):
             mod = ob.modifiers.get("Triangulate")
             if ob is not None and mod is not None:
@@ -306,6 +322,52 @@ def triangulateEToggle_changed(self, context):
                 ob.modifiers["Triangulate"].show_in_editmode = bool(triangulateEToggle)
 
 
+##################### Update Weighted Normals #############################
+
+def weightedNormalsToggle_changed(self, context):
+    if context.active_object is not None:
+        ob = context.object
+        weightedNormalsToggle = ob.weightedNormalsToggle
+        context.scene.mod_weightednormals = weightedNormalsToggle
+        ob.weightedNormalsEToggle = weightedNormalsToggle
+        ob.weightedNormalsVToggle = weightedNormalsToggle
+        ob.weightedNormalsRToggle = weightedNormalsToggle
+        for nr, ob in enumerate(bpy.context.selected_objects):
+            mod = ob.modifiers.get("Weighted Normal")
+            if ob is not None and mod is not None:
+                ob.modifiers["Weighted Normal"].show_render = bool(weightedNormalsToggle)
+                ob.modifiers["Weighted Normal"].show_viewport = bool(weightedNormalsToggle)
+                ob.modifiers["Weighted Normal"].show_in_editmode = bool(weightedNormalsToggle)
+                #mod_triangulate = triangulateToggle
+
+def weightedNormalsRToggle_changed(self, context):
+    if context.active_object is not None:
+        ob = context.object
+        weightedNormalsRToggle = ob.weightedNormalsRToggle
+        for nr, ob in enumerate(bpy.context.selected_objects):
+            mod = ob.modifiers.get("Weighted Normal")
+            if ob is not None and mod is not None:
+                ob.modifiers["Weighted Normal"].show_render = bool(weightedNormalsRToggle)
+
+def weightedNormalsVToggle_changed(self, context):
+    if context.active_object is not None:
+        ob = context.object
+        weightedNormalsVToggle = ob.weightedNormalsVToggle
+        for nr, ob in enumerate(bpy.context.selected_objects):
+            mod = ob.modifiers.get("Weighted Normal")
+            if ob is not None and mod is not None:
+                ob.modifiers["Weighted Normal"].show_viewport = bool(weightedNormalsVToggle)
+
+def weightedNormalsEToggle_changed(self, context):
+    if context.active_object is not None:
+        ob = context.object
+        weightedNormalsEToggle = ob.weightedNormalsEToggle
+        for nr, ob in enumerate(bpy.context.selected_objects):
+            mod = ob.modifiers.get("Weighted Normal")
+            if ob is not None and mod is not None:
+                ob.modifiers["Weighted Normal"].show_in_editmode = bool(weightedNormalsEToggle)
+
+
 ##################### Update View Mode #############################
 def viewMode_changed(self, context):
     if context.active_object is not None:
@@ -332,35 +394,44 @@ bpy.types.Object.angleLimit = bpy.props.FloatProperty(name = "Angle Limit", defa
 
 
 ##### Bevel ##########
-bpy.types.Object.bevelToggle = bpy.props.BoolProperty(name = "Bevel Toggle", default = True, update=bevelToggle_changed)
-bpy.types.Object.bevelEToggle = bpy.props.BoolProperty(name = "Bevel Edit Toggle", default = True, update=bevelEToggle_changed)
-bpy.types.Object.bevelVToggle = bpy.props.BoolProperty(name = "Bevel View Toggle", default = True, update=bevelVToggle_changed)
-bpy.types.Object.bevelRToggle = bpy.props.BoolProperty(name = "Bevel Render Toggle", default = True, update=bevelRToggle_changed)
+bpy.types.Object.bevelToggle = bpy.props.BoolProperty(name = "Bevel Toggle", default = False, update=bevelToggle_changed)
+bpy.types.Object.bevelEToggle = bpy.props.BoolProperty(name = "Bevel Edit Toggle", default = False, update=bevelEToggle_changed)
+bpy.types.Object.bevelVToggle = bpy.props.BoolProperty(name = "Bevel View Toggle", default = False, update=bevelVToggle_changed)
+bpy.types.Object.bevelRToggle = bpy.props.BoolProperty(name = "Bevel Render Toggle", default = False, update=bevelRToggle_changed)
 bpy.types.Object.bevelSegments = bpy.props.IntProperty(name = "Bevel Segments", default = 3, min = 1, max = 6, update=bevelSegments_changed)
 bpy.types.Object.bevelWidth = bpy.props.FloatProperty(name = "Bevel Width", default = 0.3, min = 0.03, max = 1.40, update=bevelWidth_changed)
 
 
 ##### Subdivision ##########
-bpy.types.Object.subsurfEToggle = bpy.props.BoolProperty(name = "Subdivision Edit Toggle", default = True, update=subsurfEToggle_changed)
-bpy.types.Object.subsurfVToggle = bpy.props.BoolProperty(name = "Subdivision View Toggle", default = True, update=subsurfVToggle_changed)
-bpy.types.Object.subsurfRToggle = bpy.props.BoolProperty(name = "Subdivision Render Toggle", default = True, update=subsurfRToggle_changed)
+bpy.types.Object.subsurfToggle = bpy.props.BoolProperty(name = "Subdivision Toggle", default = False, update=subsurfToggle_changed)
+bpy.types.Object.subsurfEToggle = bpy.props.BoolProperty(name = "Subdivision Edit Toggle", default = False, update=subsurfEToggle_changed)
+bpy.types.Object.subsurfVToggle = bpy.props.BoolProperty(name = "Subdivision View Toggle", default = False, update=subsurfVToggle_changed)
+bpy.types.Object.subsurfRToggle = bpy.props.BoolProperty(name = "Subdivision Render Toggle", default = False, update=subsurfRToggle_changed)
 bpy.types.Object.subdivisionView = bpy.props.IntProperty(name = "Subdivision View Levels", default = 1, min = 0, max = 5, update=subdivisionView_changed)
 bpy.types.Object.subdivisionRender = bpy.props.IntProperty(name = "Subdivision Render Levels", default = 4, min = 0, max = 8, update=subdivisionRender_changed)
 
 
 ##### Solidify ##########
-bpy.types.Object.solidifyEToggle = bpy.props.BoolProperty(name = "Solidify Edit Toggle", default = True, update=solidifyEToggle_changed)
-bpy.types.Object.solidifyVToggle = bpy.props.BoolProperty(name = "Solidify View Toggle", default = True, update=solidifyVToggle_changed)
-bpy.types.Object.solidifyRToggle = bpy.props.BoolProperty(name = "Solidify Render Toggle", default = True, update=solidifyRToggle_changed)
+bpy.types.Object.solidifyToggle = bpy.props.BoolProperty(name = "Solidify Toggle", default = False, update=solidifyToggle_changed)
+bpy.types.Object.solidifyEToggle = bpy.props.BoolProperty(name = "Solidify Edit Toggle", default = False, update=solidifyEToggle_changed)
+bpy.types.Object.solidifyVToggle = bpy.props.BoolProperty(name = "Solidify View Toggle", default = False, update=solidifyVToggle_changed)
+bpy.types.Object.solidifyRToggle = bpy.props.BoolProperty(name = "Solidify Render Toggle", default = False, update=solidifyRToggle_changed)
 bpy.types.Object.solidifyThickness = bpy.props.FloatProperty(name = "Solidify Thickness", default = 0.3, min = 0.1, max = 20.0, update=solidifyThickness_changed)
 bpy.types.Object.solidifyOffset = bpy.props.FloatProperty(name = "Solidify Offset", default = 0.0, min = -1.0, max = 1.0, update=solidifyOffset_changed)
 
 
 ##### Triangulate ##########
-bpy.types.Object.triangulateToggle = bpy.props.BoolProperty(name = "Triangulate Toggle", default = True, update=triangulateToggle_changed)
-bpy.types.Object.triangulateEToggle = bpy.props.BoolProperty(name = "Triangulate Edit Toggle", default = True, update=triangulateEToggle_changed)
-bpy.types.Object.triangulateVToggle = bpy.props.BoolProperty(name = "Triangulate View Toggle", default = True, update=triangulateVToggle_changed)
-bpy.types.Object.triangulateRToggle = bpy.props.BoolProperty(name = "Triangulate Render Toggle", default = True, update=triangulateRToggle_changed)
+bpy.types.Object.triangulateToggle = bpy.props.BoolProperty(name = "Triangulate Toggle", default = False, update=triangulateToggle_changed)
+bpy.types.Object.triangulateEToggle = bpy.props.BoolProperty(name = "Triangulate Edit Toggle", default = False, update=triangulateEToggle_changed)
+bpy.types.Object.triangulateVToggle = bpy.props.BoolProperty(name = "Triangulate View Toggle", default = False, update=triangulateVToggle_changed)
+bpy.types.Object.triangulateRToggle = bpy.props.BoolProperty(name = "Triangulate Render Toggle", default = False, update=triangulateRToggle_changed)
+
+
+##### Weighted Normals ##########
+bpy.types.Object.weightedNormalsToggle = bpy.props.BoolProperty(name = "Weighted Normals Toggle", default = False, update=weightedNormalsToggle_changed)
+bpy.types.Object.weightedNormalsEToggle = bpy.props.BoolProperty(name = "Weighted Normals Edit Toggle", default = False, update=weightedNormalsEToggle_changed)
+bpy.types.Object.weightedNormalsVToggle = bpy.props.BoolProperty(name = "Weighted Normals View Toggle", default = False, update=weightedNormalsVToggle_changed)
+bpy.types.Object.weightedNormalsRToggle = bpy.props.BoolProperty(name = "Weighted Normals Render Toggle", default = False, update=weightedNormalsRToggle_changed)
 
 
 ##### Object View Mode ##########
@@ -379,6 +450,61 @@ bpy.types.Object.viewMode = bpy.props.EnumProperty(
 
 ##################### Update Defs End #############################
 
+#### Menu Float Sliders #########################
+
+bpy.types.Scene.subsurf_rlevel = IntProperty(name="Menu subsurf render level slider",
+                default=2,
+                min=0,
+                max=6,
+                description="Menu subsurf render level slider.")
+
+bpy.types.Scene.subsurf_vlevel = IntProperty(name="Menu subsurf view level slider",
+                default=2,
+                min=0,
+                max=5,
+                description="Menu subsurf view level slider.")
+
+bpy.types.Scene.solid_offset = FloatProperty(name="Menu solidify offset slider",
+                default=1.0,
+                min=-1.0,
+                max=1.0,
+                description="Menu solidify offset slider.")
+
+bpy.types.Scene.solid_thickness = FloatProperty(name="Menu solidify thickness slider",
+                default=0.20,
+                min=-200.0,
+                max=200.0,
+                description="Menu solidify thickness slider.")
+
+bpy.types.Scene.inset_thickness = FloatProperty(name="Menu inset thickness slider",
+                default=0.07,
+                min=0.00,
+                max=200.0,
+                description="Menu inset thickness slider.")
+
+bpy.types.Scene.inset_depth = FloatProperty(name="Menu inset depth slider",
+                default=0.75,
+                min=-50.0,
+                max=50.0,
+                description="Menu inset depth slider.")
+
+bpy.types.Scene.bevel_width = FloatProperty(name="Menu bevel width slider",
+                default=0.15,
+                min=0.03,
+                max=1.37,
+                description="Menu bevel width slider.")
+
+bpy.types.Scene.bevel_segments = IntProperty(name="Menu bevel segments slider",
+                default=3,
+                min=1,
+                max=6,
+                description="Menu bevel segments slider.")
+
+bpy.types.Scene.angle_limit = FloatProperty(name="Menu angle limit slider",
+                default=0.523599,
+                min=0.00174533,
+                max=3.14159,
+                description="Menu angle limit slider.")
 
 #### Menu Tabs #########################
 
@@ -421,7 +547,7 @@ bpy.types.Scene.mod_screw = BoolProperty(name="Add screw modifier",
                 description="Adds screw modifier")
 
 bpy.types.Scene.mod_solid = BoolProperty(name="Add solidify modifier",
-                default=True,
+                default=False,
                 description="Adds solidify modifier")
 
 bpy.types.Scene.mod_mirror = BoolProperty(name="Add mirror modifier",
@@ -429,7 +555,7 @@ bpy.types.Scene.mod_mirror = BoolProperty(name="Add mirror modifier",
                 description="Adds mirror modifier")
 
 bpy.types.Scene.mod_bevel = BoolProperty(name="Add bevel modifier",
-                default=True,
+                default=False,
                 description="Adds bevel modifier")
 
 bpy.types.Scene.mod_subsurf = BoolProperty(name="Add subsurface modifier",

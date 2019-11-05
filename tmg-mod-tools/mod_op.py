@@ -141,6 +141,9 @@ class MOD_Object_OT_Operator(bpy.types.Operator):
                     obj.modifiers["Triangulate"].show_expanded = False
                     obj.modifiers["Triangulate"].show_in_editmode = False
 
+                obj.data.use_auto_smooth = True
+                obj.data.auto_smooth_angle = 0.785398
+
                 if mod_weightednormals == True:
                     mod = obj.modifiers.get("Weighted Normal")
                     if mod is None:
@@ -150,9 +153,6 @@ class MOD_Object_OT_Operator(bpy.types.Operator):
                     obj.modifiers["Weighted Normal"].mode = 'FACE_AREA_WITH_ANGLE'
                     obj.modifiers["Weighted Normal"].show_expanded = False
                     obj.modifiers["Weighted Normal"].show_in_editmode = False
-
-                obj.data.use_auto_smooth = True
-                obj.data.auto_smooth_angle = 0.785398
 
 
             elif types == "CURVE":

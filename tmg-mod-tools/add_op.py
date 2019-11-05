@@ -101,15 +101,16 @@ class ADD_Solid_Plane_Object_OT_Operator(bpy.types.Operator):
             bpy.context.object.modifiers["Triangulate"].show_in_editmode = False
             bpy.context.object.modifiers["Triangulate"].show_expanded = False
         
-        bpy.ops.object.modifier_add(type='WEIGHTED_NORMAL')
-        bpy.context.object.modifiers["Weighted Normal"].keep_sharp = True
-        bpy.context.object.modifiers["Weighted Normal"].mode = 'FACE_AREA_WITH_ANGLE'
-        bpy.context.object.modifiers["Weighted Normal"].show_in_editmode = False
-        bpy.context.object.modifiers["Weighted Normal"].show_expanded = False
-
         bpy.context.object.data.use_auto_smooth = True
         bpy.context.object.data.auto_smooth_angle = 0.785398
         bpy.ops.object.shade_smooth()
+
+        if mod_weightednormals == True:
+            bpy.ops.object.modifier_add(type='WEIGHTED_NORMAL')
+            bpy.context.object.modifiers["Weighted Normal"].keep_sharp = True
+            bpy.context.object.modifiers["Weighted Normal"].mode = 'FACE_AREA_WITH_ANGLE'
+            bpy.context.object.modifiers["Weighted Normal"].show_in_editmode = False
+            bpy.context.object.modifiers["Weighted Normal"].show_expanded = False
         
         return {'FINISHED'}
         return {'FINISHED'}
@@ -200,15 +201,16 @@ class ADD_Solid_Circle_Object_OT_Operator(bpy.types.Operator):
             bpy.context.object.modifiers["Triangulate"].show_in_editmode = False
             bpy.context.object.modifiers["Triangulate"].show_expanded = False
         
-        bpy.ops.object.modifier_add(type='WEIGHTED_NORMAL')
-        bpy.context.object.modifiers["Weighted Normal"].mode = 'FACE_AREA_WITH_ANGLE'
-        bpy.context.object.modifiers["Weighted Normal"].keep_sharp = True
-        bpy.context.object.modifiers["Weighted Normal"].show_in_editmode = False
-        bpy.context.object.modifiers["Weighted Normal"].show_expanded = False
-
         bpy.context.object.data.use_auto_smooth = True
         bpy.context.object.data.auto_smooth_angle = 0.785398
         bpy.ops.object.shade_smooth()
+
+        if mod_weightednormals == True:
+            bpy.ops.object.modifier_add(type='WEIGHTED_NORMAL')
+            bpy.context.object.modifiers["Weighted Normal"].keep_sharp = True
+            bpy.context.object.modifiers["Weighted Normal"].mode = 'FACE_AREA_WITH_ANGLE'
+            bpy.context.object.modifiers["Weighted Normal"].show_in_editmode = False
+            bpy.context.object.modifiers["Weighted Normal"].show_expanded = False
 
         return {'FINISHED'}
         return {'FINISHED'}
@@ -281,15 +283,16 @@ class ADD_Arch_Object_X_OT_Operator(bpy.types.Operator):
             bpy.context.object.modifiers["Triangulate"].show_expanded = False
             bpy.context.object.modifiers["Triangulate"].show_in_editmode = False
 
-        bpy.ops.object.modifier_add(type='WEIGHTED_NORMAL')
-        bpy.context.object.modifiers["Weighted Normal"].keep_sharp = True
-        bpy.context.object.modifiers["Weighted Normal"].mode = 'FACE_AREA_WITH_ANGLE'
-        bpy.context.object.modifiers["Weighted Normal"].show_in_editmode = False
-        bpy.context.object.modifiers["Weighted Normal"].show_expanded = False
-
         bpy.context.object.data.use_auto_smooth = True
         bpy.context.object.data.auto_smooth_angle = 0.785398
         bpy.ops.object.shade_smooth()
+
+        if mod_weightednormals == True:
+            bpy.ops.object.modifier_add(type='WEIGHTED_NORMAL')
+            bpy.context.object.modifiers["Weighted Normal"].keep_sharp = True
+            bpy.context.object.modifiers["Weighted Normal"].mode = 'FACE_AREA_WITH_ANGLE'
+            bpy.context.object.modifiers["Weighted Normal"].show_in_editmode = False
+            bpy.context.object.modifiers["Weighted Normal"].show_expanded = False
 
         return {'FINISHED'}
         return {'FINISHED'}
@@ -359,15 +362,16 @@ class ADD_Arch_Object_Y_OT_Operator(bpy.types.Operator):
             bpy.context.object.modifiers["Triangulate"].show_expanded = False
             bpy.context.object.modifiers["Triangulate"].show_in_editmode = False
         
-        bpy.ops.object.modifier_add(type='WEIGHTED_NORMAL')
-        bpy.context.object.modifiers["Weighted Normal"].keep_sharp = True
-        bpy.context.object.modifiers["Weighted Normal"].mode = 'FACE_AREA_WITH_ANGLE'
-        bpy.context.object.modifiers["Weighted Normal"].show_in_editmode = False
-        bpy.context.object.modifiers["Weighted Normal"].show_expanded = False
-
         bpy.context.object.data.use_auto_smooth = True
         bpy.context.object.data.auto_smooth_angle = 0.785398
         bpy.ops.object.shade_smooth()
+
+        if mod_weightednormals == True:
+            bpy.ops.object.modifier_add(type='WEIGHTED_NORMAL')
+            bpy.context.object.modifiers["Weighted Normal"].keep_sharp = True
+            bpy.context.object.modifiers["Weighted Normal"].mode = 'FACE_AREA_WITH_ANGLE'
+            bpy.context.object.modifiers["Weighted Normal"].show_in_editmode = False
+            bpy.context.object.modifiers["Weighted Normal"].show_expanded = False
 
         return {'FINISHED'}
         return {'FINISHED'}
@@ -439,15 +443,16 @@ class ADD_Arch_Object_Z_OT_Operator(bpy.types.Operator):
             bpy.context.object.modifiers["Triangulate"].show_expanded = False
             bpy.context.object.modifiers["Triangulate"].show_in_editmode = False
 
-        bpy.ops.object.modifier_add(type='WEIGHTED_NORMAL')
-        bpy.context.object.modifiers["Weighted Normal"].keep_sharp = True
-        bpy.context.object.modifiers["Weighted Normal"].mode = 'FACE_AREA_WITH_ANGLE'
-        bpy.context.object.modifiers["Weighted Normal"].show_in_editmode = False
-        bpy.context.object.modifiers["Weighted Normal"].show_expanded = False
-
         bpy.context.object.data.use_auto_smooth = True
         bpy.context.object.data.auto_smooth_angle = 0.785398
         bpy.ops.object.shade_smooth()
+
+        if mod_weightednormals == True:
+            bpy.ops.object.modifier_add(type='WEIGHTED_NORMAL')
+            bpy.context.object.modifiers["Weighted Normal"].keep_sharp = True
+            bpy.context.object.modifiers["Weighted Normal"].mode = 'FACE_AREA_WITH_ANGLE'
+            bpy.context.object.modifiers["Weighted Normal"].show_in_editmode = False
+            bpy.context.object.modifiers["Weighted Normal"].show_expanded = False
 
         return {'FINISHED'}
         return {'FINISHED'}
@@ -526,15 +531,16 @@ class ADD_Pipe_Line_Object_Y_OT_Operator(bpy.types.Operator):
             bpy.context.object.modifiers["Triangulate"].show_in_editmode = False
             bpy.context.object.modifiers["Triangulate"].show_expanded = False
 
-        bpy.ops.object.modifier_add(type='WEIGHTED_NORMAL')
-        bpy.context.object.modifiers["Weighted Normal"].mode = 'FACE_AREA_WITH_ANGLE'
-        bpy.context.object.modifiers["Weighted Normal"].weight = 45
-        bpy.context.object.modifiers["Weighted Normal"].keep_sharp = True
-        bpy.context.object.modifiers["Weighted Normal"].show_in_editmode = False
-        bpy.context.object.modifiers["Weighted Normal"].show_expanded = False
-
         bpy.context.object.data.use_auto_smooth = True
         bpy.context.object.data.auto_smooth_angle = 0.785398
+        bpy.ops.object.shade_smooth()
+
+        if mod_weightednormals == True:
+            bpy.ops.object.modifier_add(type='WEIGHTED_NORMAL')
+            bpy.context.object.modifiers["Weighted Normal"].keep_sharp = True
+            bpy.context.object.modifiers["Weighted Normal"].mode = 'FACE_AREA_WITH_ANGLE'
+            bpy.context.object.modifiers["Weighted Normal"].show_in_editmode = False
+            bpy.context.object.modifiers["Weighted Normal"].show_expanded = False
 
         return {'FINISHED'}
         return {'FINISHED'}
@@ -615,15 +621,16 @@ class ADD_Pipe_Line_Object_Z_OT_Operator(bpy.types.Operator):
             bpy.context.object.modifiers["Triangulate"].show_in_editmode = False
             bpy.context.object.modifiers["Triangulate"].show_expanded = False
 
-        bpy.ops.object.modifier_add(type='WEIGHTED_NORMAL')
-        bpy.context.object.modifiers["Weighted Normal"].mode = 'FACE_AREA_WITH_ANGLE'
-        bpy.context.object.modifiers["Weighted Normal"].weight = 45
-        bpy.context.object.modifiers["Weighted Normal"].keep_sharp = True
-        bpy.context.object.modifiers["Weighted Normal"].show_in_editmode = False
-        bpy.context.object.modifiers["Weighted Normal"].show_expanded = False
-
         bpy.context.object.data.use_auto_smooth = True
         bpy.context.object.data.auto_smooth_angle = 0.785398
+        bpy.ops.object.shade_smooth()
+
+        if mod_weightednormals == True:
+            bpy.ops.object.modifier_add(type='WEIGHTED_NORMAL')
+            bpy.context.object.modifiers["Weighted Normal"].keep_sharp = True
+            bpy.context.object.modifiers["Weighted Normal"].mode = 'FACE_AREA_WITH_ANGLE'
+            bpy.context.object.modifiers["Weighted Normal"].show_in_editmode = False
+            bpy.context.object.modifiers["Weighted Normal"].show_expanded = False
 
         return {'FINISHED'}
         return {'FINISHED'}

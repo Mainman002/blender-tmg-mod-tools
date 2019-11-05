@@ -13,10 +13,14 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
 
         sel_mode = context.tool_settings.mesh_select_mode
 
+        axis_mode = context.scene.axis_mod
         solid_offset = context.scene.solid_offset
         #solid_thickness = context.scene.solid_thickness
         #bevel_width = context.scene.bevel_width
         #bevel_segments = context.scene.bevel_segments
+        #angle_limit = context.scene.angle_limit
+        #subsurf_vlevel = context.scene.subsurf_vlevel
+        #subsurf_rlevel = context.scene.subsurf_rlevel
 
         check_view = context.scene.check_view
         check_modifiers = context.scene.check_modifiers
@@ -25,13 +29,9 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
         check_adds = context.scene.check_adds
         check_splines = context.scene.check_splines
 
-        axis_mode = context.scene.axis_mod
-        #angle_limit = context.scene.angle_limit
         mod_solid = context.scene.mod_solid
         mod_bevel = context.scene.mod_bevel
         mod_subsurf = context.scene.mod_subsurf
-        #subsurf_vlevel = context.scene.subsurf_vlevel
-        #subsurf_rlevel = context.scene.subsurf_rlevel
         mod_triangulate = context.scene.mod_triangulate
         mod_weightednormals = context.scene.mod_weightednormals
 
@@ -81,11 +81,11 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
 
             colm = View_Flow.box()
 
-            View_Col = colm.row()
-            View_Col.label(text="Apply Modifiers")
-            View_Col.operator('wm.mod_apply_object_ot_operator', text='', icon='MODIFIER')
+            #View_Col = colm.row()
+            #View_Col.label(text="Apply Modifiers")
+            #View_Col.operator('wm.mod_apply_object_ot_operator', text='', icon='MODIFIER')
 
-            colm = View_Flow.box()
+            #colm = View_Flow.box()
 
             View_Col = colm.row()
             View_Col.label(text="Distraction Free")
@@ -194,17 +194,38 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
             ModSettings_Row.use_property_split = True
             ModSettings_Flow = ModSettings_Row.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
 
+            colm = ModSettings_Flow.row()
+
+            ModSettings_Col = colm.row()
+            ModSettings_Col.label(text="Apply Modifiers")
+
+            ModSettings_Col = colm.row()
+            ModSettings_Col.operator('wm.mod_apply_object_ot_operator', text='', icon='MODIFIER')
+
+            colm = ModSettings_Flow.row()
+
+            ModSettings_Col = colm.row()
+            ModSettings_Col.label(text="Add Modifiers")
+
+            ModSettings_Col = colm.row()
+            ModSettings_Col.operator('wm.mod_object_ot_operator', text='', icon="PRESET_NEW")
+
+            ModSettings_Row = ModSettings_Subcol.box()
+
+            ModSettings_Row.use_property_split = True
+            ModSettings_Flow = ModSettings_Row.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
+
             colm = ModSettings_Flow.column()
 
             ModSettings_Col = colm.row()
             ModSettings_Col.label(text="Mod Axis")
 
-            colm = ModSettings_Flow.column()
+            colm = ModSettings_Flow.row()
 
             ModSettings_Col = colm.row()
             ModSettings_Col.prop(context.scene, "axis_mod", text="")
 
-            colm = ModSettings_Flow.column()
+            colm = ModSettings_Flow.row()
 
             ModSettings_Col = colm.row()
             ModSettings_Col.label(text="Angle Limit")
@@ -227,7 +248,7 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
                 colm = ModSettings_Flow.row()
 
                 ModSettings_Col = colm.row()
-                ModSettings_Col.prop(context.scene, "mod_solid", text="", icon="MOD_SOLIDIFY")
+                ModSettings_Col.prop(obj, "solidifyToggle", index=2, text="", icon="MOD_SOLIDIFY")
 
                 ModSettings_Col = colm.row() #angle_limit
                 ModSettings_Col.label(text="Solidify")
@@ -264,7 +285,6 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
 
                     colm = ModSettings_Flow.column()
 
-                    #if mod is not None:
                     ModSettings_Col = colm.row()
                     ModSettings_Col.prop(obj, "solidifyThickness", index=2, text="", slider=True)
 
@@ -297,7 +317,7 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
                 colm = ModSettings_Flow.row()
 
                 ModSettings_Col = colm.row()
-                ModSettings_Col.prop(context.scene, "mod_subsurf", text="", icon="MOD_SUBSURF")
+                ModSettings_Col.prop(obj, "subsurfToggle", index=2, text="", icon="MOD_SUBSURF")
 
                 ModSettings_Col = colm.row() #angle_limit
                 ModSettings_Col.label(text="Subsurf")
@@ -316,9 +336,6 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
 
                     ModSettings_Row.use_property_split = True
                     ModSettings_Flow = ModSettings_Row.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
-
-                    #ModSettings_Col = colm.row()
-                    #ModSettings_Col.prop(obj, "subdivisionToggle", index=2, text="")
 
                     colm = ModSettings_Flow.column()
 
@@ -369,7 +386,6 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
                 colm = ModSettings_Flow.row()
 
                 ModSettings_Col = colm.row()
-                #ModSettings_Col.prop(context.scene, "mod_bevel", text="", icon="MOD_BEVEL")
                 ModSettings_Col.prop(obj, "bevelToggle", index=2, text="", icon="MOD_BEVEL")
 
                 ModSettings_Col = colm.row()
@@ -409,7 +425,6 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
 
                     colm = ModSettings_Flow.column()
 
-                    #if mod is not None:
                     ModSettings_Col = colm.row()
                     ModSettings_Col.prop(obj, "bevelWidth", index=2, text="", slider=True)
 
@@ -456,34 +471,6 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
 
                     ModSettings_Col = colm.row()
                     ModSettings_Col.prop(obj, "triangulateEToggle", index=2, text="", icon="EDITMODE_HLT")
-
-                    #ModSettings_Row = ModSettings_Subcol.box()
-
-                    #ModSettings_Row.use_property_split = True
-                    #ModSettings_Flow = ModSettings_Row.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
-
-                    #colm = ModSettings_Flow.column()
-
-                    #ModSettings_Col = colm.row()
-                    #ModSettings_Col.label(text="Segments")
-
-                    #colm = ModSettings_Flow.column()
-
-                    #ModSettings_Col = colm.row()
-                    #ModSettings_Col.prop(obj, "bevelSegments", index=2, text="")
-
-                    #colm = ModSettings_Flow.column()
-
-                    #mod = obj.modifiers.get("Bevel")
-
-                    #ModSettings_Col = colm.row()
-                    #ModSettings_Col.label(text="Width")
-
-                    #colm = ModSettings_Flow.column()
-
-                    #ModSettings_Col = colm.row()
-                    #ModSettings_Col.prop(obj, "bevelWidth", index=2, text="", slider=True)
-
             else:
                 ModSettings_Col = Master_Col.column() ###### Box if needed for Modifiers Panel #############
                 ModSettings_Subcol = ModSettings_Col.column(align=True)
@@ -500,6 +487,49 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
 
                 ModSettings_Col = colm.row()
                 ModSettings_Col.label(text="Triangulate")
+
+            if  context.active_object is not None:
+                ModSettings_Col = Master_Col.column() ###### Box if needed for Modifiers Panel #############
+                ModSettings_Subcol = ModSettings_Col.column(align=True)
+
+                ModSettings_Row = ModSettings_Subcol.box()
+
+                ModSettings_Row.use_property_split = True
+                ModSettings_Flow = ModSettings_Row.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
+
+                colm = ModSettings_Flow.row()
+
+                ModSettings_Col = colm.row()
+                ModSettings_Col.prop(obj, "weightedNormalsToggle", index=2, text="", icon="MOD_NORMALEDIT")
+
+                ModSettings_Col = colm.row()
+                ModSettings_Col.label(text="Weighted Normals")
+
+                if mod_weightednormals == True:
+                    ModSettings_Col = colm.row()
+                    ModSettings_Col.prop(obj, "weightedNormalsRToggle", index=2, text="", icon="RESTRICT_RENDER_OFF")
+
+                    ModSettings_Col = colm.row()
+                    ModSettings_Col.prop(obj, "weightedNormalsVToggle", index=2, text="", icon="RESTRICT_VIEW_OFF")
+
+                    ModSettings_Col = colm.row()
+                    ModSettings_Col.prop(obj, "weightedNormalsEToggle", index=2, text="", icon="EDITMODE_HLT")
+            else:
+                ModSettings_Col = Master_Col.column() ###### Box if needed for Modifiers Panel #############
+                ModSettings_Subcol = ModSettings_Col.column(align=True)
+
+                ModSettings_Row = ModSettings_Subcol.box()
+
+                ModSettings_Row.use_property_split = True
+                ModSettings_Flow = ModSettings_Row.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
+
+                colm = ModSettings_Flow.row()
+
+                ModSettings_Col = colm.row()
+                ModSettings_Col.prop(context.scene, "mod_weightednormals", text="", icon="MOD_TRIANGULATE")
+
+                ModSettings_Col = colm.row()
+                ModSettings_Col.label(text="Weighted Normals")
 
         #### Add Objects Tab Panel Layout Controllers #########################
 
@@ -681,11 +711,11 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
 
             colm = View_Flow.box()
 
-            View_Col = colm.row()
-            View_Col.label(text="Apply Modifiers")
-            View_Col.operator('wm.mod_apply_object_ot_operator', text='', icon='MODIFIER')
+            #View_Col = colm.row()
+            #View_Col.label(text="Apply Modifiers")
+            #View_Col.operator('wm.mod_apply_object_ot_operator', text='', icon='MODIFIER')
 
-            colm = View_Flow.box()
+            #colm = View_Flow.box()
 
             View_Col = colm.row()
             View_Col.label(text="Distraction Free")
@@ -794,17 +824,38 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
             ModSettings_Row.use_property_split = True
             ModSettings_Flow = ModSettings_Row.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
 
+            colm = ModSettings_Flow.row()
+
+            ModSettings_Col = colm.row()
+            ModSettings_Col.label(text="Apply Modifiers")
+
+            ModSettings_Col = colm.row()
+            ModSettings_Col.operator('wm.mod_apply_object_ot_operator', text='', icon='MODIFIER')
+
+            colm = ModSettings_Flow.row()
+
+            ModSettings_Col = colm.row()
+            ModSettings_Col.label(text="Add Modifiers")
+
+            ModSettings_Col = colm.row()
+            ModSettings_Col.operator('wm.mod_object_ot_operator', text='', icon="PRESET_NEW")
+
+            ModSettings_Row = ModSettings_Subcol.box()
+
+            ModSettings_Row.use_property_split = True
+            ModSettings_Flow = ModSettings_Row.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
+
             colm = ModSettings_Flow.column()
 
             ModSettings_Col = colm.row()
             ModSettings_Col.label(text="Mod Axis")
 
-            colm = ModSettings_Flow.column()
+            colm = ModSettings_Flow.row()
 
             ModSettings_Col = colm.row()
             ModSettings_Col.prop(context.scene, "axis_mod", text="")
 
-            colm = ModSettings_Flow.column()
+            colm = ModSettings_Flow.row()
 
             ModSettings_Col = colm.row()
             ModSettings_Col.label(text="Angle Limit")
@@ -827,7 +878,7 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
                 colm = ModSettings_Flow.row()
 
                 ModSettings_Col = colm.row()
-                ModSettings_Col.prop(context.scene, "mod_solid", text="", icon="MOD_SOLIDIFY")
+                ModSettings_Col.prop(obj, "solidifyToggle", index=2, text="", icon="MOD_SOLIDIFY")
 
                 ModSettings_Col = colm.row() #angle_limit
                 ModSettings_Col.label(text="Solidify")
@@ -864,9 +915,25 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
 
                     colm = ModSettings_Flow.column()
 
-                    #if mod is not None:
                     ModSettings_Col = colm.row()
                     ModSettings_Col.prop(obj, "solidifyThickness", index=2, text="", slider=True)
+
+            else:
+                ModSettings_Col = Master_Col.column() ###### Box if needed for Modifiers Panel #############
+                ModSettings_Subcol = ModSettings_Col.column(align=True)
+
+                ModSettings_Row = ModSettings_Subcol.box()
+
+                ModSettings_Row.use_property_split = True
+                ModSettings_Flow = ModSettings_Row.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
+
+                colm = ModSettings_Flow.row()
+
+                ModSettings_Col = colm.row()
+                ModSettings_Col.prop(context.scene, "mod_solid", text="", icon="MOD_SOLIDIFY")
+
+                ModSettings_Col = colm.row() #angle_limit
+                ModSettings_Col.label(text="Solidify")
 
             if  context.active_object is not None:
                 ModSettings_Col = Master_Col.column() ###### Box if needed for Modifiers Panel #############
@@ -880,7 +947,7 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
                 colm = ModSettings_Flow.row()
 
                 ModSettings_Col = colm.row()
-                ModSettings_Col.prop(context.scene, "mod_subsurf", text="", icon="MOD_SUBSURF")
+                ModSettings_Col.prop(obj, "subsurfToggle", index=2, text="", icon="MOD_SUBSURF")
 
                 ModSettings_Col = colm.row() #angle_limit
                 ModSettings_Col.label(text="Subsurf")
@@ -899,9 +966,6 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
 
                     ModSettings_Row.use_property_split = True
                     ModSettings_Flow = ModSettings_Row.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
-
-                    #ModSettings_Col = colm.row()
-                    #ModSettings_Col.prop(obj, "subdivisionToggle", index=2, text="")
 
                     colm = ModSettings_Flow.column()
 
@@ -940,13 +1004,6 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
                 ModSettings_Col = colm.row() #angle_limit
                 ModSettings_Col.label(text="Subsurf")
 
-                #colm = ModSettings_Flow.column()
-
-                #ModSettings_Col = colm.row()
-                #ModSettings_Col.label(text="Subsurface")
-                #ModSettings_Col.prop(context.scene, "mod_subsurf", text="", icon="MOD_SUBSURF")
-
-
             if  context.active_object is not None:
                 ModSettings_Col = Master_Col.column() ###### Box if needed for Modifiers Panel #############
                 ModSettings_Subcol = ModSettings_Col.column(align=True)
@@ -959,7 +1016,7 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
                 colm = ModSettings_Flow.row()
 
                 ModSettings_Col = colm.row()
-                ModSettings_Col.prop(context.scene, "mod_bevel", text="", icon="MOD_BEVEL")
+                ModSettings_Col.prop(obj, "bevelToggle", index=2, text="", icon="MOD_BEVEL")
 
                 ModSettings_Col = colm.row()
                 ModSettings_Col.label(text="Bevel")
@@ -981,11 +1038,6 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
 
                     colm = ModSettings_Flow.column()
 
-                    #ModSettings_Col = colm.row()
-                    #ModSettings_Col.label(text="Bevel Toggle")
-
-                    #colm = ModSettings_Flow.column()
-
                     ModSettings_Col = colm.row()
                     ModSettings_Col.label(text="Segments")
 
@@ -1003,9 +1055,111 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
 
                     colm = ModSettings_Flow.column()
 
-                    #if mod is not None:
                     ModSettings_Col = colm.row()
                     ModSettings_Col.prop(obj, "bevelWidth", index=2, text="", slider=True)
+
+            else:
+                ModSettings_Col = Master_Col.column() ###### Box if needed for Modifiers Panel #############
+                ModSettings_Subcol = ModSettings_Col.column(align=True)
+
+                ModSettings_Row = ModSettings_Subcol.box()
+
+                ModSettings_Row.use_property_split = True
+                ModSettings_Flow = ModSettings_Row.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
+
+                colm = ModSettings_Flow.row()
+
+                ModSettings_Col = colm.row()
+                ModSettings_Col.prop(context.scene, "mod_bevel", text="", icon="MOD_BEVEL")
+
+                ModSettings_Col = colm.row()
+                ModSettings_Col.label(text="Bevel")
+
+            if  context.active_object is not None:
+                ModSettings_Col = Master_Col.column() ###### Box if needed for Modifiers Panel #############
+                ModSettings_Subcol = ModSettings_Col.column(align=True)
+
+                ModSettings_Row = ModSettings_Subcol.box()
+
+                ModSettings_Row.use_property_split = True
+                ModSettings_Flow = ModSettings_Row.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
+
+                colm = ModSettings_Flow.row()
+
+                ModSettings_Col = colm.row()
+                ModSettings_Col.prop(obj, "triangulateToggle", index=2, text="", icon="MOD_TRIANGULATE")
+
+                ModSettings_Col = colm.row()
+                ModSettings_Col.label(text="Triangulate")
+
+                if mod_triangulate == True:
+                    ModSettings_Col = colm.row()
+                    ModSettings_Col.prop(obj, "triangulateRToggle", index=2, text="", icon="RESTRICT_RENDER_OFF")
+
+                    ModSettings_Col = colm.row()
+                    ModSettings_Col.prop(obj, "triangulateVToggle", index=2, text="", icon="RESTRICT_VIEW_OFF")
+
+                    ModSettings_Col = colm.row()
+                    ModSettings_Col.prop(obj, "triangulateEToggle", index=2, text="", icon="EDITMODE_HLT")
+            else:
+                ModSettings_Col = Master_Col.column() ###### Box if needed for Modifiers Panel #############
+                ModSettings_Subcol = ModSettings_Col.column(align=True)
+
+                ModSettings_Row = ModSettings_Subcol.box()
+
+                ModSettings_Row.use_property_split = True
+                ModSettings_Flow = ModSettings_Row.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
+
+                colm = ModSettings_Flow.row()
+
+                ModSettings_Col = colm.row()
+                ModSettings_Col.prop(context.scene, "mod_triangulate", text="", icon="MOD_TRIANGULATE")
+
+                ModSettings_Col = colm.row()
+                ModSettings_Col.label(text="Triangulate")
+
+            if  context.active_object is not None:
+                ModSettings_Col = Master_Col.column() ###### Box if needed for Modifiers Panel #############
+                ModSettings_Subcol = ModSettings_Col.column(align=True)
+
+                ModSettings_Row = ModSettings_Subcol.box()
+
+                ModSettings_Row.use_property_split = True
+                ModSettings_Flow = ModSettings_Row.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
+
+                colm = ModSettings_Flow.row()
+
+                ModSettings_Col = colm.row()
+                ModSettings_Col.prop(obj, "weightedNormalsToggle", index=2, text="", icon="MOD_NORMALEDIT")
+
+                ModSettings_Col = colm.row()
+                ModSettings_Col.label(text="Weighted Normals")
+
+                if mod_weightednormals == True:
+                    ModSettings_Col = colm.row()
+                    ModSettings_Col.prop(obj, "weightedNormalsRToggle", index=2, text="", icon="RESTRICT_RENDER_OFF")
+
+                    ModSettings_Col = colm.row()
+                    ModSettings_Col.prop(obj, "weightedNormalsVToggle", index=2, text="", icon="RESTRICT_VIEW_OFF")
+
+                    ModSettings_Col = colm.row()
+                    ModSettings_Col.prop(obj, "weightedNormalsEToggle", index=2, text="", icon="EDITMODE_HLT")
+            else:
+                ModSettings_Col = Master_Col.column() ###### Box if needed for Modifiers Panel #############
+                ModSettings_Subcol = ModSettings_Col.column(align=True)
+
+                ModSettings_Row = ModSettings_Subcol.box()
+
+                ModSettings_Row.use_property_split = True
+                ModSettings_Flow = ModSettings_Row.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
+
+                colm = ModSettings_Flow.row()
+
+                ModSettings_Col = colm.row()
+                ModSettings_Col.prop(context.scene, "mod_weightednormals", text="", icon="MOD_TRIANGULATE")
+
+                ModSettings_Col = colm.row()
+                ModSettings_Col.label(text="Weighted Normals")
 
         #### Add Objects Tab  #############################################
 
