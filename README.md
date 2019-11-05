@@ -5,9 +5,12 @@
 
 ### Alpha Release zip here -> 
 
-![v0.1.7 Alpha Release](https://github.com/Mainman002/blender-decimate-tools/releases/tag/0.1.7)
+![v0.1.8 Alpha Release](https://github.com/Mainman002/blender-decimate-tools/releases/tag/0.1.8)
 
 ### youtube video showing what it can do -> 
+
+### TMG-Mod-Tools v0.1.8-alpha-3
+https://youtu.be/Bu4R8NCpvQw
 
 ### TMG_Mod_Tools v0.1.8 live update slider test
 https://youtu.be/vagXWfk5gwE
