@@ -3,7 +3,7 @@ bl_info = {
     "author" : "Johnathan Mueller, Jayanam",
     "descrtion" : "Checker decimate edges in your selected edge loops.",
     "blender" : (2, 80, 0),
-    "version" : (0, 1, 8),
+    "version" : (0, 1, 9),
     "location" : "View3D (EditMode) > Sidebar > Edit Tab",
     "warning" : "",
     "category" : "Mesh"
@@ -88,6 +88,13 @@ def angleLimit_changed(self, context):
 
 
 ##################### Update Bevel #############################
+
+def bevelDropToggle_changed(self, context):
+    if context.active_object is not None:
+        ob = context.object
+        bevelDropToggle = ob.bevelDropToggle
+        context.scene.modDrop_bevel = bevelDropToggle
+
 def bevelToggle_changed(self, context):
     if context.active_object is not None:
         ob = context.object
@@ -150,6 +157,13 @@ def bevelSegments_changed(self, context):
 
 
 ##################### Update Subdivision #############################
+
+def subsurfDropToggle_changed(self, context):
+    if context.active_object is not None:
+        ob = context.object
+        subsurfDropToggle = ob.subsurfDropToggle
+        context.scene.modDrop_subsurf = subsurfDropToggle
+
 def subsurfToggle_changed(self, context):
     if context.active_object is not None:
         ob = context.object
@@ -212,6 +226,13 @@ def subdivisionRender_changed(self, context):
 
 
 ##################### Update Solidify #############################
+
+def solidifyDropToggle_changed(self, context):
+    if context.active_object is not None:
+        ob = context.object
+        solidifyDropToggle = ob.solidifyDropToggle
+        context.scene.modDrop_solid = solidifyDropToggle
+
 def solidifyToggle_changed(self, context):
     if context.active_object is not None:
         ob = context.object
@@ -278,6 +299,12 @@ def solidifyOffset_changed(self, context):
 
 ##################### Update Triangulate #############################
 
+def triangulateDropToggle_changed(self, context):
+    if context.active_object is not None:
+        ob = context.object
+        triangulateDropToggle = ob.triangulateDropToggle
+        context.scene.modDrop_triangulate = triangulateDropToggle
+
 def triangulateToggle_changed(self, context):
     if context.active_object is not None:
         ob = context.object
@@ -323,6 +350,12 @@ def triangulateEToggle_changed(self, context):
 
 
 ##################### Update Weighted Normals #############################
+
+def weightedNormalsDropToggle_changed(self, context):
+    if context.active_object is not None:
+        ob = context.object
+        weightedNormalsDropToggle = ob.weightedNormalsDropToggle
+        context.scene.modDrop_weightedNormals = weightedNormalsDropToggle
 
 def weightedNormalsToggle_changed(self, context):
     if context.active_object is not None:
@@ -394,6 +427,8 @@ bpy.types.Object.angleLimit = bpy.props.FloatProperty(name = "Angle Limit", defa
 
 
 ##### Bevel ##########
+bpy.types.Object.bevelDropToggle = bpy.props.BoolProperty(name = "Bevel Dropdown Toggle", default = False, update=bevelDropToggle_changed)
+
 bpy.types.Object.bevelToggle = bpy.props.BoolProperty(name = "Bevel Toggle", default = False, update=bevelToggle_changed)
 bpy.types.Object.bevelEToggle = bpy.props.BoolProperty(name = "Bevel Edit Toggle", default = False, update=bevelEToggle_changed)
 bpy.types.Object.bevelVToggle = bpy.props.BoolProperty(name = "Bevel View Toggle", default = False, update=bevelVToggle_changed)
@@ -403,6 +438,8 @@ bpy.types.Object.bevelWidth = bpy.props.FloatProperty(name = "Bevel Width", defa
 
 
 ##### Subdivision ##########
+bpy.types.Object.subsurfDropToggle = bpy.props.BoolProperty(name = "Subdivision Dropdown Toggle", default = False, update=subsurfDropToggle_changed)
+
 bpy.types.Object.subsurfToggle = bpy.props.BoolProperty(name = "Subdivision Toggle", default = False, update=subsurfToggle_changed)
 bpy.types.Object.subsurfEToggle = bpy.props.BoolProperty(name = "Subdivision Edit Toggle", default = False, update=subsurfEToggle_changed)
 bpy.types.Object.subsurfVToggle = bpy.props.BoolProperty(name = "Subdivision View Toggle", default = False, update=subsurfVToggle_changed)
@@ -412,6 +449,8 @@ bpy.types.Object.subdivisionRender = bpy.props.IntProperty(name = "Subdivision R
 
 
 ##### Solidify ##########
+bpy.types.Object.solidifyDropToggle = bpy.props.BoolProperty(name = "Solidify Dropdown Toggle", default = False, update=solidifyDropToggle_changed)
+
 bpy.types.Object.solidifyToggle = bpy.props.BoolProperty(name = "Solidify Toggle", default = False, update=solidifyToggle_changed)
 bpy.types.Object.solidifyEToggle = bpy.props.BoolProperty(name = "Solidify Edit Toggle", default = False, update=solidifyEToggle_changed)
 bpy.types.Object.solidifyVToggle = bpy.props.BoolProperty(name = "Solidify View Toggle", default = False, update=solidifyVToggle_changed)
@@ -421,6 +460,8 @@ bpy.types.Object.solidifyOffset = bpy.props.FloatProperty(name = "Solidify Offse
 
 
 ##### Triangulate ##########
+bpy.types.Object.triangulateDropToggle = bpy.props.BoolProperty(name = "Triangulate Dropdown Toggle", default = False, update=triangulateDropToggle_changed)
+
 bpy.types.Object.triangulateToggle = bpy.props.BoolProperty(name = "Triangulate Toggle", default = False, update=triangulateToggle_changed)
 bpy.types.Object.triangulateEToggle = bpy.props.BoolProperty(name = "Triangulate Edit Toggle", default = False, update=triangulateEToggle_changed)
 bpy.types.Object.triangulateVToggle = bpy.props.BoolProperty(name = "Triangulate View Toggle", default = False, update=triangulateVToggle_changed)
@@ -428,6 +469,8 @@ bpy.types.Object.triangulateRToggle = bpy.props.BoolProperty(name = "Triangulate
 
 
 ##### Weighted Normals ##########
+bpy.types.Object.weightedNormalsDropToggle = bpy.props.BoolProperty(name = "Weighted Normals Dropdown Toggle", default = False, update=weightedNormalsDropToggle_changed)
+
 bpy.types.Object.weightedNormalsToggle = bpy.props.BoolProperty(name = "Weighted Normals Toggle", default = False, update=weightedNormalsToggle_changed)
 bpy.types.Object.weightedNormalsEToggle = bpy.props.BoolProperty(name = "Weighted Normals Edit Toggle", default = False, update=weightedNormalsEToggle_changed)
 bpy.types.Object.weightedNormalsVToggle = bpy.props.BoolProperty(name = "Weighted Normals View Toggle", default = False, update=weightedNormalsVToggle_changed)
@@ -569,6 +612,36 @@ bpy.types.Scene.mod_triangulate = BoolProperty(name="Add triangulate modifier",
 bpy.types.Scene.mod_weightednormals = BoolProperty(name="Add weighted normals modifier",
                 default=False,
                 description="Adds weighted normals modifier")
+
+#### Modifier Dropdown List #########################
+
+bpy.types.Scene.modDrop_screw = BoolProperty(name="Dropdown screw modifier",
+                default=False,
+                description="Dropdown screw modifier")
+
+bpy.types.Scene.modDrop_solid = BoolProperty(name="Dropdown solidify modifier",
+                default=False,
+                description="Dropdown solidify modifier")
+
+bpy.types.Scene.modDrop_mirror = BoolProperty(name="Dropdown mirror modifier",
+                default=False,
+                description="Dropdown mirror modifier")
+
+bpy.types.Scene.modDrop_bevel = BoolProperty(name="Dropdown bevel modifier",
+                default=False,
+                description="Dropdown bevel modifier")
+
+bpy.types.Scene.modDrop_subsurf = BoolProperty(name="Dropdown subsurface modifier",
+                default=False,
+                description="Dropdown subsurface modifier")
+
+bpy.types.Scene.modDrop_triangulate = BoolProperty(name="Dropdown triangulate modifier",
+                default=False,
+                description="Dropdown triangulate modifier")
+
+bpy.types.Scene.modDrop_weightedNormals = BoolProperty(name="Dropdown weighted normals modifier",
+                default=False,
+                description="Dropdown weighted normals modifier")
 
 #### Tools Checkboxes #########################
 
