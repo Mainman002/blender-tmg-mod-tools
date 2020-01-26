@@ -77,6 +77,32 @@ class TOOL_Remove_Doubles_Edit_OT_Operator(bpy.types.Operator):
         return {'FINISHED'}
         return {'FINISHED'}
 
+class TOOL_Select_Interior_Faces_Edit_OT_Operator(bpy.types.Operator):
+    bl_idname = 'wm.tool_select_interior_faces_edit_ot_operator'
+    bl_label = 'Decimate Panel'
+    bl_description = 'Select faces in between selection.'
+    bl_options = {'REGISTER', 'UNDO'}
+
+    def execute(self, context):
+
+        bpy.ops.mesh.loop_to_region()
+
+        return {'FINISHED'}
+        return {'FINISHED'}
+
+class TOOL_Flip_Normals_Edit_OT_Operator(bpy.types.Operator):
+    bl_idname = 'wm.tool_flip_normals_edit_ot_operator'
+    bl_label = 'Decimate Panel'
+    bl_description = 'Flip normals of selection.'
+    bl_options = {'REGISTER', 'UNDO'}
+
+    def execute(self, context):
+
+        bpy.ops.mesh.flip_normals()
+
+        return {'FINISHED'}
+        return {'FINISHED'}
+
 
 
 #bpy.ops.mesh.loopcut_slide(MESH_OT_loopcut={"number_cuts":1, "smoothness":0, "falloff":'INVERSE_SQUARE', "object_index":0, "edge_index":9, "mesh_select_mode_init":(False, False, True)}, TRANSFORM_OT_edge_slide={"value":0, "single_side":False, "use_even":False, "flipped":False, "use_clamp":True, "mirror":False, "snap":False, "snap_target":'CLOSEST', "snap_point":(0, 0, 0), "snap_align":False, "snap_normal":(0, 0, 0), "correct_uv":True, "release_confirm":False, "use_accurate":False})

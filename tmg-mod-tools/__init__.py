@@ -21,6 +21,7 @@ from . dec_op import *
 from . mod_op import * 
 from . add_op import * 
 from . tool_op import * 
+from . text_op import * 
 from . dec_panel import * 
 
 
@@ -413,6 +414,30 @@ def viewMode_changed(self, context):
                     ob.display_type = viewMode
 
 
+##################### Update Text Objects #############################
+def textName_changed(self, context):
+    if context.active_object is not None:
+        ob = context.object
+        textName = ob.textName
+        context.scene.text_name = textName
+        for nr, ob in enumerate(bpy.context.selected_objects):
+            types = ob.type
+            if types == "TEXT":
+                ob.textName = textName
+
+
+##################### Update Text Objects #############################
+def textText_changed(self, context):
+    if context.active_object is not None:
+        ob = context.object
+        textText = ob.textText
+        context.scene.text_text = textText
+        for nr, ob in enumerate(bpy.context.selected_objects):
+            types = ob.type
+            if types == "TEXT":
+                ob.textText = textText
+
+
 ##################### Update Values #############################
 bpy.types.Object.myBool = bpy.props.BoolProperty(name = "Switch", default = False, update=myBool_changed)
 bpy.types.Object.zlayer = bpy.props.IntProperty(name = "Z Layer", default = 1, update=zlayer_changed)
@@ -477,6 +502,12 @@ bpy.types.Object.weightedNormalsVToggle = bpy.props.BoolProperty(name = "Weighte
 bpy.types.Object.weightedNormalsRToggle = bpy.props.BoolProperty(name = "Weighted Normals Render Toggle", default = False, update=weightedNormalsRToggle_changed)
 
 
+##### Text Update ############
+bpy.types.Scene.text_name = bpy.props.StringProperty(name = "Text Name", default = "Text", update=textName_changed)
+bpy.types.Scene.text_text = bpy.props.StringProperty(name = "Text Text", default = "Blank", update=textText_changed)
+
+
+
 ##### Object View Mode ##########
 bpy.types.Object.viewMode = bpy.props.EnumProperty(
     name="View Mode",
@@ -492,6 +523,20 @@ bpy.types.Object.viewMode = bpy.props.EnumProperty(
 
 
 ##################### Update Defs End #############################
+
+
+#### Menu Strings #########################
+
+bpy.types.Scene.text_name = StringProperty(name="Object Name",
+                default="Text",
+                update=textName_changed,
+                description="Text Object Name.")
+
+bpy.types.Scene.text_text = StringProperty(name="Text",
+                default="Blank",
+                update=textText_changed,
+                description="Text Name.")
+
 
 #### Menu Float Sliders #########################
 
@@ -688,9 +733,11 @@ ADD_Solid_Plane_Object_OT_Operator, ADD_Solid_Circle_Object_OT_Operator, ADD_Arc
 ADD_Arch_Object_Z_OT_Operator, ADD_Pipe_Line_Object_Y_OT_Operator, ADD_Pipe_Line_Object_Z_OT_Operator, 
 ADD_Basic_Spline_Y_OT_Operator, ADD_Pipe_Spline_Y_OT_Operator, ADD_Spline_Folow_Y_OT_Operator, 
 DEC_PT_Object_Panel, DEC_PT_Edit_Panel, 
-TOOL_Inset_Edit_OT_Operator, TOOL_Bevel_Edge_Edit_OT_Operator, TOOL_Remove_Doubles_Edit_OT_Operator, 
+TOOL_Inset_Edit_OT_Operator, TOOL_Bevel_Edge_Edit_OT_Operator, TOOL_Remove_Doubles_Edit_OT_Operator, TOOL_Select_Interior_Faces_Edit_OT_Operator, 
+TOOL_Flip_Normals_Edit_OT_Operator,  
 UI_Distraction_Free_OT_Operator, UI_Wireframe_OT_Operator, UI_View_Mode_OT_Operator, Dec_Edit_Modifier_Panel, Dec_Object_Modifier_Panel,
-UI_Texel_Check_OT_Operator, Dec_Object_Materials_Panel 
+UI_Texel_Check_OT_Operator, Dec_Object_Materials_Panel,
+Text_Update_OT_Operator, Text_Object_Text_Panel 
 
 )
 

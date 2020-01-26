@@ -774,6 +774,12 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
             View_Col.label(text="Texel Check")
             View_Col.operator('wm.ui_texel_check_ot_operator', text='', icon='UV_DATA')
 
+            colm = View_Flow.box()
+
+            View_Col = colm.row()
+            View_Col.label(text="Flip Normals")
+            View_Col.operator('wm.tool_flip_normals_edit_ot_operator', text='', icon='NORMALS_FACE')
+
             obj = context.object
             if obj is not None:
                 colm = View_Flow.box()
@@ -1458,6 +1464,11 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
 
             Tools_Apply_Col = colm.row()
             Tools_Apply_Col.operator('wm.tool_remove_doubles_edit_ot_operator', text='Remove Doubles')
+
+            colm = Tools_Apply_Flow.column()
+
+            Tools_Apply_Col = colm.row()
+            Tools_Apply_Col.operator('wm.tool_select_interior_faces_edit_ot_operator', text='Select Interior')
 
 
 
@@ -4819,6 +4830,92 @@ class Dec_Object_Materials_Panel(bpy.types.Panel):
             #View_Col.operator("object.material_slot_move", icon='TRIA_UP', text="").direction = 'UP'
 
 
+
+
+class Text_Object_Text_Panel(bpy.types.Panel):
+    bl_idname = 'OBJECT_PT_text_object_text_panel'
+    bl_category = 'Edit'
+    bl_label = 'Text Panel'
+    bl_context = "objectmode"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+
+    def draw(self, context):
+
+        scene = context.scene
+
+        obj = bpy.context.view_layer.objects.active
+        #sel_mode = context.tool_settings.mesh_select_mode
+        
+        text_name = context.scene.text_name
+        text_text = context.scene.text_text
+
+        layout = self.layout
+
+        layout.use_property_split = True
+        layout.use_property_decorate = False  # No animation.
+
+        #layout = self.layout
+        #col = layout.column()
+        #col.prop(context.active_object, "MyInt")
+
+        #### Master Panel Layout Controllers ###############################
+
+        Master_Col = layout.column(align=True)
+        Master_Subcol = Master_Col.column()
+
+        #### View Tab Panel Layout Controllers #########################
+
+        Text_Col = Master_Col.column(align=True)
+        Text_Subcol = Text_Col.column()
+        Text_Row = Text_Col.row()
+
+        #### View Tab  ############################################################################################################
+
+        #if check_view == False:
+            #View_Col.prop(context.scene, "check_view", text="View", icon="RIGHTARROW")
+        #else:
+            #View_Col.prop(context.scene, "check_view", text="View", icon="DOWNARROW_HLT")
+
+        Text_Col = Master_Col.column() ###### Box if needed for View Panel #############
+        Text_Subcol = Text_Col.column(align=True)
+
+        Text_Col.use_property_split = True
+        Text_Flow = Text_Col.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
+
+        colm = Text_Flow.box()
+
+        #for nr, obj in enumerate(bpy.context.selected_objects):
+            #if obj is not "empty":
+        if context.active_object is not None:
+            if obj.type == "CURVE" or "TEXT":
+
+                Text_Col = colm.row()
+                Text_Col.label(text="Apply Text Changes")
+                Text_Col.operator('wm.text_update_ot_operator', text='', icon='FILE_FONT')
+
+                #colm = Text_Flow.row()
+
+                #Text_Flow = colm.row()
+                #Text_Flow.label(text="Name")
+                #Text_Flow.prop(context.scene, "text_name", text='')
+
+                #colm = Text_Flow.row()
+
+                Text_Flow = colm.row()
+                #Text_Flow.label(text="Text")
+                Text_Flow.prop(context.scene, "text_text", text='')
+        else:
+
+            #colm = Text_Flow.row()
+
+            Text_Flow = colm.column()
+            Text_Flow.label(text="No Text")
+
+        #colm = Text_Flow.column()
+
+        #Text_Flow = colm.row()
+        #Text_Flow.prop(obj, "bevelWidth", index=2, text="", slider=True)
 
 
         
