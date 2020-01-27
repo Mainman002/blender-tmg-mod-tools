@@ -4844,11 +4844,15 @@ class Text_Object_Text_Panel(bpy.types.Panel):
 
         scene = context.scene
 
-        obj = bpy.context.view_layer.objects.active
+        #obj = bpy.context.view_layer.objects.active
+
+        obj = context.object
+
         #sel_mode = context.tool_settings.mesh_select_mode
         
-        text_name = context.scene.text_name
-        text_text = context.scene.text_text
+        textNameLink = context.scene.textNameLink
+        text_name = context.scene.textName
+        text_text = context.scene.textText
 
         layout = self.layout
 
@@ -4883,34 +4887,45 @@ class Text_Object_Text_Panel(bpy.types.Panel):
         Text_Col.use_property_split = True
         Text_Flow = Text_Col.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
 
+        #if obj is not None:
+            #if obj.type == 'FONT':
         colm = Text_Flow.box()
 
-        #for nr, obj in enumerate(bpy.context.selected_objects):
-            #if obj is not "empty":
-        if context.active_object is not None:
-            if obj.type == "CURVE" or "TEXT":
+        if textNameLink == False: # UNLINKED / LINKED
 
-                Text_Col = colm.row()
-                Text_Col.label(text="Apply Text Changes")
-                Text_Col.operator('wm.text_update_ot_operator', text='', icon='FILE_FONT')
+            Text_Col = colm.row()
+            Text_Col.label(text="Link Object To Text")
+            Text_Col.prop(scene, "textNameLink", text='', icon='LINKED')
 
-                #colm = Text_Flow.row()
+            Text_Flow = colm.row()
+            Text_Flow.label(text="Object Name")
 
-                #Text_Flow = colm.row()
-                #Text_Flow.label(text="Name")
-                #Text_Flow.prop(context.scene, "text_name", text='')
+            Text_Flow = colm.row()
+            Text_Flow.prop(scene, "textName", text='')
 
-                #colm = Text_Flow.row()
+            Text_Flow = colm.row()
+            Text_Flow.label(text="Text")
 
-                Text_Flow = colm.row()
-                #Text_Flow.label(text="Text")
-                Text_Flow.prop(context.scene, "text_text", text='')
-        else:
+            Text_Flow = colm.row()
+            Text_Flow.prop(scene, "textText", text='')
+
+        else: # UNLINKED / LINKED
+
+            Text_Col = colm.row()
+            Text_Col.label(text="UnLink Object From Text")
+            Text_Col.prop(scene, "textNameLink", text='', icon='UNLINKED')
+
+            Text_Flow = colm.row()
+            Text_Flow.label(text="Text")
+
+            Text_Flow = colm.row()
+            Text_Flow.prop(scene, "textText", text='')
+        #else:
 
             #colm = Text_Flow.row()
 
-            Text_Flow = colm.column()
-            Text_Flow.label(text="No Text")
+            #Text_Flow = colm.column()
+            #Text_Flow.label(text="No Text")
 
         #colm = Text_Flow.column()
 

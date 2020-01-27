@@ -8,23 +8,20 @@ class Text_Update_OT_Operator(bpy.types.Operator):
 
     def execute(self, context):
 
-        #obj = bpy.context.view_layer.objects.active
-
-        text_name = context.scene.text_name
-        text_text = context.scene.text_text
+        #textNameLink = context.scene.textNameLink
+        #text_name = context.scene.textName
+        text_text = context.scene.textText
 
         obj = bpy.context.active_object
 
         for nr, obj in enumerate(bpy.context.selected_objects):
 
-            if obj is not "empty":
-                types = obj.type
-                if types == "MESH":
-                    return {'FINISHED'}
-                elif types == "CURVE" or "TEXT":
-                    #obj.name = text_name
-                    #obj.data.name = text_name
-                    obj.data.body = text_text
+            if obj.type == 'FONT':
+                #print('font object: ', obj.type)
+                obj.data.body = text_text
+            #else:
+                #print('bad type: ', obj.type)
+        
                    
 
         return {'FINISHED'}

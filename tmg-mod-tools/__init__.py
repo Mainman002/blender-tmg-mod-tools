@@ -3,7 +3,7 @@ bl_info = {
     "author" : "Johnathan Mueller, Jayanam",
     "descrtion" : "Checker decimate edges in your selected edge loops.",
     "blender" : (2, 80, 0),
-    "version" : (0, 1, 9),
+    "version" : (0, 2, 0),
     "location" : "View3D (EditMode) > Sidebar > Edit Tab",
     "warning" : "",
     "category" : "Mesh"
@@ -416,26 +416,35 @@ def viewMode_changed(self, context):
 
 ##################### Update Text Objects #############################
 def textName_changed(self, context):
-    if context.active_object is not None:
-        ob = context.object
-        textName = ob.textName
-        context.scene.text_name = textName
-        for nr, ob in enumerate(bpy.context.selected_objects):
-            types = ob.type
-            if types == "TEXT":
-                ob.textName = textName
+    text_name = context.scene.textName
+
+    obj = bpy.context.active_object
+
+    for nr, obj in enumerate(bpy.context.selected_objects):
+
+        if obj.type == 'FONT':
+            #print('font object: ', obj.type)
+            obj.name = text_name
+            obj.data.name = text_name
 
 
 ##################### Update Text Objects #############################
 def textText_changed(self, context):
-    if context.active_object is not None:
-        ob = context.object
-        textText = ob.textText
-        context.scene.text_text = textText
-        for nr, ob in enumerate(bpy.context.selected_objects):
-            types = ob.type
-            if types == "TEXT":
-                ob.textText = textText
+    textNameLink = context.scene.textNameLink
+    #textName = context.scene.textName
+    text_text = context.scene.textText
+
+    obj = bpy.context.active_object
+
+    for nr, obj in enumerate(bpy.context.selected_objects):
+
+        if obj.type == 'FONT':
+            #print('font object: ', obj.type)
+            
+            if textNameLink == True:
+                obj.name = text_text
+                obj.data.name = text_text
+            obj.data.body = text_text
 
 
 ##################### Update Values #############################
@@ -503,9 +512,8 @@ bpy.types.Object.weightedNormalsRToggle = bpy.props.BoolProperty(name = "Weighte
 
 
 ##### Text Update ############
-bpy.types.Scene.text_name = bpy.props.StringProperty(name = "Text Name", default = "Text", update=textName_changed)
-bpy.types.Scene.text_text = bpy.props.StringProperty(name = "Text Text", default = "Blank", update=textText_changed)
-
+bpy.types.Scene.textName = bpy.props.StringProperty(name = "Text Name", default = "Text", update=textName_changed)
+bpy.types.Scene.textText = bpy.props.StringProperty(name = "Text Text", default = "Blank", update=textText_changed)
 
 
 ##### Object View Mode ##########
@@ -524,19 +532,11 @@ bpy.types.Object.viewMode = bpy.props.EnumProperty(
 
 ##################### Update Defs End #############################
 
+#### Text Bools #################################
 
-#### Menu Strings #########################
-
-bpy.types.Scene.text_name = StringProperty(name="Object Name",
-                default="Text",
-                update=textName_changed,
-                description="Text Object Name.")
-
-bpy.types.Scene.text_text = StringProperty(name="Text",
-                default="Blank",
-                update=textText_changed,
-                description="Text Name.")
-
+bpy.types.Scene.textNameLink = BoolProperty(name="Text Object Name Link",
+                default=False,
+                description="Text Object Name Link To Text.")
 
 #### Menu Float Sliders #########################
 
