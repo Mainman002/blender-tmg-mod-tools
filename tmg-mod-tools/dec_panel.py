@@ -11,10 +11,13 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
 
     def draw(self, context):
 
+        scene = context.scene
+        obj = context.object
+
         sel_mode = context.tool_settings.mesh_select_mode
 
         axis_mode = context.scene.axis_mod
-        solid_offset = context.scene.solid_offset
+        solid_offset = context.scene.solidOffset
         #solid_thickness = context.scene.solid_thickness
         #bevel_width = context.scene.bevel_width
         #bevel_segments = context.scene.bevel_segments
@@ -45,11 +48,8 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
         ui_viewMode = context.scene.ui_viewMode
         ui_wireMode = context.scene.ui_wireMode
 
-        scene = context.scene
-
         layout = self.layout
 
-        obj = context.object
         #objmesh = obj.data
 
         layout.use_property_split = True
@@ -71,14 +71,14 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
             #poly = len(objmesh.polygons)
             #View_Col.label(text="Poly" + str(len(objmesh.polygons)))
         #View_Col.label(text="Poly" + str(obj.triCount))
-        #View_Col.prop(obj, "triCount", index=2, text="")
+        #View_Col.prop(scene, "triCount", index=2, text="")
 
         #### View Tab  ############################################################################################################
 
         if check_view == False:
-            View_Col.prop(context.scene, "check_view", text="View", icon="RIGHTARROW")
+            View_Col.prop(scene, "check_view", text="View", icon="RIGHTARROW")
         else:
-            View_Col.prop(context.scene, "check_view", text="View", icon="DOWNARROW_HLT")
+            View_Col.prop(scene, "check_view", text="View", icon="DOWNARROW_HLT")
 
             View_Col = Master_Col.column() ###### Box if needed for View Panel #############
             View_Subcol = View_Col.column(align=True)
@@ -115,7 +115,7 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
                 colm = View_Flow.box()
                 View_Col = colm.row()
                 View_Col.label(text="Object")
-                View_Col.prop(obj, "viewMode", index=2, text="")
+                View_Col.prop(scene, "viewMode", index=2, text="")
 
         #### Modifiers Tab Panel Layout Controllers #########################
 
@@ -126,9 +126,9 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
         #### Modifiers Tab  ############################################################################################################
 
         if check_modifiers == False:
-            Modifiers_Col.prop(context.scene, "check_modifiers", text="Modifiers", icon="RIGHTARROW")
+            Modifiers_Col.prop(scene, "check_modifiers", text="Modifiers", icon="RIGHTARROW")
         else:
-            Modifiers_Col.prop(context.scene, "check_modifiers", text="Modifiers", icon="DOWNARROW_HLT")
+            Modifiers_Col.prop(scene, "check_modifiers", text="Modifiers", icon="DOWNARROW_HLT")
 
             Modifiers_Col = Master_Col.box()  ###### Box if needed for Modifiers Panel #############
 
@@ -150,37 +150,37 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
 
             Modifiers_Col = Mod_ColM.row()
             Modifiers_Col.label(text="Screw")
-            Modifiers_Col.prop(context.scene, "mod_screw", text="", icon="MOD_SCREW")
+            Modifiers_Col.prop(scene, "mod_screw", text="", icon="MOD_SCREW")
             
             Modifiers_Col = Mod_ColM.row()
             Modifiers_Col.label(text="Mirror")
-            Modifiers_Col.prop(context.scene, "mod_mirror", text="", icon="MOD_MIRROR")
+            Modifiers_Col.prop(scene, "mod_mirror", text="", icon="MOD_MIRROR")
 
             Mod_ColM = Modifiers_Flow2.column()
 
             Modifiers_Col = Mod_ColM.row()
             Modifiers_Col.label(text="Subsurface")
-            Modifiers_Col.prop(context.scene, "mod_subsurf", text="", icon="MOD_SUBSURF")
+            Modifiers_Col.prop(scene, "mod_subsurf", text="", icon="MOD_SUBSURF")
 
             Modifiers_Col = Mod_ColM.row()
             Modifiers_Col.label(text="Solidify")
-            Modifiers_Col.prop(context.scene, "mod_solid", text="", icon="MOD_SOLIDIFY")
+            Modifiers_Col.prop(scene, "mod_solid", text="", icon="MOD_SOLIDIFY")
 
             Mod_ColM = Modifiers_Flow2.column()
 
             Modifiers_Col = Mod_ColM.row()
             Modifiers_Col.label(text="Bevel")
-            Modifiers_Col.prop(context.scene, "mod_bevel", text="", icon="MOD_BEVEL")
+            Modifiers_Col.prop(scene, "mod_bevel", text="", icon="MOD_BEVEL")
 
             Modifiers_Col = Mod_ColM.row()
             Modifiers_Col.label(text="Triangulate")
-            Modifiers_Col.prop(context.scene, "mod_triangulate", text="", icon="MOD_TRIANGULATE")
+            Modifiers_Col.prop(scene, "mod_triangulate", text="", icon="MOD_TRIANGULATE")
 
             Mod_ColM = Modifiers_Flow2.column()
 
             Modifiers_Col = Mod_ColM.row()
             Modifiers_Col.label(text="Normal Edit")
-            Modifiers_Col.prop(context.scene, "mod_weightednormals", text="", icon="MOD_NORMALEDIT")
+            Modifiers_Col.prop(scene, "mod_weightednormals", text="", icon="MOD_NORMALEDIT")
 
             Mod_ColM = Modifiers_Flow2.column()
 
@@ -193,9 +193,9 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
         #### Modifier Settings Tab  ############################################################################################################
 
         if check_modSettings == False:
-            ModSettings_Col.prop(context.scene, "check_modSettings", text="Mod Settings", icon="RIGHTARROW")
+            ModSettings_Col.prop(scene, "check_modSettings", text="Mod Settings", icon="RIGHTARROW")
         else:
-            ModSettings_Col.prop(context.scene, "check_modSettings", text="Mod Settings", icon="DOWNARROW_HLT")
+            ModSettings_Col.prop(scene, "check_modSettings", text="Mod Settings", icon="DOWNARROW_HLT")
 
             ModSettings_Col = Master_Col.column() ###### Box if needed for Modifiers Panel #############
             ModSettings_Subcol = ModSettings_Col.column(align=True)
@@ -237,7 +237,7 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
             colm = ModSettings_Flow.row()
 
             ModSettings_Col = colm.row()
-            ModSettings_Col.prop(context.scene, "axis_mod", text="")
+            ModSettings_Col.prop(scene, "axis_mod", text="")
 
             colm = ModSettings_Flow.row()
 
@@ -248,7 +248,7 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
 
             if obj is not None:
                 ModSettings_Col = colm.row()
-                ModSettings_Col.prop(obj, "angleLimit", index=2, text="")
+                ModSettings_Col.prop(scene, "angleLimit", index=2, text="")
 
             if  context.active_object is not None:
                 ModSettings_Col = Master_Col.column() ###### Box if needed for Modifiers Panel #############
@@ -262,7 +262,7 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
                 colm = ModSettings_Flow.row()
 
                 ModSettings_Col = colm.row()
-                ModSettings_Col.prop(obj, "solidifyDropToggle", index=2, text="", icon="MOD_SOLIDIFY")
+                ModSettings_Col.prop(scene, "solidDropToggle", index=2, text="", icon="MOD_SOLIDIFY")
 
                 ModSettings_Col = colm.row() #angle_limit
                 ModSettings_Col.label(text="Solidify")
@@ -270,16 +270,16 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
                 if  modDrop_solid == True:
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "solidifyToggle", index=2, text="", icon="MOD_SOLIDIFY")
+                    ModSettings_Col.prop(scene, "solidToggle", index=2, text="", icon="MOD_SOLIDIFY")
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "solidifyRToggle", index=2, text="", icon="RESTRICT_RENDER_OFF")
+                    ModSettings_Col.prop(scene, "solidRToggle", index=2, text="", icon="RESTRICT_RENDER_OFF")
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "solidifyVToggle", index=2, text="", icon="RESTRICT_VIEW_OFF")
+                    ModSettings_Col.prop(scene, "solidVToggle", index=2, text="", icon="RESTRICT_VIEW_OFF")
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "solidifyEToggle", index=2, text="", icon="EDITMODE_HLT")
+                    ModSettings_Col.prop(scene, "solidEToggle", index=2, text="", icon="EDITMODE_HLT")
 
                     ModSettings_Row = ModSettings_Subcol.box()
 
@@ -294,7 +294,7 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
                     colm = ModSettings_Flow.column()
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "solidifyOffset", index=2, text="", slider=True)
+                    ModSettings_Col.prop(scene, "solidOffset", index=2, text="", slider=True)
 
                     colm = ModSettings_Flow.column()
 
@@ -304,7 +304,7 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
                     colm = ModSettings_Flow.column()
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "solidifyThickness", index=2, text="", slider=True)
+                    ModSettings_Col.prop(scene, "solidThickness", index=2, text="", slider=True)
 
             else:
                 ModSettings_Col = Master_Col.column() ###### Box if needed for Modifiers Panel #############
@@ -318,7 +318,7 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
                 colm = ModSettings_Flow.row()
 
                 ModSettings_Col = colm.row()
-                ModSettings_Col.prop(context.scene, "mod_solid", text="", icon="MOD_SOLIDIFY")
+                ModSettings_Col.prop(scene, "mod_solid", text="", icon="MOD_SOLIDIFY")
 
                 ModSettings_Col = colm.row() #angle_limit
                 ModSettings_Col.label(text="Solidify")
@@ -335,7 +335,7 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
                 colm = ModSettings_Flow.row()
 
                 ModSettings_Col = colm.row()
-                ModSettings_Col.prop(obj, "subsurfDropToggle", index=2, text="", icon="MOD_SUBSURF")
+                ModSettings_Col.prop(scene, "subsurfDropToggle", index=2, text="", icon="MOD_SUBSURF")
 
                 ModSettings_Col = colm.row() #angle_limit
                 ModSettings_Col.label(text="Subsurf")
@@ -343,16 +343,16 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
                 if  modDrop_subsurf == True:
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "subsurfToggle", index=2, text="", icon="MOD_SUBSURF")
+                    ModSettings_Col.prop(scene, "subsurfToggle", index=2, text="", icon="MOD_SUBSURF")
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "subsurfRToggle", index=2, text="", icon="RESTRICT_RENDER_OFF")
+                    ModSettings_Col.prop(scene, "subsurfRToggle", index=2, text="", icon="RESTRICT_RENDER_OFF")
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "subsurfVToggle", index=2, text="", icon="RESTRICT_VIEW_OFF")
+                    ModSettings_Col.prop(scene, "subsurfVToggle", index=2, text="", icon="RESTRICT_VIEW_OFF")
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "subsurfEToggle", index=2, text="", icon="EDITMODE_HLT")
+                    ModSettings_Col.prop(scene, "subsurfEToggle", index=2, text="", icon="EDITMODE_HLT")
 
                     ModSettings_Row = ModSettings_Subcol.box()
 
@@ -367,7 +367,7 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
                     colm = ModSettings_Flow.column()
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "subdivisionView", index=2, text="")
+                    ModSettings_Col.prop(scene, "subdivisionView", index=2, text="")
 
                     colm = ModSettings_Flow.column()
 
@@ -377,7 +377,7 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
                     colm = ModSettings_Flow.column()
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "subdivisionRender", index=2, text="")
+                    ModSettings_Col.prop(scene, "subdivisionRender", index=2, text="")
 
             else:
                 ModSettings_Col = Master_Col.column() ###### Box if needed for Modifiers Panel #############
@@ -391,7 +391,7 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
                 colm = ModSettings_Flow.row()
 
                 ModSettings_Col = colm.row()
-                ModSettings_Col.prop(context.scene, "mod_subsurf", text="", icon="MOD_SUBSURF")
+                ModSettings_Col.prop(scene, "mod_subsurf", text="", icon="MOD_SUBSURF")
 
                 ModSettings_Col = colm.row() #angle_limit
                 ModSettings_Col.label(text="Subsurf")
@@ -408,7 +408,7 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
                 colm = ModSettings_Flow.row()
 
                 ModSettings_Col = colm.row()
-                ModSettings_Col.prop(obj, "bevelDropToggle", index=2, text="", icon="MOD_BEVEL")
+                ModSettings_Col.prop(scene, "bevelDropToggle", index=2, text="", icon="MOD_BEVEL")
 
                 ModSettings_Col = colm.row()
                 ModSettings_Col.label(text="Bevel")
@@ -416,16 +416,16 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
                 if modDrop_bevel == True:
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "bevelToggle", index=2, text="", icon="MOD_BEVEL")
+                    ModSettings_Col.prop(scene, "bevelToggle", index=2, text="", icon="MOD_BEVEL")
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "bevelRToggle", index=2, text="", icon="RESTRICT_RENDER_OFF")
+                    ModSettings_Col.prop(scene, "bevelRToggle", index=2, text="", icon="RESTRICT_RENDER_OFF")
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "bevelVToggle", index=2, text="", icon="RESTRICT_VIEW_OFF")
+                    ModSettings_Col.prop(scene, "bevelVToggle", index=2, text="", icon="RESTRICT_VIEW_OFF")
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "bevelEToggle", index=2, text="", icon="EDITMODE_HLT")
+                    ModSettings_Col.prop(scene, "bevelEToggle", index=2, text="", icon="EDITMODE_HLT")
 
                     ModSettings_Row = ModSettings_Subcol.box()
 
@@ -440,7 +440,7 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
                     colm = ModSettings_Flow.column()
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "bevelSegments", index=2, text="")
+                    ModSettings_Col.prop(scene, "bevelSegments", index=2, text="")
 
                     colm = ModSettings_Flow.column()
 
@@ -452,7 +452,7 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
                     colm = ModSettings_Flow.column()
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "bevelWidth", index=2, text="", slider=True)
+                    ModSettings_Col.prop(scene, "bevelWidth", index=2, text="", slider=True)
 
             else:
                 ModSettings_Col = Master_Col.column() ###### Box if needed for Modifiers Panel #############
@@ -466,7 +466,7 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
                 colm = ModSettings_Flow.row()
 
                 ModSettings_Col = colm.row()
-                ModSettings_Col.prop(context.scene, "mod_bevel", text="", icon="MOD_BEVEL")
+                ModSettings_Col.prop(scene, "mod_bevel", text="", icon="MOD_BEVEL")
 
                 ModSettings_Col = colm.row()
                 ModSettings_Col.label(text="Bevel")
@@ -483,7 +483,7 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
                 colm = ModSettings_Flow.row()
 
                 ModSettings_Col = colm.row()
-                ModSettings_Col.prop(obj, "triangulateDropToggle", index=2, text="", icon="MOD_TRIANGULATE")
+                ModSettings_Col.prop(scene, "triangulateDropToggle", index=2, text="", icon="MOD_TRIANGULATE")
 
                 ModSettings_Col = colm.row()
                 ModSettings_Col.label(text="Triangulate")
@@ -491,16 +491,16 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
                 if modDrop_triangulate == True:
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "triangulateToggle", index=2, text="", icon="MOD_TRIANGULATE")
+                    ModSettings_Col.prop(scene, "triangulateToggle", index=2, text="", icon="MOD_TRIANGULATE")
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "triangulateRToggle", index=2, text="", icon="RESTRICT_RENDER_OFF")
+                    ModSettings_Col.prop(scene, "triangulateRToggle", index=2, text="", icon="RESTRICT_RENDER_OFF")
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "triangulateVToggle", index=2, text="", icon="RESTRICT_VIEW_OFF")
+                    ModSettings_Col.prop(scene, "triangulateVToggle", index=2, text="", icon="RESTRICT_VIEW_OFF")
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "triangulateEToggle", index=2, text="", icon="EDITMODE_HLT")
+                    ModSettings_Col.prop(scene, "triangulateEToggle", index=2, text="", icon="EDITMODE_HLT")
             else:
                 ModSettings_Col = Master_Col.column() ###### Box if needed for Modifiers Panel #############
                 ModSettings_Subcol = ModSettings_Col.column(align=True)
@@ -513,7 +513,7 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
                 colm = ModSettings_Flow.row()
 
                 ModSettings_Col = colm.row()
-                ModSettings_Col.prop(context.scene, "mod_triangulate", text="", icon="MOD_TRIANGULATE")
+                ModSettings_Col.prop(scene, "mod_triangulate", text="", icon="MOD_TRIANGULATE")
 
                 ModSettings_Col = colm.row()
                 ModSettings_Col.label(text="Triangulate")
@@ -530,7 +530,7 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
                 colm = ModSettings_Flow.row()
 
                 ModSettings_Col = colm.row()
-                ModSettings_Col.prop(obj, "weightedNormalsDropToggle", index=2, text="", icon="MOD_NORMALEDIT")
+                ModSettings_Col.prop(scene, "weightedNormalsDropToggle", index=2, text="", icon="MOD_NORMALEDIT")
 
                 ModSettings_Col = colm.row()
                 ModSettings_Col.label(text="Weighted Normals")
@@ -538,16 +538,16 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
                 if modDrop_weightedNormals == True:
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "weightedNormalsToggle", index=2, text="", icon="MOD_NORMALEDIT")
+                    ModSettings_Col.prop(scene, "weightedNormalsToggle", index=2, text="", icon="MOD_NORMALEDIT")
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "weightedNormalsRToggle", index=2, text="", icon="RESTRICT_RENDER_OFF")
+                    ModSettings_Col.prop(scene, "weightedNormalsRToggle", index=2, text="", icon="RESTRICT_RENDER_OFF")
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "weightedNormalsVToggle", index=2, text="", icon="RESTRICT_VIEW_OFF")
+                    ModSettings_Col.prop(scene, "weightedNormalsVToggle", index=2, text="", icon="RESTRICT_VIEW_OFF")
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "weightedNormalsEToggle", index=2, text="", icon="EDITMODE_HLT")
+                    ModSettings_Col.prop(scene, "weightedNormalsEToggle", index=2, text="", icon="EDITMODE_HLT")
             else:
                 ModSettings_Col = Master_Col.column() ###### Box if needed for Modifiers Panel #############
                 ModSettings_Subcol = ModSettings_Col.column(align=True)
@@ -560,7 +560,7 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
                 colm = ModSettings_Flow.row()
 
                 ModSettings_Col = colm.row()
-                ModSettings_Col.prop(context.scene, "mod_weightednormals", text="", icon="MOD_TRIANGULATE")
+                ModSettings_Col.prop(scene, "mod_weightednormals", text="", icon="MOD_TRIANGULATE")
 
                 ModSettings_Col = colm.row()
                 ModSettings_Col.label(text="Weighted Normals")
@@ -574,9 +574,9 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
         #### Add Objects Tab  ############################################################################################################
 
         if check_adds == False:
-            AddObjects_Col.prop(context.scene, "check_adds", text="Add Objects", icon="RIGHTARROW")
+            AddObjects_Col.prop(scene, "check_adds", text="Add Objects", icon="RIGHTARROW")
         else:
-            AddObjects_Col.prop(context.scene, "check_adds", text="Add Objects", icon="DOWNARROW_HLT")
+            AddObjects_Col.prop(scene, "check_adds", text="Add Objects", icon="DOWNARROW_HLT")
 
             View_Col = Master_Col.column() ###### Box if needed for View Panel #############
             View_Subcol = View_Col.column(align=True)
@@ -638,10 +638,10 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
 
         if check_splines == False:
             if axis_mode == "Y": # Y:
-                AddSplines_Col.prop(context.scene, "check_splines", text="Add Splines", icon="RIGHTARROW")
+                AddSplines_Col.prop(scene, "check_splines", text="Add Splines", icon="RIGHTARROW")
         else:
             if axis_mode == "Y": # Y:
-                AddSplines_Col.prop(context.scene, "check_splines", text="Add Splines", icon="DOWNARROW_HLT")
+                AddSplines_Col.prop(scene, "check_splines", text="Add Splines", icon="DOWNARROW_HLT")
 
                 AddSplines_Col = Master_Col.column() ###### Box if needed for Add Splines Panel #############
                 AddSplines_SubCol = AddSplines_Col.column(align=True)
@@ -682,6 +682,7 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
         #obj = bpy.context.view_layer.objects.active
         sel_mode = context.tool_settings.mesh_select_mode
 
+        scene = context.scene
         obj = context.object
 
         solid_offset = 1
@@ -740,9 +741,9 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
         #### View Tab  ############################################################################################################
 
         if check_view == False:
-            View_Col.prop(context.scene, "check_view", text="View", icon="RIGHTARROW")
+            View_Col.prop(scene, "check_view", text="View", icon="RIGHTARROW")
         else:
-            View_Col.prop(context.scene, "check_view", text="View", icon="DOWNARROW_HLT")
+            View_Col.prop(scene, "check_view", text="View", icon="DOWNARROW_HLT")
 
             View_Col = Master_Col.column() ###### Box if needed for View Panel #############
             View_Subcol = View_Col.column(align=True)
@@ -785,7 +786,7 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
                 colm = View_Flow.box()
                 View_Col = colm.row()
                 View_Col.label(text="Object")
-                View_Col.prop(obj, "viewMode", index=2, text="")
+                View_Col.prop(scene, "viewMode", index=2, text="")
 
         #### Modifiers Tab Panel Layout Controllers #########################
 
@@ -796,9 +797,9 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
         #### Modifiers Tab  ############################################################################################################
 
         if check_modifiers == False:
-            Modifiers_Col.prop(context.scene, "check_modifiers", text="Modifiers", icon="RIGHTARROW")
+            Modifiers_Col.prop(scene, "check_modifiers", text="Modifiers", icon="RIGHTARROW")
         else:
-            Modifiers_Col.prop(context.scene, "check_modifiers", text="Modifiers", icon="DOWNARROW_HLT")
+            Modifiers_Col.prop(scene, "check_modifiers", text="Modifiers", icon="DOWNARROW_HLT")
 
             Modifiers_Col = Master_Col.box()  ###### Box if needed for Modifiers Panel #############
 
@@ -820,37 +821,37 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
 
             Modifiers_Col = Mod_ColM.row()
             Modifiers_Col.label(text="Screw")
-            Modifiers_Col.prop(context.scene, "mod_screw", text="", icon="MOD_SCREW")
+            Modifiers_Col.prop(scene, "mod_screw", text="", icon="MOD_SCREW")
             
             Modifiers_Col = Mod_ColM.row()
             Modifiers_Col.label(text="Mirror")
-            Modifiers_Col.prop(context.scene, "mod_mirror", text="", icon="MOD_MIRROR")
+            Modifiers_Col.prop(scene, "mod_mirror", text="", icon="MOD_MIRROR")
 
             Mod_ColM = Modifiers_Flow2.column()
 
             Modifiers_Col = Mod_ColM.row()
             Modifiers_Col.label(text="Subsurface")
-            Modifiers_Col.prop(context.scene, "mod_subsurf", text="", icon="MOD_SUBSURF")
+            Modifiers_Col.prop(scene, "mod_subsurf", text="", icon="MOD_SUBSURF")
 
             Modifiers_Col = Mod_ColM.row()
             Modifiers_Col.label(text="Solidify")
-            Modifiers_Col.prop(context.scene, "mod_solid", text="", icon="MOD_SOLIDIFY")
+            Modifiers_Col.prop(scene, "mod_solid", text="", icon="MOD_SOLIDIFY")
 
             Mod_ColM = Modifiers_Flow2.column()
 
             Modifiers_Col = Mod_ColM.row()
             Modifiers_Col.label(text="Bevel")
-            Modifiers_Col.prop(context.scene, "mod_bevel", text="", icon="MOD_BEVEL")
+            Modifiers_Col.prop(scene, "mod_bevel", text="", icon="MOD_BEVEL")
 
             Modifiers_Col = Mod_ColM.row()
             Modifiers_Col.label(text="Triangulate")
-            Modifiers_Col.prop(context.scene, "mod_triangulate", text="", icon="MOD_TRIANGULATE")
+            Modifiers_Col.prop(scene, "mod_triangulate", text="", icon="MOD_TRIANGULATE")
 
             Mod_ColM = Modifiers_Flow2.column()
 
             Modifiers_Col = Mod_ColM.row()
             Modifiers_Col.label(text="Normal Edit")
-            Modifiers_Col.prop(context.scene, "mod_weightednormals", text="", icon="MOD_NORMALEDIT")
+            Modifiers_Col.prop(scene, "mod_weightednormals", text="", icon="MOD_NORMALEDIT")
 
             Mod_ColM = Modifiers_Flow2.column()
 
@@ -863,9 +864,9 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
         #### Modifier Settings Tab  ############################################################################################################
 
         if check_modSettings == False:
-            ModSettings_Col.prop(context.scene, "check_modSettings", text="Mod Settings", icon="RIGHTARROW")
+            ModSettings_Col.prop(scene, "check_modSettings", text="Mod Settings", icon="RIGHTARROW")
         else:
-            ModSettings_Col.prop(context.scene, "check_modSettings", text="Mod Settings", icon="DOWNARROW_HLT")
+            ModSettings_Col.prop(scene, "check_modSettings", text="Mod Settings", icon="DOWNARROW_HLT")
 
             ModSettings_Col = Master_Col.column() ###### Box if needed for Modifiers Panel #############
             ModSettings_Subcol = ModSettings_Col.column(align=True)
@@ -907,7 +908,7 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
             colm = ModSettings_Flow.row()
 
             ModSettings_Col = colm.row()
-            ModSettings_Col.prop(context.scene, "axis_mod", text="")
+            ModSettings_Col.prop(scene, "axis_mod", text="")
 
             colm = ModSettings_Flow.row()
 
@@ -918,7 +919,7 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
 
             if obj is not None:
                 ModSettings_Col = colm.row()
-                ModSettings_Col.prop(obj, "angleLimit", index=2, text="")
+                ModSettings_Col.prop(scene, "angleLimit", index=2, text="")
 
             if  context.active_object is not None:
                 ModSettings_Col = Master_Col.column() ###### Box if needed for Modifiers Panel #############
@@ -932,7 +933,7 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
                 colm = ModSettings_Flow.row()
 
                 ModSettings_Col = colm.row()
-                ModSettings_Col.prop(obj, "solidifyDropToggle", index=2, text="", icon="MOD_SOLIDIFY")
+                ModSettings_Col.prop(scene, "solidDropToggle", index=2, text="", icon="MOD_SOLIDIFY")
 
                 ModSettings_Col = colm.row() #angle_limit
                 ModSettings_Col.label(text="Solidify")
@@ -940,16 +941,16 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
                 if  modDrop_solid == True:
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "solidifyToggle", index=2, text="", icon="MOD_SOLIDIFY")
+                    ModSettings_Col.prop(scene, "solidToggle", index=2, text="", icon="MOD_SOLIDIFY")
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "solidifyRToggle", index=2, text="", icon="RESTRICT_RENDER_OFF")
+                    ModSettings_Col.prop(scene, "solidRToggle", index=2, text="", icon="RESTRICT_RENDER_OFF")
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "solidifyVToggle", index=2, text="", icon="RESTRICT_VIEW_OFF")
+                    ModSettings_Col.prop(scene, "solidVToggle", index=2, text="", icon="RESTRICT_VIEW_OFF")
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "solidifyEToggle", index=2, text="", icon="EDITMODE_HLT")
+                    ModSettings_Col.prop(scene, "solidEToggle", index=2, text="", icon="EDITMODE_HLT")
 
                     ModSettings_Row = ModSettings_Subcol.box()
 
@@ -964,7 +965,7 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
                     colm = ModSettings_Flow.column()
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "solidifyOffset", index=2, text="", slider=True)
+                    ModSettings_Col.prop(scene, "solidOffset", index=2, text="", slider=True)
 
                     colm = ModSettings_Flow.column()
 
@@ -974,7 +975,7 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
                     colm = ModSettings_Flow.column()
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "solidifyThickness", index=2, text="", slider=True)
+                    ModSettings_Col.prop(scene, "solidThickness", index=2, text="", slider=True)
 
             else:
                 ModSettings_Col = Master_Col.column() ###### Box if needed for Modifiers Panel #############
@@ -988,7 +989,7 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
                 colm = ModSettings_Flow.row()
 
                 ModSettings_Col = colm.row()
-                ModSettings_Col.prop(context.scene, "mod_solid", text="", icon="MOD_SOLIDIFY")
+                ModSettings_Col.prop(scene, "mod_solid", text="", icon="MOD_SOLIDIFY")
 
                 ModSettings_Col = colm.row() #angle_limit
                 ModSettings_Col.label(text="Solidify")
@@ -1005,7 +1006,7 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
                 colm = ModSettings_Flow.row()
 
                 ModSettings_Col = colm.row()
-                ModSettings_Col.prop(obj, "subsurfDropToggle", index=2, text="", icon="MOD_SUBSURF")
+                ModSettings_Col.prop(scene, "subsurfDropToggle", index=2, text="", icon="MOD_SUBSURF")
 
                 ModSettings_Col = colm.row() #angle_limit
                 ModSettings_Col.label(text="Subsurf")
@@ -1013,16 +1014,16 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
                 if  modDrop_subsurf == True:
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "subsurfToggle", index=2, text="", icon="MOD_SUBSURF")
+                    ModSettings_Col.prop(scene, "subsurfToggle", index=2, text="", icon="MOD_SUBSURF")
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "subsurfRToggle", index=2, text="", icon="RESTRICT_RENDER_OFF")
+                    ModSettings_Col.prop(scene, "subsurfRToggle", index=2, text="", icon="RESTRICT_RENDER_OFF")
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "subsurfVToggle", index=2, text="", icon="RESTRICT_VIEW_OFF")
+                    ModSettings_Col.prop(scene, "subsurfVToggle", index=2, text="", icon="RESTRICT_VIEW_OFF")
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "subsurfEToggle", index=2, text="", icon="EDITMODE_HLT")
+                    ModSettings_Col.prop(scene, "subsurfEToggle", index=2, text="", icon="EDITMODE_HLT")
 
                     ModSettings_Row = ModSettings_Subcol.box()
 
@@ -1037,7 +1038,7 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
                     colm = ModSettings_Flow.column()
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "subdivisionView", index=2, text="")
+                    ModSettings_Col.prop(scene, "subdivisionView", index=2, text="")
 
                     colm = ModSettings_Flow.column()
 
@@ -1047,7 +1048,7 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
                     colm = ModSettings_Flow.column()
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "subdivisionRender", index=2, text="")
+                    ModSettings_Col.prop(scene, "subdivisionRender", index=2, text="")
 
             else:
                 ModSettings_Col = Master_Col.column() ###### Box if needed for Modifiers Panel #############
@@ -1061,7 +1062,7 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
                 colm = ModSettings_Flow.row()
 
                 ModSettings_Col = colm.row()
-                ModSettings_Col.prop(context.scene, "mod_subsurf", text="", icon="MOD_SUBSURF")
+                ModSettings_Col.prop(scene, "mod_subsurf", text="", icon="MOD_SUBSURF")
 
                 ModSettings_Col = colm.row() #angle_limit
                 ModSettings_Col.label(text="Subsurf")
@@ -1078,7 +1079,7 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
                 colm = ModSettings_Flow.row()
 
                 ModSettings_Col = colm.row()
-                ModSettings_Col.prop(obj, "bevelDropToggle", index=2, text="", icon="MOD_BEVEL")
+                ModSettings_Col.prop(scene, "bevelDropToggle", index=2, text="", icon="MOD_BEVEL")
 
                 ModSettings_Col = colm.row()
                 ModSettings_Col.label(text="Bevel")
@@ -1086,16 +1087,16 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
                 if modDrop_bevel == True:
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "bevelToggle", index=2, text="", icon="MOD_BEVEL")
+                    ModSettings_Col.prop(scene, "bevelToggle", index=2, text="", icon="MOD_BEVEL")
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "bevelRToggle", index=2, text="", icon="RESTRICT_RENDER_OFF")
+                    ModSettings_Col.prop(scene, "bevelRToggle", index=2, text="", icon="RESTRICT_RENDER_OFF")
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "bevelVToggle", index=2, text="", icon="RESTRICT_VIEW_OFF")
+                    ModSettings_Col.prop(scene, "bevelVToggle", index=2, text="", icon="RESTRICT_VIEW_OFF")
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "bevelEToggle", index=2, text="", icon="EDITMODE_HLT")
+                    ModSettings_Col.prop(scene, "bevelEToggle", index=2, text="", icon="EDITMODE_HLT")
 
                     ModSettings_Row = ModSettings_Subcol.box()
 
@@ -1110,7 +1111,7 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
                     colm = ModSettings_Flow.column()
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "bevelSegments", index=2, text="")
+                    ModSettings_Col.prop(scene, "bevelSegments", index=2, text="")
 
                     colm = ModSettings_Flow.column()
 
@@ -1122,7 +1123,7 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
                     colm = ModSettings_Flow.column()
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "bevelWidth", index=2, text="", slider=True)
+                    ModSettings_Col.prop(scene, "bevelWidth", index=2, text="", slider=True)
 
             else:
                 ModSettings_Col = Master_Col.column() ###### Box if needed for Modifiers Panel #############
@@ -1136,7 +1137,7 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
                 colm = ModSettings_Flow.row()
 
                 ModSettings_Col = colm.row()
-                ModSettings_Col.prop(context.scene, "mod_bevel", text="", icon="MOD_BEVEL")
+                ModSettings_Col.prop(scene, "mod_bevel", text="", icon="MOD_BEVEL")
 
                 ModSettings_Col = colm.row()
                 ModSettings_Col.label(text="Bevel")
@@ -1153,7 +1154,7 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
                 colm = ModSettings_Flow.row()
 
                 ModSettings_Col = colm.row()
-                ModSettings_Col.prop(obj, "triangulateDropToggle", index=2, text="", icon="MOD_TRIANGULATE")
+                ModSettings_Col.prop(scene, "triangulateDropToggle", index=2, text="", icon="MOD_TRIANGULATE")
 
                 ModSettings_Col = colm.row()
                 ModSettings_Col.label(text="Triangulate")
@@ -1161,16 +1162,16 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
                 if modDrop_triangulate == True:
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "triangulateToggle", index=2, text="", icon="MOD_TRIANGULATE")
+                    ModSettings_Col.prop(scene, "triangulateToggle", index=2, text="", icon="MOD_TRIANGULATE")
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "triangulateRToggle", index=2, text="", icon="RESTRICT_RENDER_OFF")
+                    ModSettings_Col.prop(scene, "triangulateRToggle", index=2, text="", icon="RESTRICT_RENDER_OFF")
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "triangulateVToggle", index=2, text="", icon="RESTRICT_VIEW_OFF")
+                    ModSettings_Col.prop(scene, "triangulateVToggle", index=2, text="", icon="RESTRICT_VIEW_OFF")
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "triangulateEToggle", index=2, text="", icon="EDITMODE_HLT")
+                    ModSettings_Col.prop(scene, "triangulateEToggle", index=2, text="", icon="EDITMODE_HLT")
             else:
                 ModSettings_Col = Master_Col.column() ###### Box if needed for Modifiers Panel #############
                 ModSettings_Subcol = ModSettings_Col.column(align=True)
@@ -1183,7 +1184,7 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
                 colm = ModSettings_Flow.row()
 
                 ModSettings_Col = colm.row()
-                ModSettings_Col.prop(context.scene, "mod_triangulate", text="", icon="MOD_TRIANGULATE")
+                ModSettings_Col.prop(scene, "mod_triangulate", text="", icon="MOD_TRIANGULATE")
 
                 ModSettings_Col = colm.row()
                 ModSettings_Col.label(text="Triangulate")
@@ -1200,7 +1201,7 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
                 colm = ModSettings_Flow.row()
 
                 ModSettings_Col = colm.row()
-                ModSettings_Col.prop(obj, "weightedNormalsDropToggle", index=2, text="", icon="MOD_NORMALEDIT")
+                ModSettings_Col.prop(scene, "weightedNormalsDropToggle", index=2, text="", icon="MOD_NORMALEDIT")
 
                 ModSettings_Col = colm.row()
                 ModSettings_Col.label(text="Weighted Normals")
@@ -1208,16 +1209,16 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
                 if modDrop_weightedNormals == True:
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "weightedNormalsToggle", index=2, text="", icon="MOD_NORMALEDIT")
+                    ModSettings_Col.prop(scene, "weightedNormalsToggle", index=2, text="", icon="MOD_NORMALEDIT")
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "weightedNormalsRToggle", index=2, text="", icon="RESTRICT_RENDER_OFF")
+                    ModSettings_Col.prop(scene, "weightedNormalsRToggle", index=2, text="", icon="RESTRICT_RENDER_OFF")
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "weightedNormalsVToggle", index=2, text="", icon="RESTRICT_VIEW_OFF")
+                    ModSettings_Col.prop(scene, "weightedNormalsVToggle", index=2, text="", icon="RESTRICT_VIEW_OFF")
 
                     ModSettings_Col = colm.row()
-                    ModSettings_Col.prop(obj, "weightedNormalsEToggle", index=2, text="", icon="EDITMODE_HLT")
+                    ModSettings_Col.prop(scene, "weightedNormalsEToggle", index=2, text="", icon="EDITMODE_HLT")
             else:
                 ModSettings_Col = Master_Col.column() ###### Box if needed for Modifiers Panel #############
                 ModSettings_Subcol = ModSettings_Col.column(align=True)
@@ -1230,7 +1231,7 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
                 colm = ModSettings_Flow.row()
 
                 ModSettings_Col = colm.row()
-                ModSettings_Col.prop(context.scene, "mod_weightednormals", text="", icon="MOD_TRIANGULATE")
+                ModSettings_Col.prop(scene, "mod_weightednormals", text="", icon="MOD_TRIANGULATE")
 
                 ModSettings_Col = colm.row()
                 ModSettings_Col.label(text="Weighted Normals")
@@ -1244,9 +1245,9 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
         #### Add Objects Tab  ############################################################################################################
 
         if check_adds == False:
-            AddObjects_Col.prop(context.scene, "check_adds", text="Add Objects", icon="RIGHTARROW")
+            AddObjects_Col.prop(scene, "check_adds", text="Add Objects", icon="RIGHTARROW")
         else:
-            AddObjects_Col.prop(context.scene, "check_adds", text="Add Objects", icon="DOWNARROW_HLT")
+            AddObjects_Col.prop(scene, "check_adds", text="Add Objects", icon="DOWNARROW_HLT")
 
             View_Col = Master_Col.column() ###### Box if needed for View Panel #############
             View_Subcol = View_Col.column(align=True)
@@ -1308,10 +1309,10 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
 
         if check_splines == False:
             if axis_mode == "Y": # Y:
-                AddSplines_Col.prop(context.scene, "check_splines", text="Add Splines", icon="RIGHTARROW")
+                AddSplines_Col.prop(scene, "check_splines", text="Add Splines", icon="RIGHTARROW")
         else:
             if axis_mode == "Y": # Y:
-                AddSplines_Col.prop(context.scene, "check_splines", text="Add Splines", icon="DOWNARROW_HLT")
+                AddSplines_Col.prop(scene, "check_splines", text="Add Splines", icon="DOWNARROW_HLT")
 
                 AddSplines_Col = Master_Col.column() ###### Box if needed for Add Splines Panel #############
                 AddSplines_SubCol = AddSplines_Col.column(align=True)
@@ -1340,9 +1341,9 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
         #### Decimate Tools Tab  ##########################################################################################################
 
         if check_decimations == False:
-            DecTools_Col.prop(context.scene, "check_decimations", text="Decimate", icon="RIGHTARROW")
+            DecTools_Col.prop(scene, "check_decimations", text="Decimate", icon="RIGHTARROW")
         else:
-            DecTools_Col.prop(context.scene, "check_decimations", text="Decimate", icon="DOWNARROW_HLT")
+            DecTools_Col.prop(scene, "check_decimations", text="Decimate", icon="DOWNARROW_HLT")
 
             DecTools_Col = Master_Col.column() ###### Box if needed for Add Splines Panel #############
             DecTools_SubCol = DecTools_Col.column(align=True)
@@ -1393,9 +1394,9 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
         #### Tools Tab  ##########################################################################################################
 
         if check_tools == False:
-            Tools_Col.prop(context.scene, "check_tools", text="Tools", icon="RIGHTARROW")
+            Tools_Col.prop(scene, "check_tools", text="Tools", icon="RIGHTARROW")
         else:
-            Tools_Col.prop(context.scene, "check_tools", text="Tools", icon="DOWNARROW_HLT")
+            Tools_Col.prop(scene, "check_tools", text="Tools", icon="DOWNARROW_HLT")
 
             Tools_Col = Master_Col.column() ###### Box if needed for Modifiers Panel #############
             Tools_Subcol = Tools_Col.column(align=True)
@@ -1412,24 +1413,24 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
 
             Tools_Col = colm.row()
             Tools_Col.label(text="Inset Depth")
-            Tools_Col.prop(context.scene, "check_inset_depth", text="")
+            Tools_Col.prop(scene, "check_inset_depth", text="")
 
             if check_inset_depth == True:
 
                 Tools_Col = colm.row()
                 Tools_Col.label(text="Depth")
-                Tools_Col.prop(context.scene, "inset_depth", text="")
+                Tools_Col.prop(scene, "inset_depth", text="")
 
             colm = Tools_Flow.box()
 
             Tools_Col = colm.row()
             Tools_Col.label(text="Inset Thickness")
-            Tools_Col.prop(context.scene, "check_inset_thickness", text="")
+            Tools_Col.prop(scene, "check_inset_thickness", text="")
 
             if check_inset_thickness == True:
                 Tools_Col = colm.row()
                 Tools_Col.label(text="Thickness")
-                Tools_Col.prop(context.scene, "inset_thickness", text="")
+                Tools_Col.prop(scene, "inset_thickness", text="")
 
                 #colm = Tools_Flow.column()
 
@@ -1437,7 +1438,7 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
 
             Tools_Col = colm.row()
             Tools_Col.label(text="Inset Individual")
-            Tools_Col.prop(context.scene, "check_inset_individual", text="")
+            Tools_Col.prop(scene, "check_inset_individual", text="")
 
 
             Tools_Apply_Col = Master_Col.box() ###### Box if needed for Settings Panel #############
@@ -1506,7 +1507,7 @@ class Dec_Object_Modifier_Panel(bpy.types.Panel):
         obj = bpy.context.view_layer.objects.active
         sel_mode = context.tool_settings.mesh_select_mode
 
-        solid_offset = context.scene.solid_offset
+        solid_offset = context.scene.solidOffset
         #solid_thickness = context.scene.solid_thickness
         #bevel_width = context.scene.bevel_width
         #bevel_width = context.object.modifiers["Bevel"].width
@@ -4789,6 +4790,12 @@ class Dec_Object_Materials_Panel(bpy.types.Panel):
 
         scene = context.scene
 
+        #matList = context.scene.matList
+
+        #for nr, mat in enumerate(bpy.data.materials):
+            #matList.append(mat)
+            #print('matList: ', mat_list)
+
         layout = self.layout
 
         layout.use_property_split = True
@@ -4812,9 +4819,9 @@ class Dec_Object_Materials_Panel(bpy.types.Panel):
         #### View Tab  ############################################################################################################
 
         #if check_view == False:
-            #View_Col.prop(context.scene, "check_view", text="View", icon="RIGHTARROW")
+            #View_Col.prop(scene, "check_view", text="View", icon="RIGHTARROW")
         #else:
-            #View_Col.prop(context.scene, "check_view", text="View", icon="DOWNARROW_HLT")
+            #View_Col.prop(scene, "check_view", text="View", icon="DOWNARROW_HLT")
 
         View_Col = Master_Col.column() ###### Box if needed for View Panel #############
         View_Subcol = View_Col.column(align=True)
@@ -4826,6 +4833,11 @@ class Dec_Object_Materials_Panel(bpy.types.Panel):
 
         View_Col = colm.row()
         View_Col.label(text="Materials maybe?")
+
+        #if mat_list != empty:
+        #View_Col = colm.row()
+        #View_Col.prop(scene, "matList", text='')
+            
             #View_Col.operator('wm.mod_apply_object_ot_operator', text='', icon='MODIFIER')
             #View_Col.operator("object.material_slot_move", icon='TRIA_UP', text="").direction = 'UP'
 
@@ -4853,6 +4865,8 @@ class Text_Object_Text_Panel(bpy.types.Panel):
         textNameLink = context.scene.textNameLink
         text_name = context.scene.textName
         text_text = context.scene.textText
+        text_vAlign = context.scene.text_vAlign
+        text_hAlign = context.scene.text_hAlign
 
         layout = self.layout
 
@@ -4877,9 +4891,9 @@ class Text_Object_Text_Panel(bpy.types.Panel):
         #### View Tab  ############################################################################################################
 
         #if check_view == False:
-            #View_Col.prop(context.scene, "check_view", text="View", icon="RIGHTARROW")
+            #View_Col.prop(scene, "check_view", text="View", icon="RIGHTARROW")
         #else:
-            #View_Col.prop(context.scene, "check_view", text="View", icon="DOWNARROW_HLT")
+            #View_Col.prop(scene, "check_view", text="View", icon="DOWNARROW_HLT")
 
         Text_Col = Master_Col.column() ###### Box if needed for View Panel #############
         Text_Subcol = Text_Col.column(align=True)
@@ -4920,6 +4934,21 @@ class Text_Object_Text_Panel(bpy.types.Panel):
 
             Text_Flow = colm.row()
             Text_Flow.prop(scene, "textText", text='')
+
+
+        Text_Flow = colm.row()
+        Text_Flow.label(text="Vertical Align")
+
+        Text_Flow = colm.row()
+        Text_Flow.prop(scene, "text_vAlign", text='')
+
+        Text_Flow = colm.row()
+        Text_Flow.label(text="Horizontal Align")
+
+        Text_Flow = colm.row()
+        Text_Flow.prop(scene, "text_hAlign", text='')
+
+
         #else:
 
             #colm = Text_Flow.row()
@@ -4930,7 +4959,69 @@ class Text_Object_Text_Panel(bpy.types.Panel):
         #colm = Text_Flow.column()
 
         #Text_Flow = colm.row()
-        #Text_Flow.prop(obj, "bevelWidth", index=2, text="", slider=True)
+        #Text_Flow.prop(scene, "bevelWidth", index=2, text="", slider=True)
+
+
+
+class Sculpt_Object_Panel(bpy.types.Panel):
+    bl_idname = 'SCULPT_PT_sculpt_object_panel'
+    bl_category = 'Edit'
+    bl_label = 'Sculpt Panel'
+    bl_context = "objectmode"
+    bl_space_type = 'VIEW_3D'
+    bl_region_type = 'UI'
+
+    def draw(self, context):
+
+        scene = context.scene
+
+        obj = context.object
+        
+        sculpt_spacingDistance = context.scene.sculpt_spacingDistance
+
+        layout = self.layout
+
+        layout.use_property_split = True
+        layout.use_property_decorate = False  # No animation.
+
+        #layout = self.layout
+        #col = layout.column()
+        #col.prop(context.active_object, "MyInt")
+
+        #### Master Panel Layout Controllers ###############################
+
+        Master_Col = layout.column(align=True)
+        Master_Subcol = Master_Col.column()
+
+        #### View Tab Panel Layout Controllers #########################
+
+        Sculpt_Col = Master_Col.column(align=True)
+        Sculpt_Subcol = Sculpt_Col.column()
+        Sculpt_Row = Sculpt_Col.row()
+
+        #### View Tab  ############################################################################################################
+
+        #if check_view == False:
+            #View_Col.prop(scene, "check_view", text="View", icon="RIGHTARROW")
+        #else:
+            #View_Col.prop(scene, "check_view", text="View", icon="DOWNARROW_HLT")
+
+        Sculpt_Col = Master_Col.column() ###### Box if needed for View Panel #############
+        Sculpt_Subcol = Sculpt_Col.column(align=True)
+
+        Sculpt_Col.use_property_split = True
+        Sculpt_Flow = Sculpt_Col.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
+
+        #if obj is not None:
+            #if obj.type == 'FONT':
+        colm = Sculpt_Flow.box()
+
+        Sculpt_Flow = colm.row()
+        Sculpt_Flow.label(text="Sculpt Distance")
+
+        Sculpt_Flow = colm.row()
+        Sculpt_Flow.prop(scene, "sculpt_spacingDistance", text='')
+
 
 
         

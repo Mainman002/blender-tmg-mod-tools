@@ -22,13 +22,15 @@ from . mod_op import *
 from . add_op import * 
 from . tool_op import * 
 from . text_op import * 
+from . sculpt_op import * 
+from . mat_op import * 
 from . dec_panel import * 
 
 
 ##################### Update Defs Start #############################
 def objectStart_Values(self, context):
     if context.active_object is not None:
-        ob = "None" #bpy.context.object
+        ob = "None" #bpy.context.scene
         obs = ob
         obj = bpy.context.active_object
         objs = bpy.context.selected_objects
@@ -45,7 +47,7 @@ def objectStart_Values(self, context):
 
 def myBool_changed(self, context):
     if context.active_object is not None:
-        ob = context.object
+        ob = context.scene
         if ob is not None:
             if ob.myBool:
                 ob.data.body = "On"
@@ -54,7 +56,7 @@ def myBool_changed(self, context):
 
 def zlayer_changed(self, context):
     if context.active_object is not None:
-        ob = context.object
+        ob = context.scene
         zlayer = ob.zlayer
         if zlayer > 0:
             ob.location.z = float(zlayer) * 0.3
@@ -65,7 +67,7 @@ def zlayer_changed(self, context):
 ##################### Update Tri Count #############################
 def triCount_changed(self, context):
     if context.active_object is not None:
-        ob = context.object
+        ob = context.scene
         objmesh = ob.data
         tri_count = ob.triCount
         for poly in mesh.polygons:
@@ -80,7 +82,7 @@ def triCount_changed(self, context):
 ##################### Update Auto Smooth #############################
 def angleLimit_changed(self, context):
     if context.active_object is not None:
-        ob = context.object
+        ob = context.scene
         angleLimit = ob.angleLimit
         for nr, ob in enumerate(bpy.context.selected_objects):
             types = ob.type
@@ -92,13 +94,13 @@ def angleLimit_changed(self, context):
 
 def bevelDropToggle_changed(self, context):
     if context.active_object is not None:
-        ob = context.object
+        ob = context.scene
         bevelDropToggle = ob.bevelDropToggle
         context.scene.modDrop_bevel = bevelDropToggle
 
 def bevelToggle_changed(self, context):
     if context.active_object is not None:
-        ob = context.object
+        ob = context.scene
         bevelToggle = ob.bevelToggle
         context.scene.mod_bevel = bevelToggle
         ob.bevelEToggle = bevelToggle
@@ -113,7 +115,7 @@ def bevelToggle_changed(self, context):
 
 def bevelRToggle_changed(self, context):
     if context.active_object is not None:
-        ob = context.object
+        ob = context.scene
         bevelRToggle = ob.bevelRToggle
         for nr, ob in enumerate(bpy.context.selected_objects):
             mod = ob.modifiers.get("Bevel")
@@ -122,7 +124,7 @@ def bevelRToggle_changed(self, context):
 
 def bevelVToggle_changed(self, context):
     if context.active_object is not None:
-        ob = context.object
+        ob = context.scene
         bevelVToggle = ob.bevelVToggle
         for nr, ob in enumerate(bpy.context.selected_objects):
             mod = ob.modifiers.get("Bevel")
@@ -131,7 +133,7 @@ def bevelVToggle_changed(self, context):
 
 def bevelEToggle_changed(self, context):
     if context.active_object is not None:
-        ob = context.object
+        ob = context.scene
         bevelEToggle = ob.bevelEToggle
         for nr, ob in enumerate(bpy.context.selected_objects):
             mod = ob.modifiers.get("Bevel")
@@ -140,7 +142,7 @@ def bevelEToggle_changed(self, context):
 
 def bevelWidth_changed(self, context):
     if context.active_object is not None:
-        ob = context.object
+        ob = context.scene
         bevelWidth = ob.bevelWidth
         for nr, ob in enumerate(bpy.context.selected_objects):
             mod = ob.modifiers.get("Bevel")
@@ -149,7 +151,7 @@ def bevelWidth_changed(self, context):
 
 def bevelSegments_changed(self, context):
     if context.active_object is not None:
-        ob = context.object
+        ob = context.scene
         bevelSegments = ob.bevelSegments
         for nr, ob in enumerate(bpy.context.selected_objects):
             mod = ob.modifiers.get("Bevel")
@@ -161,13 +163,13 @@ def bevelSegments_changed(self, context):
 
 def subsurfDropToggle_changed(self, context):
     if context.active_object is not None:
-        ob = context.object
+        ob = context.scene
         subsurfDropToggle = ob.subsurfDropToggle
         context.scene.modDrop_subsurf = subsurfDropToggle
 
 def subsurfToggle_changed(self, context):
     if context.active_object is not None:
-        ob = context.object
+        ob = context.scene
         subsurfToggle = ob.subsurfToggle
         context.scene.mod_subsurf = subsurfToggle
         ob.subsurfEToggle = subsurfToggle
@@ -182,7 +184,7 @@ def subsurfToggle_changed(self, context):
 
 def subsurfRToggle_changed(self, context):
     if context.active_object is not None:
-        ob = context.object
+        ob = context.scene
         subsurfRToggle = ob.subsurfRToggle
         for nr, ob in enumerate(bpy.context.selected_objects):
             mod = ob.modifiers.get("Subdivision")
@@ -191,7 +193,7 @@ def subsurfRToggle_changed(self, context):
 
 def subsurfVToggle_changed(self, context):
     if context.active_object is not None:
-        ob = context.object
+        ob = context.scene
         subsurfVToggle = ob.subsurfVToggle
         for nr, ob in enumerate(bpy.context.selected_objects):
             mod = ob.modifiers.get("Subdivision")
@@ -200,7 +202,7 @@ def subsurfVToggle_changed(self, context):
 
 def subsurfEToggle_changed(self, context):
     if context.active_object is not None:
-        ob = context.object
+        ob = context.scene
         subsurfEToggle = ob.subsurfEToggle
         for nr, ob in enumerate(bpy.context.selected_objects):
             mod = ob.modifiers.get("Subdivision")
@@ -209,7 +211,7 @@ def subsurfEToggle_changed(self, context):
 
 def subdivisionView_changed(self, context):
     if context.active_object is not None:
-        ob = context.object
+        ob = context.scene
         subdivisionView = ob.subdivisionView
         for nr, ob in enumerate(bpy.context.selected_objects):
             mod = ob.modifiers.get("Subdivision")
@@ -218,7 +220,7 @@ def subdivisionView_changed(self, context):
 
 def subdivisionRender_changed(self, context):
     if context.active_object is not None:
-        ob = context.object
+        ob = context.scene
         subdivisionRender = ob.subdivisionRender
         for nr, ob in enumerate(bpy.context.selected_objects):
             mod = ob.modifiers.get("Subdivision")
@@ -228,87 +230,87 @@ def subdivisionRender_changed(self, context):
 
 ##################### Update Solidify #############################
 
-def solidifyDropToggle_changed(self, context):
+def solidDropToggle_changed(self, context):
     if context.active_object is not None:
-        ob = context.object
-        solidifyDropToggle = ob.solidifyDropToggle
-        context.scene.modDrop_solid = solidifyDropToggle
+        ob = context.scene
+        solidDropToggle = ob.solidDropToggle
+        context.scene.modDrop_solid = solidDropToggle
 
-def solidifyToggle_changed(self, context):
+def solidToggle_changed(self, context):
     if context.active_object is not None:
-        ob = context.object
-        solidifyToggle = ob.solidifyToggle
-        context.scene.mod_solid = solidifyToggle
-        ob.solidifyEToggle = solidifyToggle
-        ob.solidifyVToggle = solidifyToggle
-        ob.solidifyRToggle = solidifyToggle
+        ob = context.scene
+        solidToggle = ob.solidToggle
+        context.scene.mod_solid = solidToggle
+        ob.solidEToggle = solidToggle
+        ob.solidVToggle = solidToggle
+        ob.solidRToggle = solidToggle
         for nr, ob in enumerate(bpy.context.selected_objects):
             mod = ob.modifiers.get("Solidify")
             if ob is not None and mod is not None:
-                ob.modifiers["Solidify"].show_render = bool(solidifyToggle)
-                ob.modifiers["Solidify"].show_viewport = bool(solidifyToggle)
-                ob.modifiers["Solidify"].show_in_editmode = bool(solidifyToggle)
+                ob.modifiers["Solidify"].show_render = bool(solidToggle)
+                ob.modifiers["Solidify"].show_viewport = bool(solidToggle)
+                ob.modifiers["Solidify"].show_in_editmode = bool(solidToggle)
 
-def solidifyRToggle_changed(self, context):
+def solidRToggle_changed(self, context):
     if context.active_object is not None:
-        ob = context.object
-        solidifyRToggle = ob.solidifyRToggle
+        ob = context.scene
+        solidRToggle = ob.solidRToggle
         for nr, ob in enumerate(bpy.context.selected_objects):
             mod = ob.modifiers.get("Solidify")
             if ob is not None and mod is not None:
-                ob.modifiers["Solidify"].show_render = bool(solidifyRToggle)
+                ob.modifiers["Solidify"].show_render = bool(solidRToggle)
 
-def solidifyVToggle_changed(self, context):
+def solidVToggle_changed(self, context):
     if context.active_object is not None:
-        ob = context.object
-        solidifyVToggle = ob.solidifyVToggle
+        ob = context.scene
+        solidVToggle = ob.solidVToggle
         for nr, ob in enumerate(bpy.context.selected_objects):
             mod = ob.modifiers.get("Solidify")
             if ob is not None and mod is not None:
-                ob.modifiers["Solidify"].show_viewport = bool(solidifyVToggle)
+                ob.modifiers["Solidify"].show_viewport = bool(solidVToggle)
 
-def solidifyEToggle_changed(self, context):
+def solidEToggle_changed(self, context):
     if context.active_object is not None:
-        ob = context.object
-        solidifyEToggle = ob.solidifyEToggle
+        ob = context.scene
+        solidEToggle = ob.solidEToggle
         for nr, ob in enumerate(bpy.context.selected_objects):
             mod = ob.modifiers.get("Solidify")
             if ob is not None and mod is not None:
-                ob.modifiers["Solidify"].show_in_editmode = bool(solidifyEToggle)
+                ob.modifiers["Solidify"].show_in_editmode = bool(solidEToggle)
 
 
-def solidifyThickness_changed(self, context):
+def solidThickness_changed(self, context):
     if context.active_object is not None:
-        ob = context.object
-        solidifyThickness = ob.solidifyThickness
+        ob = context.scene
+        solidThickness = ob.solidThickness
         for nr, ob in enumerate(bpy.context.selected_objects):
             mod = ob.modifiers.get("Solidify")
             if ob is not None and mod is not None:
-                ob.modifiers["Solidify"].thickness = float(solidifyThickness) #* 0.3
+                ob.modifiers["Solidify"].thickness = float(solidThickness) #* 0.3
 
 
-def solidifyOffset_changed(self, context):
+def solidOffset_changed(self, context):
     if context.active_object is not None:
-        ob = context.object
-        solidifyOffset = ob.solidifyOffset
+        ob = context.scene
+        solidOffset = ob.solidOffset
         #context.scene.mod_solidifyOffset = solidifyOffset
         for nr, ob in enumerate(bpy.context.selected_objects):
             mod = ob.modifiers.get("Solidify")
             if ob is not None and mod is not None:
-                ob.modifiers["Solidify"].offset = float(solidifyOffset) #* 0.3
+                ob.modifiers["Solidify"].offset = float(solidOffset) #* 0.3
 
 
 ##################### Update Triangulate #############################
 
 def triangulateDropToggle_changed(self, context):
     if context.active_object is not None:
-        ob = context.object
+        ob = context.scene
         triangulateDropToggle = ob.triangulateDropToggle
         context.scene.modDrop_triangulate = triangulateDropToggle
 
 def triangulateToggle_changed(self, context):
     if context.active_object is not None:
-        ob = context.object
+        ob = context.scene
         triangulateToggle = ob.triangulateToggle
         context.scene.mod_triangulate = triangulateToggle
         ob.triangulateEToggle = triangulateToggle
@@ -324,7 +326,7 @@ def triangulateToggle_changed(self, context):
 
 def triangulateRToggle_changed(self, context):
     if context.active_object is not None:
-        ob = context.object
+        ob = context.scene
         triangulateRToggle = ob.triangulateRToggle
         for nr, ob in enumerate(bpy.context.selected_objects):
             mod = ob.modifiers.get("Triangulate")
@@ -333,7 +335,7 @@ def triangulateRToggle_changed(self, context):
 
 def triangulateVToggle_changed(self, context):
     if context.active_object is not None:
-        ob = context.object
+        ob = context.scene
         triangulateVToggle = ob.triangulateVToggle
         for nr, ob in enumerate(bpy.context.selected_objects):
             mod = ob.modifiers.get("Triangulate")
@@ -342,7 +344,7 @@ def triangulateVToggle_changed(self, context):
 
 def triangulateEToggle_changed(self, context):
     if context.active_object is not None:
-        ob = context.object
+        ob = context.scene
         triangulateEToggle = ob.triangulateEToggle
         for nr, ob in enumerate(bpy.context.selected_objects):
             mod = ob.modifiers.get("Triangulate")
@@ -354,13 +356,13 @@ def triangulateEToggle_changed(self, context):
 
 def weightedNormalsDropToggle_changed(self, context):
     if context.active_object is not None:
-        ob = context.object
+        ob = context.scene
         weightedNormalsDropToggle = ob.weightedNormalsDropToggle
         context.scene.modDrop_weightedNormals = weightedNormalsDropToggle
 
 def weightedNormalsToggle_changed(self, context):
     if context.active_object is not None:
-        ob = context.object
+        ob = context.scene
         weightedNormalsToggle = ob.weightedNormalsToggle
         context.scene.mod_weightednormals = weightedNormalsToggle
         ob.weightedNormalsEToggle = weightedNormalsToggle
@@ -376,7 +378,7 @@ def weightedNormalsToggle_changed(self, context):
 
 def weightedNormalsRToggle_changed(self, context):
     if context.active_object is not None:
-        ob = context.object
+        ob = context.scene
         weightedNormalsRToggle = ob.weightedNormalsRToggle
         for nr, ob in enumerate(bpy.context.selected_objects):
             mod = ob.modifiers.get("Weighted Normal")
@@ -385,7 +387,7 @@ def weightedNormalsRToggle_changed(self, context):
 
 def weightedNormalsVToggle_changed(self, context):
     if context.active_object is not None:
-        ob = context.object
+        ob = context.scene
         weightedNormalsVToggle = ob.weightedNormalsVToggle
         for nr, ob in enumerate(bpy.context.selected_objects):
             mod = ob.modifiers.get("Weighted Normal")
@@ -394,7 +396,7 @@ def weightedNormalsVToggle_changed(self, context):
 
 def weightedNormalsEToggle_changed(self, context):
     if context.active_object is not None:
-        ob = context.object
+        ob = context.scene
         weightedNormalsEToggle = ob.weightedNormalsEToggle
         for nr, ob in enumerate(bpy.context.selected_objects):
             mod = ob.modifiers.get("Weighted Normal")
@@ -405,7 +407,7 @@ def weightedNormalsEToggle_changed(self, context):
 ##################### Update View Mode #############################
 def viewMode_changed(self, context):
     if context.active_object is not None:
-        ob = context.object
+        ob = context.scene
         viewMode = ob.viewMode
         for nr, ob in enumerate(bpy.context.selected_objects):
             types = ob.type
@@ -447,9 +449,29 @@ def textText_changed(self, context):
             obj.data.body = text_text
 
 
+##################### Update Material List #############################
+def matList_changed(self, context):
+    matList = context.scene.matList
+
+    obj = bpy.context.active_object
+
+    for nr, mat in enumerate(bpy.data.materials):
+        mat_list.append(mat)
+        #print('matList: ', mat_list)
+
+    #for nr, obj in enumerate(bpy.context.selected_objects):
+
+        #if obj.type == 'MESH':
+            #obj.name = text_text
+
+
 ##################### Update Values #############################
 bpy.types.Object.myBool = bpy.props.BoolProperty(name = "Switch", default = False, update=myBool_changed)
 bpy.types.Object.zlayer = bpy.props.IntProperty(name = "Z Layer", default = 1, update=zlayer_changed)
+
+
+##### Material List #######
+#bpy.types.Scene.matList = bpy.props.ArrayProperty(name = "Material List", update=matList_changed)
 
 
 ##### Tri Count ##########
@@ -457,58 +479,58 @@ bpy.types.Object.triCount = bpy.props.IntProperty(name = "Tri Count", default = 
 
 
 ##### Auto Smooth ##########
-bpy.types.Object.angleLimit = bpy.props.FloatProperty(name = "Angle Limit", default = 0.523599, min = 0.0, max = 3.133, update=angleLimit_changed)
+bpy.types.Scene.angleLimit = bpy.props.FloatProperty(name = "Angle Limit", default = 0.523599, min = 0.0, max = 3.133, update=angleLimit_changed)
 
 
 ##### Bevel ##########
-bpy.types.Object.bevelDropToggle = bpy.props.BoolProperty(name = "Bevel Dropdown Toggle", default = False, update=bevelDropToggle_changed)
+bpy.types.Scene.bevelDropToggle = bpy.props.BoolProperty(name = "Bevel Dropdown Toggle", default = False, update=bevelDropToggle_changed)
 
-bpy.types.Object.bevelToggle = bpy.props.BoolProperty(name = "Bevel Toggle", default = False, update=bevelToggle_changed)
-bpy.types.Object.bevelEToggle = bpy.props.BoolProperty(name = "Bevel Edit Toggle", default = False, update=bevelEToggle_changed)
-bpy.types.Object.bevelVToggle = bpy.props.BoolProperty(name = "Bevel View Toggle", default = False, update=bevelVToggle_changed)
-bpy.types.Object.bevelRToggle = bpy.props.BoolProperty(name = "Bevel Render Toggle", default = False, update=bevelRToggle_changed)
-bpy.types.Object.bevelSegments = bpy.props.IntProperty(name = "Bevel Segments", default = 3, min = 1, max = 6, update=bevelSegments_changed)
-bpy.types.Object.bevelWidth = bpy.props.FloatProperty(name = "Bevel Width", default = 0.3, min = 0.03, max = 1.40, update=bevelWidth_changed)
+bpy.types.Scene.bevelToggle = bpy.props.BoolProperty(name = "Bevel Toggle", default = False, update=bevelToggle_changed)
+bpy.types.Scene.bevelEToggle = bpy.props.BoolProperty(name = "Bevel Edit Toggle", default = False, update=bevelEToggle_changed)
+bpy.types.Scene.bevelVToggle = bpy.props.BoolProperty(name = "Bevel View Toggle", default = False, update=bevelVToggle_changed)
+bpy.types.Scene.bevelRToggle = bpy.props.BoolProperty(name = "Bevel Render Toggle", default = False, update=bevelRToggle_changed)
+bpy.types.Scene.bevelSegments = bpy.props.IntProperty(name = "Bevel Segments", default = 3, min = 1, max = 6, update=bevelSegments_changed)
+bpy.types.Scene.bevelWidth = bpy.props.FloatProperty(name = "Bevel Width", default = 0.3, min = 0.0, max = 1.40, update=bevelWidth_changed)
 
 
 ##### Subdivision ##########
-bpy.types.Object.subsurfDropToggle = bpy.props.BoolProperty(name = "Subdivision Dropdown Toggle", default = False, update=subsurfDropToggle_changed)
+bpy.types.Scene.subsurfDropToggle = bpy.props.BoolProperty(name = "Subdivision Dropdown Toggle", default = False, update=subsurfDropToggle_changed)
 
-bpy.types.Object.subsurfToggle = bpy.props.BoolProperty(name = "Subdivision Toggle", default = False, update=subsurfToggle_changed)
-bpy.types.Object.subsurfEToggle = bpy.props.BoolProperty(name = "Subdivision Edit Toggle", default = False, update=subsurfEToggle_changed)
-bpy.types.Object.subsurfVToggle = bpy.props.BoolProperty(name = "Subdivision View Toggle", default = False, update=subsurfVToggle_changed)
-bpy.types.Object.subsurfRToggle = bpy.props.BoolProperty(name = "Subdivision Render Toggle", default = False, update=subsurfRToggle_changed)
-bpy.types.Object.subdivisionView = bpy.props.IntProperty(name = "Subdivision View Levels", default = 1, min = 0, max = 5, update=subdivisionView_changed)
-bpy.types.Object.subdivisionRender = bpy.props.IntProperty(name = "Subdivision Render Levels", default = 4, min = 0, max = 8, update=subdivisionRender_changed)
+bpy.types.Scene.subsurfToggle = bpy.props.BoolProperty(name = "Subdivision Toggle", default = False, update=subsurfToggle_changed)
+bpy.types.Scene.subsurfEToggle = bpy.props.BoolProperty(name = "Subdivision Edit Toggle", default = False, update=subsurfEToggle_changed)
+bpy.types.Scene.subsurfVToggle = bpy.props.BoolProperty(name = "Subdivision View Toggle", default = False, update=subsurfVToggle_changed)
+bpy.types.Scene.subsurfRToggle = bpy.props.BoolProperty(name = "Subdivision Render Toggle", default = False, update=subsurfRToggle_changed)
+bpy.types.Scene.subdivisionView = bpy.props.IntProperty(name = "Subdivision View Levels", default = 1, min = 0, max = 5, update=subdivisionView_changed)
+bpy.types.Scene.subdivisionRender = bpy.props.IntProperty(name = "Subdivision Render Levels", default = 4, min = 0, max = 8, update=subdivisionRender_changed)
 
 
 ##### Solidify ##########
-bpy.types.Object.solidifyDropToggle = bpy.props.BoolProperty(name = "Solidify Dropdown Toggle", default = False, update=solidifyDropToggle_changed)
+bpy.types.Scene.solidDropToggle = bpy.props.BoolProperty(name = "Solidify Dropdown Toggle", default = False, update=solidDropToggle_changed)
 
-bpy.types.Object.solidifyToggle = bpy.props.BoolProperty(name = "Solidify Toggle", default = False, update=solidifyToggle_changed)
-bpy.types.Object.solidifyEToggle = bpy.props.BoolProperty(name = "Solidify Edit Toggle", default = False, update=solidifyEToggle_changed)
-bpy.types.Object.solidifyVToggle = bpy.props.BoolProperty(name = "Solidify View Toggle", default = False, update=solidifyVToggle_changed)
-bpy.types.Object.solidifyRToggle = bpy.props.BoolProperty(name = "Solidify Render Toggle", default = False, update=solidifyRToggle_changed)
-bpy.types.Object.solidifyThickness = bpy.props.FloatProperty(name = "Solidify Thickness", default = 0.3, min = 0.1, max = 20.0, update=solidifyThickness_changed)
-bpy.types.Object.solidifyOffset = bpy.props.FloatProperty(name = "Solidify Offset", default = 0.0, min = -1.0, max = 1.0, update=solidifyOffset_changed)
+bpy.types.Scene.solidToggle = bpy.props.BoolProperty(name = "Solidify Toggle", default = False, update=solidToggle_changed)
+bpy.types.Scene.solidEToggle = bpy.props.BoolProperty(name = "Solidify Edit Toggle", default = False, update=solidEToggle_changed)
+bpy.types.Scene.solidVToggle = bpy.props.BoolProperty(name = "Solidify View Toggle", default = False, update=solidVToggle_changed)
+bpy.types.Scene.solidRToggle = bpy.props.BoolProperty(name = "Solidify Render Toggle", default = False, update=solidRToggle_changed)
+bpy.types.Scene.solidThickness = bpy.props.FloatProperty(name = "Solidify Thickness", default = 0.3, min = 0.1, max = 20.0, update=solidThickness_changed)
+bpy.types.Scene.solidOffset = bpy.props.FloatProperty(name = "Solidify Offset", default = 0.0, min = -1.0, max = 1.0, update=solidOffset_changed)
 
 
 ##### Triangulate ##########
-bpy.types.Object.triangulateDropToggle = bpy.props.BoolProperty(name = "Triangulate Dropdown Toggle", default = False, update=triangulateDropToggle_changed)
+bpy.types.Scene.triangulateDropToggle = bpy.props.BoolProperty(name = "Triangulate Dropdown Toggle", default = False, update=triangulateDropToggle_changed)
 
-bpy.types.Object.triangulateToggle = bpy.props.BoolProperty(name = "Triangulate Toggle", default = False, update=triangulateToggle_changed)
-bpy.types.Object.triangulateEToggle = bpy.props.BoolProperty(name = "Triangulate Edit Toggle", default = False, update=triangulateEToggle_changed)
-bpy.types.Object.triangulateVToggle = bpy.props.BoolProperty(name = "Triangulate View Toggle", default = False, update=triangulateVToggle_changed)
-bpy.types.Object.triangulateRToggle = bpy.props.BoolProperty(name = "Triangulate Render Toggle", default = False, update=triangulateRToggle_changed)
+bpy.types.Scene.triangulateToggle = bpy.props.BoolProperty(name = "Triangulate Toggle", default = False, update=triangulateToggle_changed)
+bpy.types.Scene.triangulateEToggle = bpy.props.BoolProperty(name = "Triangulate Edit Toggle", default = False, update=triangulateEToggle_changed)
+bpy.types.Scene.triangulateVToggle = bpy.props.BoolProperty(name = "Triangulate View Toggle", default = False, update=triangulateVToggle_changed)
+bpy.types.Scene.triangulateRToggle = bpy.props.BoolProperty(name = "Triangulate Render Toggle", default = False, update=triangulateRToggle_changed)
 
 
 ##### Weighted Normals ##########
-bpy.types.Object.weightedNormalsDropToggle = bpy.props.BoolProperty(name = "Weighted Normals Dropdown Toggle", default = False, update=weightedNormalsDropToggle_changed)
+bpy.types.Scene.weightedNormalsDropToggle = bpy.props.BoolProperty(name = "Weighted Normals Dropdown Toggle", default = False, update=weightedNormalsDropToggle_changed)
 
-bpy.types.Object.weightedNormalsToggle = bpy.props.BoolProperty(name = "Weighted Normals Toggle", default = False, update=weightedNormalsToggle_changed)
-bpy.types.Object.weightedNormalsEToggle = bpy.props.BoolProperty(name = "Weighted Normals Edit Toggle", default = False, update=weightedNormalsEToggle_changed)
-bpy.types.Object.weightedNormalsVToggle = bpy.props.BoolProperty(name = "Weighted Normals View Toggle", default = False, update=weightedNormalsVToggle_changed)
-bpy.types.Object.weightedNormalsRToggle = bpy.props.BoolProperty(name = "Weighted Normals Render Toggle", default = False, update=weightedNormalsRToggle_changed)
+bpy.types.Scene.weightedNormalsToggle = bpy.props.BoolProperty(name = "Weighted Normals Toggle", default = False, update=weightedNormalsToggle_changed)
+bpy.types.Scene.weightedNormalsEToggle = bpy.props.BoolProperty(name = "Weighted Normals Edit Toggle", default = False, update=weightedNormalsEToggle_changed)
+bpy.types.Scene.weightedNormalsVToggle = bpy.props.BoolProperty(name = "Weighted Normals View Toggle", default = False, update=weightedNormalsVToggle_changed)
+bpy.types.Scene.weightedNormalsRToggle = bpy.props.BoolProperty(name = "Weighted Normals Render Toggle", default = False, update=weightedNormalsRToggle_changed)
 
 
 ##### Text Update ############
@@ -517,7 +539,7 @@ bpy.types.Scene.textText = bpy.props.StringProperty(name = "Text Text", default 
 
 
 ##### Object View Mode ##########
-bpy.types.Object.viewMode = bpy.props.EnumProperty(
+bpy.types.Scene.viewMode = bpy.props.EnumProperty(
     name="View Mode",
     description="Defines the Viewport mode for objects",
     items=(
@@ -530,6 +552,51 @@ bpy.types.Object.viewMode = bpy.props.EnumProperty(
     )
 
 
+##### Sculpt Space Distance ##########
+bpy.types.Scene.sculpt_spacingDistance = bpy.props.EnumProperty(
+    name="Spacing Distance",
+    description="View mode for sculpt brush distance.",
+    items=(
+        ('VIEW', 'VIEW', 'VIEW View',0),
+        ('SCENE', 'SCENE', 'SCENE Scene',1)
+        ),
+    default='VIEW', 
+    update=sculpt_spacingDistance_changed
+    )
+
+
+##### Text VAlign ########## ( TOP_BASELINE TOP CENTER BOTTOM BOTTOM_BASELINE )
+bpy.types.Scene.text_vAlign = bpy.props.EnumProperty(
+    name="Vertical Align",
+    description="Text Vertical Align.",
+    items=(
+        ('TOP_BASELINE', 'BOTTOM_BASELINE', 'TOP_BASELINE',0),
+        ('TOP', 'BOTTOM', 'TOP',1),
+        ('CENTER', 'CENTER', 'CENTER',2),
+        ('BOTTOM', 'TOP', 'BOTTOM',3),
+        ('BOTTOM_BASELINE', 'TOP_BASELINE', 'BOTTOM_BASELINE',4)
+        ),
+    default='TOP_BASELINE', 
+    update=text_vAlign_changed
+    )
+
+
+##### Text HAlign ########## ( LEFT CENTER RIGHT JUSTIFY FLUSH )
+bpy.types.Scene.text_hAlign = bpy.props.EnumProperty(
+    name="Horizontal Align",
+    description="Text Horizontal Align.",
+    items=(
+        ('RIGHT', 'LEFT', 'RIGHT',0),
+        ('CENTER', 'CENTER', 'CENTER',1),
+        ('LEFT', 'RIGHT', 'LEFT',2),
+        ('JUSTIFY', 'JUSTIFY', 'JUSTIFY',3),
+        ('FLUSH', 'FLUSH', 'FLUSH',4)
+        ),
+    default='RIGHT', 
+    update=text_hAlign_changed
+    )
+
+
 ##################### Update Defs End #############################
 
 #### Text Bools #################################
@@ -537,62 +604,6 @@ bpy.types.Object.viewMode = bpy.props.EnumProperty(
 bpy.types.Scene.textNameLink = BoolProperty(name="Text Object Name Link",
                 default=False,
                 description="Text Object Name Link To Text.")
-
-#### Menu Float Sliders #########################
-
-bpy.types.Scene.subsurf_rlevel = IntProperty(name="Menu subsurf render level slider",
-                default=2,
-                min=0,
-                max=6,
-                description="Menu subsurf render level slider.")
-
-bpy.types.Scene.subsurf_vlevel = IntProperty(name="Menu subsurf view level slider",
-                default=2,
-                min=0,
-                max=5,
-                description="Menu subsurf view level slider.")
-
-bpy.types.Scene.solid_offset = FloatProperty(name="Menu solidify offset slider",
-                default=1.0,
-                min=-1.0,
-                max=1.0,
-                description="Menu solidify offset slider.")
-
-bpy.types.Scene.solid_thickness = FloatProperty(name="Menu solidify thickness slider",
-                default=0.20,
-                min=-200.0,
-                max=200.0,
-                description="Menu solidify thickness slider.")
-
-bpy.types.Scene.inset_thickness = FloatProperty(name="Menu inset thickness slider",
-                default=0.07,
-                min=0.00,
-                max=200.0,
-                description="Menu inset thickness slider.")
-
-bpy.types.Scene.inset_depth = FloatProperty(name="Menu inset depth slider",
-                default=0.75,
-                min=-50.0,
-                max=50.0,
-                description="Menu inset depth slider.")
-
-bpy.types.Scene.bevel_width = FloatProperty(name="Menu bevel width slider",
-                default=0.15,
-                min=0.03,
-                max=1.37,
-                description="Menu bevel width slider.")
-
-bpy.types.Scene.bevel_segments = IntProperty(name="Menu bevel segments slider",
-                default=3,
-                min=1,
-                max=6,
-                description="Menu bevel segments slider.")
-
-bpy.types.Scene.angle_limit = FloatProperty(name="Menu angle limit slider",
-                default=0.523599,
-                min=0.00174533,
-                max=3.14159,
-                description="Menu angle limit slider.")
 
 #### Menu Tabs #########################
 
@@ -736,8 +747,9 @@ DEC_PT_Object_Panel, DEC_PT_Edit_Panel,
 TOOL_Inset_Edit_OT_Operator, TOOL_Bevel_Edge_Edit_OT_Operator, TOOL_Remove_Doubles_Edit_OT_Operator, TOOL_Select_Interior_Faces_Edit_OT_Operator, 
 TOOL_Flip_Normals_Edit_OT_Operator,  
 UI_Distraction_Free_OT_Operator, UI_Wireframe_OT_Operator, UI_View_Mode_OT_Operator, Dec_Edit_Modifier_Panel, Dec_Object_Modifier_Panel,
-UI_Texel_Check_OT_Operator, Dec_Object_Materials_Panel,
-Text_Update_OT_Operator, Text_Object_Text_Panel 
+UI_Texel_Check_OT_Operator, Dec_Object_Materials_Panel, #Mat_Check_OT_Operator,
+Text_Update_OT_Operator, Text_Object_Text_Panel, 
+Sculpt_Object_Panel 
 
 )
 

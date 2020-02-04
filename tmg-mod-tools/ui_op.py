@@ -1,5 +1,47 @@
 import bpy
 
+
+##################### Update View Mode #############################
+def viewMode_changed(self, context):
+    if context.active_object is not None:
+        ob = context.scene
+        viewMode = ob.viewMode
+        for nr, ob in enumerate(bpy.context.selected_objects):
+            types = ob.type
+            if ob is not "empty":
+                if types == "MESH" or "CURVE" or "TEXT" or "METABALL":
+                    ob.display_type = viewMode
+
+
+##### Object View Mode ##########
+bpy.types.Scene.viewMode = bpy.props.EnumProperty(
+    name="View Mode",
+    description="Defines the Viewport mode for objects",
+    items=(
+        ('TEXTURED', 'TEXTURED', 'TEXTURED View',0),
+        ('WIRE', 'WIRE', 'WIRE View',1),
+        ('BOUNDS', 'BOUNDS', 'BOUNDS View',2)
+        ),
+    default='TEXTURED', 
+    update=viewMode_changed
+    )
+
+
+##################### Update Tri Count #############################
+def triCount_changed(self, context):
+    if context.active_object is not None:
+        ob = context.scene
+        objmesh = ob.data
+        tri_count = ob.triCount
+        for poly in mesh.polygons:
+            if len(poly.vertices) == 3:
+                tri_count += 1
+                ob.triCount = tri_count
+    else:
+        tri_count = 0
+        ob.triCount = 0
+
+
 class UI_Distraction_Free_OT_Operator(bpy.types.Operator):
     bl_idname = 'wm.ui_distraction_free_ot_operator'
     bl_label = 'Decimate Panel'
