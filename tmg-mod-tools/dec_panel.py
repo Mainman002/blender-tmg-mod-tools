@@ -114,7 +114,13 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
             if obj is not None:
                 colm = View_Flow.box()
                 View_Col = colm.row()
-                View_Col.label(text="Object")
+                View_Col.label(text="Name")
+                View_Col.prop(scene, "objectName", index=2, text="")
+
+                colm = View_Flow.box()
+
+                View_Col = colm.row()
+                View_Col.label(text="Display As")
                 View_Col.prop(scene, "viewMode", index=2, text="")
 
         #### Modifiers Tab Panel Layout Controllers #########################
@@ -775,17 +781,17 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
             View_Col.label(text="Texel Check")
             View_Col.operator('wm.ui_texel_check_ot_operator', text='', icon='UV_DATA')
 
-            colm = View_Flow.box()
-
-            View_Col = colm.row()
-            View_Col.label(text="Flip Normals")
-            View_Col.operator('wm.tool_flip_normals_edit_ot_operator', text='', icon='NORMALS_FACE')
-
             obj = context.object
             if obj is not None:
                 colm = View_Flow.box()
                 View_Col = colm.row()
-                View_Col.label(text="Object")
+                View_Col.label(text="Name")
+                View_Col.prop(scene, "objectName", index=2, text="")
+
+                colm = View_Flow.box()
+
+                View_Col = colm.row()
+                View_Col.label(text="Display As")
                 View_Col.prop(scene, "viewMode", index=2, text="")
 
         #### Modifiers Tab Panel Layout Controllers #########################
@@ -1489,7 +1495,7 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
 class Dec_Object_Modifier_Panel(bpy.types.Panel):
     bl_idname = 'OBJECT_PT_dec_object_modifier_panel'
     bl_category = 'Edit'
-    bl_label = 'Modifiers Panel'
+    bl_label = 'TMG Modifiers Panel'
     bl_context = "objectmode"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
@@ -3147,7 +3153,7 @@ class Dec_Object_Modifier_Panel(bpy.types.Panel):
 class Dec_Edit_Modifier_Panel(bpy.types.Panel):
     bl_idname = 'OBJECT_PT_dec_edit_modifier_panel'
     bl_category = 'Edit'
-    bl_label = 'Modifiers Panel'
+    bl_label = 'TMG Modifiers Panel'
     bl_context = "mesh_edit"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
@@ -4774,7 +4780,7 @@ class Dec_Edit_Modifier_Panel(bpy.types.Panel):
 class Dec_Object_Materials_Panel(bpy.types.Panel):
     bl_idname = 'OBJECT_PT_dec_object_materials_panel'
     bl_category = 'Edit'
-    bl_label = 'Materials Panel'
+    bl_label = 'TMG Materials Panel'
     bl_context = "objectmode"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
@@ -4847,7 +4853,7 @@ class Dec_Object_Materials_Panel(bpy.types.Panel):
 class Text_Object_Text_Panel(bpy.types.Panel):
     bl_idname = 'OBJECT_PT_text_object_text_panel'
     bl_category = 'Edit'
-    bl_label = 'Text Panel'
+    bl_label = 'TMG Text Panel'
     bl_context = "objectmode"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
@@ -4966,8 +4972,8 @@ class Text_Object_Text_Panel(bpy.types.Panel):
 class Sculpt_Object_Panel(bpy.types.Panel):
     bl_idname = 'SCULPT_PT_sculpt_object_panel'
     bl_category = 'Edit'
-    bl_label = 'Sculpt Panel'
-    bl_context = "objectmode"
+    bl_label = 'TMG Sculpt Panel'
+    bl_context = "sculpt_mode"
     bl_space_type = 'VIEW_3D'
     bl_region_type = 'UI'
 

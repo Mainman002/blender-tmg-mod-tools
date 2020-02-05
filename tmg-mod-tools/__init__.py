@@ -3,7 +3,7 @@ bl_info = {
     "author" : "Johnathan Mueller, Jayanam",
     "descrtion" : "Checker decimate edges in your selected edge loops.",
     "blender" : (2, 80, 0),
-    "version" : (0, 2, 0),
+    "version" : (0, 2, 1),
     "location" : "View3D (EditMode) > Sidebar > Edit Tab",
     "warning" : "",
     "category" : "Mesh"
@@ -416,6 +416,19 @@ def viewMode_changed(self, context):
                     ob.display_type = viewMode
 
 
+##################### Update Object Name #############################
+def objectName_changed(self, context):
+    object_name = context.scene.objectName
+
+    obj = bpy.context.active_object
+
+    for nr, obj in enumerate(bpy.context.selected_objects):
+
+        if obj.type is not 'TEXT':
+            obj.name = object_name
+            obj.data.name = object_name
+
+
 ##################### Update Text Objects #############################
 def textName_changed(self, context):
     text_name = context.scene.textName
@@ -531,6 +544,10 @@ bpy.types.Scene.weightedNormalsToggle = bpy.props.BoolProperty(name = "Weighted 
 bpy.types.Scene.weightedNormalsEToggle = bpy.props.BoolProperty(name = "Weighted Normals Edit Toggle", default = False, update=weightedNormalsEToggle_changed)
 bpy.types.Scene.weightedNormalsVToggle = bpy.props.BoolProperty(name = "Weighted Normals View Toggle", default = False, update=weightedNormalsVToggle_changed)
 bpy.types.Scene.weightedNormalsRToggle = bpy.props.BoolProperty(name = "Weighted Normals Render Toggle", default = False, update=weightedNormalsRToggle_changed)
+
+
+##### Object Update ############
+bpy.types.Scene.objectName = bpy.props.StringProperty(name = "Object Name", default = "Object", update=objectName_changed)
 
 
 ##### Text Update ############
