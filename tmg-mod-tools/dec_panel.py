@@ -604,37 +604,37 @@ class DEC_PT_Object_Panel(bpy.types.Panel):
             View_Col.label(text="Circle")
             View_Col.operator('wm.add_ot_solid_circle_object', text='', icon='MESH_CIRCLE')
 
-            # colm = View_Flow.box()
+            colm = View_Flow.box()
 
-            # if axis_mode == "X": # Y
+            if axis_mode == "X": # Y
 
-            #     View_Col = colm.row()
-            #     View_Col.label(text="Arch")
-            #     View_Col.operator('wm.add_ot_arch_object_x', text='', icon='SURFACE_NCURVE')
+                View_Col = colm.row()
+                View_Col.label(text="Arch")
+                View_Col.operator('wm.add_ot_arch_object_x', text='', icon='SURFACE_NCURVE')
 
-            # elif axis_mode == "Y": # Y
+            elif axis_mode == "Y": # Y
 
-            #     View_Col = colm.row()
-            #     View_Col.label(text="Arch")
-            #     View_Col.operator('wm.add_ot_arch_object_y', text='', icon='SURFACE_NCURVE')
+                View_Col = colm.row()
+                View_Col.label(text="Arch")
+                View_Col.operator('wm.add_ot_arch_object_y', text='', icon='SURFACE_NCURVE')
 
-            #     colm = View_Flow.box()
+                colm = View_Flow.box()
 
-            #     View_Col = colm.row()
-            #     View_Col.label(text="Pipe")
-            #     View_Col.operator('wm.add_ot_pipe_line_object_y', text='', icon='OUTLINER_OB_CURVE')
+                View_Col = colm.row()
+                View_Col.label(text="Pipe")
+                View_Col.operator('wm.add_ot_pipe_line_object_y', text='', icon='OUTLINER_OB_CURVE')
 
-            # elif axis_mode == "Z": # Z
+            elif axis_mode == "Z": # Z
 
-            #     View_Col = colm.row()
-            #     View_Col.label(text="Arch")
-            #     View_Col.operator('wm.add_ot_arch_object_z', text='', icon='SURFACE_NCURVE')
+                View_Col = colm.row()
+                View_Col.label(text="Arch")
+                View_Col.operator('wm.add_ot_arch_object_z', text='', icon='SURFACE_NCURVE')
 
-            #     colm = View_Flow.box()
+                colm = View_Flow.box()
 
-            #     View_Col = colm.row()
-            #     View_Col.label(text="Pipe")
-            #     View_Col.operator('wm.add_ot_pipe_line_object_z', text='', icon='OUTLINER_OB_CURVE')
+                View_Col = colm.row()
+                View_Col.label(text="Pipe")
+                View_Col.operator('wm.add_ot_pipe_line_object_z', text='', icon='OUTLINER_OB_CURVE')
 
         #### Add Splines Tab Panel Layout Controllers #########################
 
@@ -1288,37 +1288,37 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
             View_Col.label(text="Circle")
             View_Col.operator('wm.add_ot_solid_circle_object', text='', icon='MESH_CIRCLE')
 
-            # colm = View_Flow.box()
+            colm = View_Flow.box()
 
-            # if axis_mode == "X": # Y
+            if axis_mode == "X": # Y
 
-            #     View_Col = colm.row()
-            #     View_Col.label(text="Arch")
-            #     View_Col.operator('wm.add_ot_arch_object_x', text='', icon='SURFACE_NCURVE')
+                View_Col = colm.row()
+                View_Col.label(text="Arch")
+                View_Col.operator('wm.add_ot_arch_object_x', text='', icon='SURFACE_NCURVE')
 
-            # elif axis_mode == "Y": # Y
+            elif axis_mode == "Y": # Y
 
-            #     View_Col = colm.row()
-            #     View_Col.label(text="Arch")
-            #     View_Col.operator('wm.add_ot_arch_object_y', text='', icon='SURFACE_NCURVE')
+                View_Col = colm.row()
+                View_Col.label(text="Arch")
+                View_Col.operator('wm.add_ot_arch_object_y', text='', icon='SURFACE_NCURVE')
 
-            #     colm = View_Flow.box()
+                colm = View_Flow.box()
 
-            #     View_Col = colm.row()
-            #     View_Col.label(text="Pipe")
-            #     View_Col.operator('wm.add_ot_pipe_line_object_y', text='', icon='OUTLINER_OB_CURVE')
+                View_Col = colm.row()
+                View_Col.label(text="Pipe")
+                View_Col.operator('wm.add_ot_pipe_line_object_y', text='', icon='OUTLINER_OB_CURVE')
 
-            # elif axis_mode == "Z": # Z
+            elif axis_mode == "Z": # Z
 
-            #     View_Col = colm.row()
-            #     View_Col.label(text="Arch")
-            #     View_Col.operator('wm.add_ot_arch_object_z', text='', icon='SURFACE_NCURVE')
+                View_Col = colm.row()
+                View_Col.label(text="Arch")
+                View_Col.operator('wm.add_ot_arch_object_z', text='', icon='SURFACE_NCURVE')
 
-            #     colm = View_Flow.box()
+                colm = View_Flow.box()
 
-            #     View_Col = colm.row()
-            #     View_Col.label(text="Pipe")
-            #     View_Col.operator('wm.add_ot_pipe_line_object_z', text='', icon='OUTLINER_OB_CURVE')
+                View_Col = colm.row()
+                View_Col.label(text="Pipe")
+                View_Col.operator('wm.add_ot_pipe_line_object_z', text='', icon='OUTLINER_OB_CURVE')
 
         #### Add Splines Tab  ######################################
 
@@ -5023,11 +5023,11 @@ class Sculpt_Brush_Panel(bpy.types.Panel):
         Sculpt_Flow = colm.row()
         Sculpt_Flow.prop(scene, "sculpt_spacingDistance", text='')
 
-        Sculpt_Flow = colm.row()
-        Sculpt_Flow.label(text="Use Face Sets")
+        # Sculpt_Flow = colm.row()
+        # Sculpt_Flow.label(text="Use Face Sets")
 
-        Sculpt_Flow = colm.row()
-        Sculpt_Flow.prop(scene, "sculpt_faceSets", text='')
+        # Sculpt_Flow = colm.row()
+        # Sculpt_Flow.prop(scene, "sculpt_faceSets", text='')
 
 
 class Sculpt_Referance_Panel(bpy.types.Panel):

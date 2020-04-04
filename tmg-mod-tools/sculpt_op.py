@@ -76,8 +76,6 @@ def sculpt_faceSets_changed(self, context):
             bpy.data.brushes["Cloth"].use_automasking_face_sets = sculpt_faceSets
             bpy.data.brushes["Simplify"].use_automasking_face_sets = sculpt_faceSets
             bpy.data.brushes["Mask"].use_automasking_face_sets = sculpt_faceSets
-            # bpy.data.brushes["Draw Face Sets"].use_automasking_face_sets = False
-            #bpy.ops.sculpt.mesh_filter(use_face_sets=sculpt_faceSets)
 
 ##################### Update Sculpt Referance View Transparency #############################
 def sculpt_referanceTransparency_changed(self, context):

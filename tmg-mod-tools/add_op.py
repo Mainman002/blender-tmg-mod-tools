@@ -186,20 +186,92 @@ class ADD_OT_Solid_Circle_Object(bpy.types.Operator):
 	bl_description = 'Add Solid Circle.'
 	bl_options = {'REGISTER', 'UNDO'}
 
-	def execute(self, context):
+	check_cursor_align: bpy.props.BoolProperty(
+	name="Align To Cursor",
+	description="Align to cursor location.",
+	default=False
+	)
 
-		solid_offset = 1
-		solid_thickness = 0.20
-		axis_mode = context.scene.axis_mod
-		mod_solid = context.scene.mod_solid
-		mod_mirror = context.scene.mod_mirror
-		mod_bevel = context.scene.mod_bevel
-		bevel_segments = 3
-		mod_subsurf = context.scene.mod_subsurf
-		subsurf_vlevel = 2
-		subsurf_rlevel = 3
-		mod_triangulate = context.scene.mod_triangulate
-		mod_weightednormals = context.scene.mod_weightednormals
+	check_mod_mirror: bpy.props.BoolProperty(
+	name="Mirror",
+	description="Add mirror modifier.",
+	default=False
+	)
+
+	check_mod_triangulate: bpy.props.BoolProperty(
+	name="Triangulate",
+	description="Triangulate.",
+	default=False
+	)
+
+	check_mod_weightednormals: bpy.props.BoolProperty(
+	name="Weighted Normals",
+	description="Weighted normals.",
+	default=False
+	)
+
+	solid_type: bpy.props.EnumProperty(
+	name="Solid Type",
+	description="Defines the solid fill type.",
+	items=(
+		('Solid', 'Solid', 'Solid',0),
+		('Hollow', 'Hollow', 'Hollow',1),
+		),
+	default='Solid'
+	)
+
+	mirror_axis: bpy.props.EnumProperty(
+	name="Mirror Axis",
+	description="Defines the mirror axis",
+	items=(
+		('X', 'X', 'X',0),
+		('Y', 'Y', 'Y',1),
+		('Z', 'Z', 'Z',2)
+		),
+	default='X'
+	)
+
+	solid_thickness: bpy.props.FloatProperty(
+	name="Solid Thickness",
+	description="Solid thickness.",
+	default=0.2,
+	soft_min=0.0,
+	soft_max=5.0,
+	)
+
+	solid_offset: bpy.props.FloatProperty(
+	name="Solid Offset",
+	description="Solid depth offset.",
+	default=1.0,
+	soft_min=-1.0,
+	soft_max=1.0,
+	)
+
+	bevel_width: bpy.props.FloatProperty(
+	name="Bevel Width",
+	description="Bevel width.",
+	default=0.03,
+	min=0.001,
+	soft_max=1.0,
+	)
+
+	bevel_segments: bpy.props.IntProperty(
+	name="Bevel Segments",
+	description="Bevel segments.",
+	default=0,
+	min=0,
+	soft_max=5,
+	)
+
+	subdivision_level: bpy.props.IntProperty(
+	name="Subdivision Level",
+	description="Subdivision level.",
+	default=0,
+	min=0,
+	soft_max=5,
+	)
+
+	def execute(self, context):
 
 		obj = bpy.context.active_object
 
@@ -210,56 +282,62 @@ class ADD_OT_Solid_Circle_Object(bpy.types.Operator):
 		bpy.ops.mesh.edge_face_add()
 		bpy.ops.object.editmode_toggle()
 
-		if mod_solid == True:
+		if self.solid_thickness > 0:
 			bpy.ops.object.modifier_add(type='SOLIDIFY')
-			bpy.context.object.modifiers["Solidify"].offset = solid_offset
+			bpy.context.object.modifiers["Solidify"].offset = self.solid_offset
 			bpy.context.object.modifiers["Solidify"].use_even_offset = True
 			bpy.context.object.modifiers["Solidify"].use_quality_normals = True
-			bpy.context.object.modifiers["Solidify"].thickness = solid_thickness
+			bpy.context.object.modifiers["Solidify"].thickness = self.solid_thickness
 			bpy.context.object.modifiers["Solidify"].show_on_cage = True
 			bpy.context.object.modifiers["Solidify"].show_expanded = False
 
-			if mod_mirror == True:
+			if self.solid_type == 'Hollow':
 				bpy.context.object.modifiers["Solidify"].use_rim_only = True
 			else:
 				bpy.context.object.modifiers["Solidify"].use_rim_only = False
 
-		if mod_mirror == True:
+		if self.check_mod_mirror == True:
 			bpy.ops.object.modifier_add(type='MIRROR')
-			bpy.context.object.modifiers["Mirror"].use_axis[0] = False
-
-			if axis_mode == "X":
+			if self.mirror_axis == 'X':
 				bpy.context.object.modifiers["Mirror"].use_axis[0] = True
 				bpy.context.object.modifiers["Mirror"].use_bisect_axis[0] = True
-			elif axis_mode == "Y":
+			else:
+				bpy.context.object.modifiers["Mirror"].use_axis[0] = False
+				bpy.context.object.modifiers["Mirror"].use_bisect_axis[0] = False
+			if self.mirror_axis == 'Y':
 				bpy.context.object.modifiers["Mirror"].use_axis[1] = True
 				bpy.context.object.modifiers["Mirror"].use_bisect_axis[1] = True
-			elif axis_mode == "Z":
+			else:
+				bpy.context.object.modifiers["Mirror"].use_axis[1] = False
+				bpy.context.object.modifiers["Mirror"].use_bisect_axis[1] = False
+			if self.mirror_axis == 'Z':
 				bpy.context.object.modifiers["Mirror"].use_axis[2] = True
 				bpy.context.object.modifiers["Mirror"].use_bisect_axis[2] = True
-			
+			else:
+				bpy.context.object.modifiers["Mirror"].use_axis[2] = False
+				bpy.context.object.modifiers["Mirror"].use_bisect_axis[2] = False
 			bpy.context.object.modifiers["Mirror"].use_clip = True
 			bpy.context.object.modifiers["Mirror"].show_expanded = False
 
-		if mod_bevel == True:
+		if self.bevel_segments > 0:
 			bpy.ops.object.modifier_add(type='BEVEL')
-			bpy.context.object.modifiers["Bevel"].segments = bevel_segments
+			bpy.context.object.modifiers["Bevel"].segments = self.bevel_segments
 			bpy.context.object.modifiers["Bevel"].limit_method = 'ANGLE'
 			bpy.context.object.modifiers["Bevel"].angle_limit = 0.785398
 			bpy.context.object.modifiers["Bevel"].offset_type = 'WIDTH'
 			bpy.context.object.modifiers["Bevel"].miter_outer = 'MITER_ARC'
-			bpy.context.object.modifiers["Bevel"].width = 0.022
+			bpy.context.object.modifiers["Bevel"].width = self.bevel_width
 			bpy.context.object.modifiers["Bevel"].show_in_editmode = False
 			bpy.context.object.modifiers["Bevel"].show_expanded = False
 
-		if mod_subsurf == True:
+		if self.subdivision_level > 0:
 			bpy.ops.object.modifier_add(type='SUBSURF')
-			bpy.context.object.modifiers["Subdivision"].levels = subsurf_vlevel
-			bpy.context.object.modifiers["Subdivision"].render_levels = subsurf_rlevel
+			bpy.context.object.modifiers["Subdivision"].levels = self.subdivision_level
+			bpy.context.object.modifiers["Subdivision"].render_levels = self.subdivision_level
 			bpy.context.object.modifiers["Subdivision"].show_in_editmode = False
 			bpy.context.object.modifiers["Subdivision"].show_expanded = False
 
-		if mod_triangulate == True:
+		if self.check_mod_triangulate == True:
 			bpy.ops.object.modifier_add(type='TRIANGULATE')
 			bpy.context.object.modifiers["Triangulate"].quad_method = 'FIXED'
 			bpy.context.object.modifiers["Triangulate"].keep_custom_normals = True
@@ -270,7 +348,7 @@ class ADD_OT_Solid_Circle_Object(bpy.types.Operator):
 		bpy.context.object.data.auto_smooth_angle = 0.785398
 		bpy.ops.object.shade_smooth()
 
-		if mod_weightednormals == True:
+		if self.check_mod_weightednormals == True:
 			bpy.ops.object.modifier_add(type='WEIGHTED_NORMAL')
 			bpy.context.object.modifiers["Weighted Normal"].keep_sharp = True
 			bpy.context.object.modifiers["Weighted Normal"].mode = 'FACE_AREA_WITH_ANGLE'
@@ -282,7 +360,7 @@ class ADD_OT_Solid_Circle_Object(bpy.types.Operator):
 
 class ADD_OT_Arch_Object_X(bpy.types.Operator):
 	bl_idname = 'wm.add_ot_arch_object_x'
-	bl_label = 'Decimate Panel'
+	bl_label = 'Add Arch X Axis'
 	bl_description = 'Add Arch.'
 	bl_options = {'REGISTER', 'UNDO'}
 
@@ -306,20 +384,21 @@ class ADD_OT_Arch_Object_X(bpy.types.Operator):
 		if obj != None:
 			bpy.ops.object.mode_set(mode="OBJECT")
 
+		# bpy.ops.object.editmode_toggle()
+
 		bpy.ops.mesh.primitive_plane_add(size=2, enter_editmode=True, location=(0, 0, 0))
 		bpy.ops.transform.resize(value=(0.1, 1, 1), orient_type='GLOBAL', orient_matrix=((1, 0, 0), (0, 1, 0), (0, 0, 1)), orient_matrix_type='GLOBAL', constraint_axis=(True, False, False), mirror=True, use_proportional_edit=False, proportional_edit_falloff='SMOOTH', proportional_size=3.7975, use_proportional_connected=False, use_proportional_projected=False)
 		bpy.ops.transform.translate(value=(-1.1, 0, 0), orient_type='GLOBAL', orient_matrix=((1, 0, 0), (0, 1, 0), (0, 0, 1)), orient_matrix_type='GLOBAL', constraint_axis=(True, False, False), mirror=True, use_proportional_edit=False, proportional_edit_falloff='SMOOTH', proportional_size=3.7975, use_proportional_connected=False, use_proportional_projected=False)
 		bpy.ops.transform.rotate(value=1.5708, orient_axis='Z', orient_type='GLOBAL', orient_matrix=((1, 0, 0), (0, 1, 0), (0, 0, 1)), orient_matrix_type='GLOBAL', constraint_axis=(False, False, True), mirror=True, use_proportional_edit=False, proportional_edit_falloff='SMOOTH', proportional_size=3.7975, use_proportional_connected=False, use_proportional_projected=False)
 		bpy.ops.transform.translate(value=(1.1, 0, 0), orient_type='GLOBAL', orient_matrix=((1, 0, 0), (0, 1, 0), (0, 0, 1)), orient_matrix_type='GLOBAL', constraint_axis=(True, False, False), mirror=True, use_proportional_edit=False, proportional_edit_falloff='SMOOTH', proportional_size=3.7975, use_proportional_connected=False, use_proportional_projected=False)
 		bpy.ops.transform.translate(value=(0, 1, 0), orient_type='GLOBAL', orient_matrix=((1, 0, 0), (0, 1, 0), (0, 0, 1)), orient_matrix_type='GLOBAL', constraint_axis=(False, True, False), mirror=True, use_proportional_edit=False, proportional_edit_falloff='SMOOTH', proportional_size=3.7975, use_proportional_connected=False, use_proportional_projected=False)
-		bpy.ops.object.editmode_toggle()
 
 		bpy.ops.object.modifier_add(type='SCREW')
 		bpy.context.object.modifiers["Screw"].axis = 'X'
 		bpy.context.object.modifiers["Screw"].angle = 3.14159
 		bpy.context.object.modifiers["Screw"].use_normal_calculate = True
 		bpy.context.object.modifiers["Screw"].use_normal_calculate = False
-		bpy.context.object.modifiers["Screw"].use_merge_vertices = True
+		# bpy.context.object.modifiers["Screw"].use_merge_vertices = True
 		bpy.context.object.modifiers["Screw"].steps = 12
 		bpy.context.object.modifiers["Screw"].show_expanded = False
 
