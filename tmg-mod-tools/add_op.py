@@ -231,6 +231,14 @@ class ADD_OT_Solid_Circle_Object(bpy.types.Operator):
 	default='X'
 	)
 
+	center_width: bpy.props.FloatProperty(
+	name="Center Width",
+	description="Center width.",
+	default=0.3,
+	min=0,
+	soft_max=1.0,
+	)
+
 	solid_thickness: bpy.props.FloatProperty(
 	name="Solid Thickness",
 	description="Solid thickness.",
@@ -271,6 +279,14 @@ class ADD_OT_Solid_Circle_Object(bpy.types.Operator):
 	soft_max=5,
 	)
 
+	circle_verts: bpy.props.IntProperty(
+	name="Vert Count",
+	description="Circle vert amount.",
+	default=12,
+	min=3,
+	soft_max=32,
+	)
+
 	def execute(self, context):
 
 		obj = bpy.context.active_object
@@ -278,8 +294,16 @@ class ADD_OT_Solid_Circle_Object(bpy.types.Operator):
 		if obj != None:
 			bpy.ops.object.mode_set(mode="OBJECT")
 
-		bpy.ops.mesh.primitive_circle_add(vertices=16, radius=1, enter_editmode=True, location=(0, 0, 0))
+		# bpy.ops.mesh.primitive_circle_add(vertices=16, radius=1, enter_editmode=True, location=(0, 0, 0))
+		bpy.ops.mesh.primitive_circle_add(vertices=self.circle_verts, radius=1, fill_type='NGON', enter_editmode=True, location=(0, 0, 0))
+
 		bpy.ops.mesh.edge_face_add()
+
+		if self.center_width > 0 and self.center_width < 1:
+			bpy.ops.mesh.inset(use_boundary=True, use_even_offset=True, use_relative_offset=False, use_edge_rail=False, thickness=self.center_width, depth=0, use_outset=False, use_select_inset=False, use_individual=False, use_interpolate=True)
+			if self.center_width < 1:
+				bpy.ops.mesh.delete(type='FACE')
+
 		bpy.ops.object.editmode_toggle()
 
 		if self.solid_thickness > 0:
