@@ -52,3 +52,20 @@ class Mat_Check_OT_Operator(bpy.types.Operator):
 
 
 
+
+
+
+
+
+
+### Credits ###
+# https://blender.stackexchange.com/questions/141179/how-to-populate-uilist-with-all-material-slot-in-scene-2-8
+
+
+
+
+
+
+
+
+

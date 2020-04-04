@@ -10,11 +10,13 @@ bl_info = {
 }
 
 import bpy
+from bpy.types import PropertyGroup
 from bpy.types import Operator
 from bpy.props import FloatVectorProperty
 from bpy_extras.object_utils import AddObjectHelper, object_data_add
 from mathutils import Vector
 from bpy.props import *
+
 
 from . ui_op import *
 from . dec_op import *
@@ -24,6 +26,7 @@ from . tool_op import *
 from . text_op import * 
 from . sculpt_op import * 
 from . mat_op import * 
+from . uv_op import * 
 from . dec_panel import * 
 
 
@@ -581,6 +584,38 @@ bpy.types.Scene.sculpt_spacingDistance = bpy.props.EnumProperty(
     update=sculpt_spacingDistance_changed
     )
 
+#### Sculpt Face Sets #################################
+bpy.types.Scene.sculpt_faceSets = BoolProperty(name="Sculpt Face Sets.",
+                default=False,
+                update=sculpt_faceSets_changed,
+                description="Sculpt face sets toggle.")
+
+#### Sculpt Referance Transparency #########################
+bpy.types.Scene.sculpt_referanceTransparency = FloatProperty(name="Referance Transparency",
+                default=0.5,
+                min=0.0,
+                max=1.0,
+                update=sculpt_referanceTransparency_changed,
+                description="Set referance image transparency.")
+
+#### Sculpt Referance PositionX #########################
+bpy.types.Scene.sculpt_referancePositionX = FloatProperty(name="Referance Position X",
+                default=0.5,
+                update=sculpt_referancePosition_changed,
+                description="Set referance image Position X.")
+
+#### Sculpt Referance PositionY #########################
+bpy.types.Scene.sculpt_referancePositionY = FloatProperty(name="Referance Position Y",
+                default=0.5,
+                update=sculpt_referancePosition_changed,
+                description="Set referance image Position Y.")
+
+#### Sculpt Referance Size #########################
+bpy.types.Scene.sculpt_referanceSize = FloatProperty(name="Referance Size",
+                default=0.5,
+                min=0.0,
+                update=sculpt_referanceSize_changed,
+                description="Set referance image size.")
 
 ##### Text VAlign ########## ( TOP_BASELINE TOP CENTER BOTTOM BOTTOM_BASELINE )
 bpy.types.Scene.text_vAlign = bpy.props.EnumProperty(
@@ -753,20 +788,143 @@ bpy.types.Scene.axis_mod = EnumProperty(
     default='Y'
     )
 
+#### Inset Values #########################
+
+bpy.types.Scene.inset_thickness = FloatProperty(name="Inset thickness",
+                default=0.1,
+                min=0.0,
+                description="Set inset thickness value.")
+
+bpy.types.Scene.inset_depth = FloatProperty(name="Inset depth",
+                default=0.0,
+                description="Set inset depth value.")
+
+
+
+class MAT_Object_Set_Mat_OT_Operator(bpy.types.Operator):
+    bl_idname = 'wm.mat_object_set_mat_ot_operator'
+    bl_label = 'Decimate Panel'
+    bl_description = 'Apply Modifiers to object.'
+    bl_options = {'REGISTER', 'UNDO'}
+
+
+    def execute(self, context):
+
+        obj = bpy.context.active_object
+        scene = context.scene
+        scn = context.scene
+        ob = obj.data
+        
+        mat_list = []
+        
+        
+        #for nr, mat in enumerate(scene.materials):
+            #mat_list.append(mat)
+
+        for nr, mat in enumerate(bpy.data.materials):
+            mat_list.append(mat)
+            print('matList: ', mat_list)
+
+
+        for nr, obj in enumerate(bpy.context.selected_objects):
+
+            if obj.type == 'MESH':
+                matIndex = obj.active_material_index = 0
+                #matName = obj.active_material.name = "Material"
+
+                obj.data.materials.append(mat_list[1])
+
+                #print('Mat ID', matIndex)
+                print('Mat ID', scene.active_material_index)
+                print('Mat NAME', mat_list[scene.active_material_index].name)
+                
+                #print('Mat Name', matName)
+
+
+            return {'FINISHED'}
+            return {'FINISHED'}
+
+
+
+def update_scene_materials(self, context):
+    self.material_slots.clear()
+    for m in self.materials:
+        s = self.material_slots.add()
+        s.name = m.name
+        s.material = m    
+
+def get_scene_materials(self):    
+    return set(s.material for o in self.objects 
+            for s in o.material_slots if s.material
+            )
+
+
+class MaterialSlot(PropertyGroup):
+    def get_name(self):
+        return getattr(self.material, "name", "")
+    material : PointerProperty(type=bpy.types.Material)
+    #name : StringProperty(get=get_name)
+
+class MATERIAL_UL_extreme_matslot(bpy.types.UIList):
+
+    def draw_item(self, context, layout, data, item, icon, active_data, active_propname):
+        ob = data
+        slot = item
+        ma = slot.material
+        mat_update = False
+
+        if self.layout_type in {'DEFAULT', 'COMPACT'}:
+            if ma:               
+                layout.prop(ma, "name", text= "", emboss=False, icon_value=layout.icon(ma))  
+
+
+#class SCENE_PT_materials(bpy.types.Panel):
+#
+#    bl_label = "My label"
+#    bl_idname = "SCENE_PT_materials"
+#    bl_space_type = "VIEW_3D"
+#    bl_region_type = "UI"
+#    bl_category = "My Category"
+#
+#    def draw(self, context):
+#
+#        scn = context.scene          
+#        layout = self.layout
+#        col = layout.column()
+#        
+        #col.label(text="Set Material")
+        #col.operator('wm.mat_object_set_mat_ot_operator', text='', icon='UV_DATA') 
+#        
+#        if set(s.material for s in scn.material_slots).symmetric_difference(scn.materials):
+#            col.prop(scn, "update_materials", toggle=True, icon='FILE_REFRESH')
+#        col.template_list(
+#                "MATERIAL_UL_extreme_matslot", 
+#                "", 
+#                scn, 
+#                "material_slots", 
+#                scn, 
+#                "active_material_index")
+
+
+
+
+
+
 classes = (
 
 DEC_Edge_OT_Operator, DEC_Edge_Random_OT_Operator, DEC_Verts_OT_Operator, DEC_Verts_Random_OT_Operator, 
 MOD_Object_OT_Operator, MOD_Apply_Object_OT_Operator, 
-ADD_Solid_Plane_Object_OT_Operator, ADD_Solid_Circle_Object_OT_Operator, ADD_Arch_Object_X_OT_Operator, ADD_Arch_Object_Y_OT_Operator, 
-ADD_Arch_Object_Z_OT_Operator, ADD_Pipe_Line_Object_Y_OT_Operator, ADD_Pipe_Line_Object_Z_OT_Operator, 
-ADD_Basic_Spline_Y_OT_Operator, ADD_Pipe_Spline_Y_OT_Operator, ADD_Spline_Folow_Y_OT_Operator, 
+ADD_OT_Solid_Plane_Object, ADD_OT_Solid_Circle_Object, ADD_OT_Arch_Object_X, ADD_OT_Arch_Object_Y, 
+ADD_OT_Arch_Object_Z, ADD_OT_Pipe_Line_Object_Y, ADD_OT_Pipe_Line_Object_Z, 
+ADD_OT_Basic_Spline_Y, ADD_OT_Pipe_Spline_Y, ADD_OT_Spline_Follow_Y, ADD_OT_TestCube,
 DEC_PT_Object_Panel, DEC_PT_Edit_Panel, 
-TOOL_Inset_Edit_OT_Operator, TOOL_Bevel_Edge_Edit_OT_Operator, TOOL_Remove_Doubles_Edit_OT_Operator, TOOL_Select_Interior_Faces_Edit_OT_Operator, 
-TOOL_Flip_Normals_Edit_OT_Operator,  
+TOOL_OT_Inset_Edit, TOOL_OT_Bevel_Edge_Edit, TOOL_OT_Remove_Doubles_Edit, TOOL_OT_Select_Interior_Faces_Edit, 
+TOOL_OT_Flip_Normals_Edit, TOOL_OT_Mesh_Face_To_Circle_Edit,
 UI_Distraction_Free_OT_Operator, UI_Wireframe_OT_Operator, UI_View_Mode_OT_Operator, Dec_Edit_Modifier_Panel, Dec_Object_Modifier_Panel,
 UI_Texel_Check_OT_Operator, Dec_Object_Materials_Panel, #Mat_Check_OT_Operator,
 Text_Update_OT_Operator, Text_Object_Text_Panel, 
-Sculpt_Object_Panel 
+Sculpt_Brush_Panel, Sculpt_Referance_Panel,
+UV_OT_MarginUnwrap
 
 )
 
@@ -774,5 +932,11 @@ register, unregister = bpy.utils.register_classes_factory(classes)
     
 if __name__ == "__main__":
     register()
-
+    #for cls in classes:
+        #bpy.utils.register_class(cls)
+    bpy.types.Scene.materials = property(get_scene_materials)
+    bpy.types.Scene.update_materials = BoolProperty(update=update_scene_materials, name="Update Scene Materials")
+    bpy.types.Scene.active_material_index = IntProperty()
+    bpy.types.Scene.set_material = BoolProperty()     
+    bpy.types.Scene.material_slots = CollectionProperty(type=MaterialSlot)
     bpy.ops.wm.mod_object_ot_operator()
