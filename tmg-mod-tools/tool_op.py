@@ -1,5 +1,83 @@
 import bpy
 
+class TOOL_OT_Knurl_Face_Edit(bpy.types.Operator):
+	bl_idname = 'wm.tool_ot_knurl_face_edit'
+	bl_label = 'Tool Knurl Face'
+	bl_description = 'Knurls selected face / faces.'
+	bl_context = "mesh_edit"
+	bl_options = {'REGISTER', 'UNDO'}
+
+	check_inset_individual: bpy.props.BoolProperty(
+	name="Inset Individual",
+	description="Checks if individual faces so be seperate or unified.",
+	default=False
+	)
+
+	check_knurl_unsubdived: bpy.props.BoolProperty(
+	name="Knurl Un-subdivide",
+	description="Unsubdivides mesh to rotate the knurls.",
+	default=False
+	)
+
+	inset_edge_thickness: bpy.props.FloatProperty(
+	name="Inset Edge Thickness",
+	description="Margin between outside edges.",
+	default=0.05,
+	soft_min=0.0,
+	soft_max=1.0
+	)
+
+	inset_center_thickness: bpy.props.FloatProperty(
+	name="Inset Center Thickness",
+	description="Margin between outside edges.",
+	default=0.05,
+	soft_min=0.0,
+	soft_max=1.0
+	)
+
+	inset_depth: bpy.props.FloatProperty(
+	name="Inset Depth",
+	description="Margin between outside edges.",
+	default=0.0,
+	soft_min=-1.0,
+	soft_max=1.0
+	)
+
+	poke_depth: bpy.props.FloatProperty(
+	name="Poke Depth",
+	description="Margin between UV islands.",
+	default=0.03,
+	soft_min=-1.0,
+	soft_max=1.0,
+	)
+
+	cuts: bpy.props.IntProperty(
+	name="Loop Cuts",
+	description="Subdivision loops.",
+	default=1,
+	min=0,
+	soft_max=5,
+	)
+
+	@classmethod
+	def poll(cls, context):
+		#print(f"My area is: {context.area.type}")
+		return context.area.type == 'VIEW_3D'
+
+	def execute(self, context):
+
+		if self.inset_edge_thickness > 0:
+			bpy.ops.mesh.inset(thickness=self.inset_edge_thickness, depth=0, use_individual=self.check_inset_individual)
+		bpy.ops.mesh.inset(thickness=self.inset_center_thickness, depth=self.inset_depth)
+		if self.cuts > 0:
+			bpy.ops.mesh.subdivide(number_cuts=self.cuts)
+			if self.check_knurl_unsubdived == True:
+				bpy.ops.mesh.unsubdivide(iterations=1)
+		bpy.ops.mesh.poke(offset=self.poke_depth)
+
+		return {'FINISHED'}
+		return {'FINISHED'}
+
 class TOOL_OT_Inset_Edit(bpy.types.Operator):
 	bl_idname = 'wm.tool_ot_inset_edit'
 	bl_label = 'Tool Inset Edit'
@@ -192,6 +270,12 @@ class TOOL_OT_Mesh_Face_To_Circle_Edit(bpy.types.Operator):
 	bl_context = "mesh_edit"
 	bl_options = {'REGISTER', 'UNDO'}
 
+	check_ngon: bpy.props.BoolProperty(
+	name="Ngon",
+	description="Ngons around crcle or add edges to corners.",
+	default=False
+	)
+
 	check_remove_center: bpy.props.BoolProperty(
 	name="Remove Center",
 	description="Removes the center face.",
@@ -266,7 +350,7 @@ class TOOL_OT_Mesh_Face_To_Circle_Edit(bpy.types.Operator):
 		bpy.ops.mesh.inset(thickness=self.inset_thickness_edge, depth=0, use_individual=self.check_inset_individual)
 		bpy.ops.mesh.inset(thickness=self.inset_thickness_center, depth=0)
 		#bpy.ops.mesh.subdivide(quadcorner='INNERVERT') 'STRAIGHT_CUT' 'FAN' 'PATH'
-		bpy.ops.mesh.subdivide(number_cuts=self.cuts, quadcorner='INNERVERT')
+		bpy.ops.mesh.subdivide(number_cuts=self.cuts, ngon=self.check_ngon, quadcorner='INNERVERT')
 		bpy.ops.mesh.looptools_circle(custom_radius=False, fit='best', flatten=True, influence=100, lock_x=False, lock_y=False, lock_z=False, radius=1, regular=True)
 		bpy.ops.mesh.dissolve_limited()
 		if self.check_circle_depth:

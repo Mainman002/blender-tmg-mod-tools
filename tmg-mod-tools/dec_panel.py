@@ -1425,22 +1425,38 @@ class DEC_PT_Edit_Panel(bpy.types.Panel):
             Tools_Row = Tools_Subcol.row() #angle_limit
             Tools_Row.label(text="Inset Settings")
 
-            Tools_Row = Tools_Subcol.column()
+            # Tools_Row = Tools_Subcol.column()
 
-            Tools_Row.use_property_split = True
-            Tools_Flow = Tools_Row.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=False, align=True)
+            # Tools_Row.use_property_split = True
+            # Tools_Flow = Tools_Row.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=False, align=True)
 
-            colm = Tools_Flow.box()
+            # colm = Tools_Flow.box()
 
-            Tools_Col = colm.row()
-            Tools_Col.label(text="Face to Circle")
-            Tools_Col.operator('wm.tool_ot_mesh_face_to_circle_edit', text='', icon='VERTEXSEL')
+            # Tools_Col = colm.row()
+            # Tools_Col.label(text="Face to Circle")
+            # Tools_Col.operator('wm.tool_ot_mesh_face_to_circle_edit', text='', icon='VERTEXSEL')
+
+            # colm = Tools_Flow.box()
+
+            # Tools_Col = colm.row()
+            # Tools_Col.label(text="Kurl Faces")
+            # Tools_Col.operator('wm.tool_ot_knurl_face_edit', text='', icon='VERTEXSEL')
 
             Tools_Apply_Col = Master_Col.box() ###### Box if needed for Settings Panel #############
             Tools_Apply_SubCol = Tools_Apply_Col.column(align=True)
 
             Tools_Apply_Col.use_property_split = True
             Tools_Apply_Flow = Tools_Apply_Col.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
+
+            colm = Tools_Apply_Flow.column()
+
+            Tools_Apply_Col = colm.row()
+            Tools_Apply_Col.operator('wm.tool_ot_mesh_face_to_circle_edit', text='Face to Circle')
+
+            colm = Tools_Apply_Flow.column()
+
+            Tools_Apply_Col = colm.row()
+            Tools_Apply_Col.operator('wm.tool_ot_knurl_face_edit', text='Knurl Face')
 
             colm = Tools_Apply_Flow.column()
 
