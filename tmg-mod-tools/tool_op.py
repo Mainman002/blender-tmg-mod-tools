@@ -25,7 +25,8 @@ class TOOL_OT_Knurl_Face_Edit(bpy.types.Operator):
 	description="Margin between outside edges.",
 	default=0.05,
 	soft_min=0.0,
-	soft_max=1.0
+	soft_max=1.0,
+	unit='LENGTH'
 	)
 
 	inset_center_thickness: bpy.props.FloatProperty(
@@ -33,7 +34,8 @@ class TOOL_OT_Knurl_Face_Edit(bpy.types.Operator):
 	description="Margin between outside edges.",
 	default=0.05,
 	soft_min=0.0,
-	soft_max=1.0
+	soft_max=1.0,
+	unit='LENGTH'
 	)
 
 	inset_depth: bpy.props.FloatProperty(
@@ -41,7 +43,8 @@ class TOOL_OT_Knurl_Face_Edit(bpy.types.Operator):
 	description="Margin between outside edges.",
 	default=0.0,
 	soft_min=-1.0,
-	soft_max=1.0
+	soft_max=1.0,
+	unit='LENGTH'
 	)
 
 	poke_depth: bpy.props.FloatProperty(
@@ -50,6 +53,7 @@ class TOOL_OT_Knurl_Face_Edit(bpy.types.Operator):
 	default=0.03,
 	soft_min=-1.0,
 	soft_max=1.0,
+	unit='LENGTH'
 	)
 
 	cuts: bpy.props.IntProperty(
@@ -143,7 +147,8 @@ class TOOL_OT_Inset_Edit(bpy.types.Operator):
 	description="Margin between UV islands.",
 	default=0.05,
 	soft_min=0.0,
-	soft_max=1.0
+	soft_max=1.0,
+	unit='LENGTH'
 	)
 
 	inset_depth: bpy.props.FloatProperty(
@@ -152,6 +157,7 @@ class TOOL_OT_Inset_Edit(bpy.types.Operator):
 	default=0.03,
 	soft_min=-1.0,
 	soft_max=1.0,
+	unit='LENGTH'
 	)
 
 	@classmethod
@@ -161,10 +167,19 @@ class TOOL_OT_Inset_Edit(bpy.types.Operator):
 
 	def execute(self, context):
 
+		for obj in (bpy.context.selected_objects):
+			if (obj.type == "MESH"):
+				if self.inset_thickness > 0:
+					nthick = (obj.dimensions.x * self.inset_thickness)
+					print(nthick)
+					# bpy.data.objects['object_name'].dimensions.y
+					# bpy.data.objects['object_name'].dimensions.z
+
+
 		if self.check_inset_individual == True:
 			if self.check_inset_depth == False and self.check_inset_thickness == True:
 				#bpy.ops.mesh.inset(use_boundary=True, use_even_offset=True, use_relative_offset=True, use_edge_rail=False, thickness=check_inset_thickness, depth=inset_depth, use_outset=False, use_select_inset=False, use_individual=check_inset_individual)
-				bpy.ops.mesh.inset(thickness=self.inset_thickness, depth=0.00, use_individual=self.check_inset_individual)
+				bpy.ops.mesh.inset(thickness=nthick, depth=0.00, use_individual=self.check_inset_individual)
 
 			elif self.check_inset_depth == True and self.check_inset_thickness == False:
 				bpy.ops.mesh.inset(thickness=0.00, depth=self.inset_depth, use_individual=self.check_inset_individual)
@@ -212,6 +227,7 @@ class TOOL_OT_Bevel_Edge_Edit(bpy.types.Operator):
 	default=0.117745,
 	soft_min=0.0,
 	soft_max=1.0,
+	unit='LENGTH'
 	)
 
 	bevel_segments: bpy.props.IntProperty(
@@ -236,6 +252,7 @@ class TOOL_OT_Bevel_Edge_Edit(bpy.types.Operator):
 	default=0.0,
 	soft_min=0.0,
 	soft_max=1.0,
+	unit='LENGTH'
 	)
 
 	@classmethod
@@ -270,7 +287,8 @@ class TOOL_OT_Remove_Doubles_Edit(bpy.types.Operator):
 	description="Distance between verts to merge.",
 	default=0.01,
 	soft_min=0.0,
-	soft_max=1.0
+	soft_max=1.0,
+	unit='LENGTH'
 	)
 
 	def execute(self, context):
@@ -340,6 +358,7 @@ class TOOL_OT_Mesh_Face_To_Circle_Edit(bpy.types.Operator):
 	default=0.1,
 	soft_min=0.0,
 	soft_max=0.99,
+	unit='LENGTH'
 	)
 
 	inset_thickness_center: bpy.props.FloatProperty(
@@ -348,6 +367,7 @@ class TOOL_OT_Mesh_Face_To_Circle_Edit(bpy.types.Operator):
 	default=0.25,
 	soft_min=0.0,
 	soft_max=0.99,
+	unit='LENGTH'
 	)
 
 	check_circle_depth: bpy.props.BoolProperty(
@@ -362,6 +382,7 @@ class TOOL_OT_Mesh_Face_To_Circle_Edit(bpy.types.Operator):
 	default=0.1,
 	soft_min=0.0,
 	soft_max=0.99,
+	unit='LENGTH'
 	)
 
 	inset_center_depth: bpy.props.FloatProperty(
@@ -370,6 +391,7 @@ class TOOL_OT_Mesh_Face_To_Circle_Edit(bpy.types.Operator):
 	default=-0.15,
 	soft_min=-1.0,
 	soft_max=1.0,
+	unit='LENGTH'
 	)
 
 	cuts: bpy.props.IntProperty(
@@ -459,6 +481,7 @@ class TOOL_OT_Wrinkle_Face_Edit(bpy.types.Operator):
 	default=0.0,
 	soft_min=0.0,
 	soft_max=1.0,
+	unit='LENGTH'
 	)
 
 	subdivide_fractals: bpy.props.FloatProperty(
@@ -467,6 +490,7 @@ class TOOL_OT_Wrinkle_Face_Edit(bpy.types.Operator):
 	default=0.0,
 	soft_min=0.0,
 	soft_max=10.0,
+	unit='LENGTH'
 	)
 
 	warp_angle: bpy.props.FloatProperty(
@@ -475,6 +499,7 @@ class TOOL_OT_Wrinkle_Face_Edit(bpy.types.Operator):
 	default=0.1,
 	soft_min=0.0,
 	soft_max=1.0,
+	unit='LENGTH'
 	)
 
 	offset_angle: bpy.props.FloatProperty(
@@ -483,6 +508,7 @@ class TOOL_OT_Wrinkle_Face_Edit(bpy.types.Operator):
 	default=-0.1,
 	soft_min=-1.0,
 	soft_max=1.0,
+	unit='LENGTH'
 	)
 
 	offset_min: bpy.props.FloatProperty(
@@ -491,6 +517,7 @@ class TOOL_OT_Wrinkle_Face_Edit(bpy.types.Operator):
 	default=0.06,
 	soft_min=-1.0,
 	soft_max=1.0,
+	unit='LENGTH'
 	)
 
 	offset_max: bpy.props.FloatProperty(
@@ -499,6 +526,7 @@ class TOOL_OT_Wrinkle_Face_Edit(bpy.types.Operator):
 	default=0.2,
 	soft_min=-1.0,
 	soft_max=1.0,
+	unit='LENGTH'
 	)
 
 	lambda_factor: bpy.props.FloatProperty(
@@ -507,12 +535,14 @@ class TOOL_OT_Wrinkle_Face_Edit(bpy.types.Operator):
 	default=5.0,
 	soft_min=-0.0,
 	soft_max=10.0,
+	unit='LENGTH'
 	)
 
 	center: bpy.props.FloatVectorProperty(
 	name="Center",
 	subtype='XYZ',
-	default=[0.0, 1.0, 0.0]
+	default=[0.0, 1.0, 0.0],
+	unit='LENGTH'
 	)
 
 	@classmethod
