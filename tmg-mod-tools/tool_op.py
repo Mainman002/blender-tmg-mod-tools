@@ -1,4 +1,5 @@
 import bpy
+import bmesh
 
 class TOOL_OT_Knurl_Face_Edit(bpy.types.Operator):
 	bl_idname = 'wm.tool_ot_knurl_face_edit'
@@ -56,7 +57,15 @@ class TOOL_OT_Knurl_Face_Edit(bpy.types.Operator):
 	description="Subdivision loops.",
 	default=1,
 	min=0,
-	soft_max=5,
+	soft_max=20,
+	)
+
+	bridge_cuts: bpy.props.IntProperty(
+	name="Bridge Loop Cuts",
+	description="Subdivision loops for bridge cuts.",
+	default=0,
+	min=0,
+	soft_max=20,
 	)
 
 	@classmethod
@@ -64,16 +73,42 @@ class TOOL_OT_Knurl_Face_Edit(bpy.types.Operator):
 		#print(f"My area is: {context.area.type}")
 		return context.area.type == 'VIEW_3D'
 
-	def execute(self, context):
+	def invoke(self, context, event):
+		self.cuts = 0
+		self.bridge_cuts = 0
+		return self.execute(context)
 
+	def execute(self, context):
 		if self.inset_edge_thickness > 0:
 			bpy.ops.mesh.inset(thickness=self.inset_edge_thickness, depth=0, use_individual=self.check_inset_individual)
-		bpy.ops.mesh.inset(thickness=self.inset_center_thickness, depth=self.inset_depth)
+
+		if self.inset_center_thickness > 0:
+			bpy.ops.mesh.inset(thickness=self.inset_center_thickness, depth=self.inset_depth)
+
+		if self.bridge_cuts > 0:
+			bpy.ops.mesh.bridge_edge_loops(type='CLOSED', use_merge=False, number_cuts=self.bridge_cuts)
+
 		if self.cuts > 0:
 			bpy.ops.mesh.subdivide(number_cuts=self.cuts)
-			if self.check_knurl_unsubdived == True:
-				bpy.ops.mesh.unsubdivide(iterations=1)
+
+		if self.check_knurl_unsubdived == True:
+			bpy.ops.mesh.unsubdivide(iterations=1)
+
 		bpy.ops.mesh.poke(offset=self.poke_depth)
+
+		bpy.ops.mesh.select_all(action='INVERT')
+
+		bpy.ops.mesh.select_mode(use_extend=False, use_expand=False, type='VERT')
+		bpy.ops.mesh.region_to_loop()
+		bpy.ops.mesh.select_interior_faces()
+
+		bpy.ops.mesh.loop_multi_select(ring=True)
+		bpy.ops.mesh.select_mode(use_extend=False, use_expand=False, type='FACE')
+		bpy.ops.mesh.quads_convert_to_tris(quad_method='SHORTEST_DIAGONAL')
+
+		# bpy.ops.mesh.select_all(action='INVERT')
+		bpy.ops.mesh.select_all(action='DESELECT')
+
 
 		return {'FINISHED'}
 		return {'FINISHED'}
@@ -159,6 +194,12 @@ class TOOL_OT_Bevel_Edge_Edit(bpy.types.Operator):
 	bl_context = "mesh_edit"
 	bl_options = {'REGISTER', 'UNDO'}
 
+	check_edge_ngon: bpy.props.BoolProperty(
+	name="Edge Ngons",
+	description="Connects circle verts to the corner verts.",
+	default=True
+	)
+
 	check_vertex_only: bpy.props.BoolProperty(
 	name="Vertex Only",
 	description="Bevel verts only.",
@@ -202,10 +243,15 @@ class TOOL_OT_Bevel_Edge_Edit(bpy.types.Operator):
 		#print(f"My area is: {context.area.type}")
 		return context.area.type == 'VIEW_3D'
 
+	def invoke(self, context, event):
+		self.cuts = 0
+		self.bevel_segments = 1
+		return self.execute(context)
+
 	def execute(self, context):
 
 		if self.cuts > 0:
-			bpy.ops.mesh.subdivide(number_cuts=self.cuts, smoothness=self.smoothness, fractal_along_normal=0.0)
+			bpy.ops.mesh.subdivide(number_cuts=self.cuts, ngon=self.check_edge_ngon, smoothness=self.smoothness, fractal_along_normal=0.0)
 
 		bpy.ops.mesh.bevel(offset=self.bevel_offset, offset_pct=0, segments=self.bevel_segments, vertex_only=self.check_vertex_only)
 
@@ -270,10 +316,10 @@ class TOOL_OT_Mesh_Face_To_Circle_Edit(bpy.types.Operator):
 	bl_context = "mesh_edit"
 	bl_options = {'REGISTER', 'UNDO'}
 
-	check_ngon: bpy.props.BoolProperty(
-	name="Ngon",
-	description="Ngons around crcle or add edges to corners.",
-	default=False
+	check_edge_ngon: bpy.props.BoolProperty(
+	name="Edge Ngons",
+	description="Connects circle verts to the corner verts.",
+	default=True
 	)
 
 	check_remove_center: bpy.props.BoolProperty(
@@ -346,17 +392,23 @@ class TOOL_OT_Mesh_Face_To_Circle_Edit(bpy.types.Operator):
 	# default='INNERVERT'
 	# )
 
+	def invoke(self, context, event):
+		self.cuts = 0
+		return self.execute(context)
+
 	def execute(self, context):
-		bpy.ops.mesh.inset(thickness=self.inset_thickness_edge, depth=0, use_individual=self.check_inset_individual)
+		if self.inset_thickness_edge > 0:
+			bpy.ops.mesh.inset(thickness=self.inset_thickness_edge, depth=0, use_individual=self.check_inset_individual)
 		bpy.ops.mesh.inset(thickness=self.inset_thickness_center, depth=0)
-		#bpy.ops.mesh.subdivide(quadcorner='INNERVERT') 'STRAIGHT_CUT' 'FAN' 'PATH'
-		bpy.ops.mesh.subdivide(number_cuts=self.cuts, ngon=self.check_ngon, quadcorner='INNERVERT')
+		bpy.ops.mesh.subdivide(number_cuts=self.cuts, ngon=self.check_edge_ngon, quadcorner='INNERVERT')
 		bpy.ops.mesh.looptools_circle(custom_radius=False, fit='best', flatten=True, influence=100, lock_x=False, lock_y=False, lock_z=False, radius=1, regular=True)
-		bpy.ops.mesh.dissolve_limited()
 		if self.check_circle_depth:
 			bpy.ops.mesh.inset(thickness=self.inset_circle_thickness, depth=self.inset_center_depth)
 		else:
 			bpy.ops.mesh.inset(thickness=self.inset_circle_thickness, depth=0)
+
+		bpy.ops.mesh.dissolve_faces()
+
 		if self.check_remove_center:
 			bpy.ops.mesh.delete(type='FACE')
 
@@ -365,9 +417,185 @@ class TOOL_OT_Mesh_Face_To_Circle_Edit(bpy.types.Operator):
 		return {'FINISHED'}
 
 
-# bpy.ops.mesh.subdivide(number_cuts=1, ngon=False, quadcorner='FAN')
+
+class TOOL_OT_Wrinkle_Face_Edit(bpy.types.Operator):
+	bl_idname = 'wm.tool_ot_wrinkle_face_edit'
+	bl_label = 'Tool Wrinkle Face'
+	bl_description = 'Wrinkles selected face(s).'
+	bl_context = "mesh_edit"
+	bl_options = {'REGISTER', 'UNDO'}
+
+	check_edge_ngon: bpy.props.BoolProperty(
+	name="Edge Ngons",
+	description="Connects circle verts to the corner verts.",
+	default=True
+	)
+
+	check_wave_mod: bpy.props.BoolProperty(
+	name="Wave modifier",
+	description="Adds a wave modifier.",
+	default=False
+	)
+
+	cuts: bpy.props.IntProperty(
+	name="Loop Cuts",
+	description="Subdivision loops.",
+	default=1,
+	min=0,
+	soft_max=20,
+	)
+
+	smoothing: bpy.props.IntProperty(
+	name="Smooth Verts",
+	description="Smooth vertex.",
+	default=3,
+	min=0,
+	soft_max=10,
+	)
+
+	subdivide_smoothness: bpy.props.FloatProperty(
+	name="Subdivision Smoothness",
+	description="Smoothes subdivision loop cuts.",
+	default=0.0,
+	soft_min=0.0,
+	soft_max=1.0,
+	)
+
+	subdivide_fractals: bpy.props.FloatProperty(
+	name="Subdivision Fractals",
+	description="Subdivision fractal warping.",
+	default=0.0,
+	soft_min=0.0,
+	soft_max=10.0,
+	)
+
+	warp_angle: bpy.props.FloatProperty(
+	name="Warp Angle",
+	description="What angle to lean towards when warping.",
+	default=0.1,
+	soft_min=0.0,
+	soft_max=1.0,
+	)
+
+	offset_angle: bpy.props.FloatProperty(
+	name="Warp Offset Angle",
+	description="Slide offset for warping the mesh.",
+	default=-0.1,
+	soft_min=-1.0,
+	soft_max=1.0,
+	)
+
+	offset_min: bpy.props.FloatProperty(
+	name="Warp Offset Min",
+	description="Minimum warp offset.",
+	default=0.06,
+	soft_min=-1.0,
+	soft_max=1.0,
+	)
+
+	offset_max: bpy.props.FloatProperty(
+	name="Warp Offset Max",
+	description="Maximum warp offset.",
+	default=0.2,
+	soft_min=-1.0,
+	soft_max=1.0,
+	)
+
+	lambda_factor: bpy.props.FloatProperty(
+	name="Smooth Factor",
+	description="Lambda factor for smoothing vertex.",
+	default=5.0,
+	soft_min=-0.0,
+	soft_max=10.0,
+	)
+
+	center: bpy.props.FloatVectorProperty(
+	name="Center",
+	subtype='XYZ',
+	default=[0.0, 1.0, 0.0]
+	)
+
+	@classmethod
+	def poll(cls, context):
+		#print(f"My area is: {context.area.type}")
+		return context.area.type == 'VIEW_3D'
+
+	def invoke(self, context, event):
+		self.cuts = 0
+		self.check_wave_mod = False
+		return self.execute(context)
+
+	def execute(self, context):
+
+		for obj in (bpy.context.selected_objects):
+			if (obj.type == "MESH"):
+
+				if self.cuts > 0:
+					# bpy.ops.mesh.subdivide(number_cuts=self.cuts, smoothness=self.subdivide_smoothness, fractal_along_normal=0.0)
+					bpy.ops.mesh.subdivide(number_cuts=self.cuts, smoothness=self.subdivide_smoothness, quadcorner='INNERVERT', ngon=self.check_edge_ngon, fractal=self.subdivide_fractals, fractal_along_normal=1, seed=1)
+
+				bpy.ops.transform.vertex_warp(warp_angle=self.warp_angle, offset_angle=self.offset_angle, min=self.offset_min, max=self.offset_max, center=(self.center[0],self.center[1],self.center[2]))
+
+				bpy.ops.mesh.vertices_smooth_laplacian(repeat=self.smoothing, lambda_factor=self.lambda_factor)
+
+				mod = obj.modifiers.get("Ocean")
+				if self.check_wave_mod == True:
+					if mod is None:
+						obj.modifiers.new(name='Ocean', type='OCEAN')
+					obj.modifiers["Ocean"].geometry_mode = 'DISPLACE'
+					obj.modifiers["Ocean"].size = 0.000999948
+					obj.modifiers["Ocean"].wave_alignment = 2.1
+					obj.modifiers["Ocean"].choppiness = 0
+					obj.modifiers["Ocean"].wave_alignment = 7.97
+					obj.modifiers["Ocean"].damping = 0.419192
+					obj.modifiers["Ocean"].wave_scale_min = 2.21
+					obj.modifiers["Ocean"].wind_velocity = 27.9
+					obj.modifiers["Ocean"].use_normals = False
+					obj.modifiers["Ocean"].spatial_size = 71
+					obj.modifiers["Ocean"].resolution = 4
+					obj.modifiers["Ocean"].time = 1.33
+					obj.modifiers["Ocean"].random_seed = 3
+				else:
+					if mod is None:
+						pass
+					else:
+						obj.modifiers.remove(mod)
+
+		return {'FINISHED'}
+		return {'FINISHED'}
 
 
 
+# bpy.props.FloatVectorProperty(
+# name="", 
+# description="", 
+# default=(0.0, 0.0, 0.0), 
+# min=sys.float_info.min, max=sys.float_info.max, 
+# soft_min=sys.float_info.min, soft_max=sys.float_info.max, 
+# step=3, precision=2, options={'ANIMATABLE'}, subtype='NONE', 
+# size=3, update=None, get=None, set=None
+# )
 
-#bpy.ops.mesh.loopcut_slide(MESH_OT_loopcut={"number_cuts":1, "smoothness":0, "falloff":'INVERSE_SQUARE', "object_index":0, "edge_index":9, "mesh_select_mode_init":(False, False, True)}, TRANSFORM_OT_edge_slide={"value":0, "single_side":False, "use_even":False, "flipped":False, "use_clamp":True, "mirror":False, "snap":False, "snap_target":'CLOSEST', "snap_point":(0, 0, 0), "snap_align":False, "snap_normal":(0, 0, 0), "correct_uv":True, "release_confirm":False, "use_accurate":False})
+
+
+# Knurl + scale
+# bpy.ops.mesh.inset(thickness=0.229018, depth=0)
+# bpy.ops.transform.resize(value=(1, 1, 2.5948), orient_type='LOCAL', orient_matrix=((1, 0, 0), (0, 1, 0), (0, 0, 1)), orient_matrix_type='LOCAL', constraint_axis=(False, False, True), mirror=True, use_proportional_edit=False, proportional_edit_falloff='SMOOTH', proportional_size=1.27, use_proportional_connected=False, use_proportional_projected=False)
+# bpy.ops.mesh.subdivide(number_cuts=5, quadcorner='INNERVERT')
+# bpy.ops.transform.resize(value=(1, 1, 0.163863), orient_type='GLOBAL', orient_matrix=((1, 0, 0), (0, 1, 0), (0, 0, 1)), orient_matrix_type='GLOBAL', constraint_axis=(False, False, True), mirror=True, use_proportional_edit=False, proportional_edit_falloff='SMOOTH', proportional_size=1, use_proportional_connected=False, use_proportional_projected=False)
+
+
+
+# for obj in (bpy.context.selected_objects):
+# 	if (obj.type == "MESH"):
+		# uniques = context.objects_in_mode_unique_data
+		# bms = {}
+		# verts = []
+		# for obj in uniques:
+		# 	me = obj.data
+		# 	bms[obj] = bmesh.from_edit_mesh(me)
+		# 	for obj in bms:
+		# 		verts.extend([obj.matrix_world @ v.co  for v in bms[obj].verts if v.select]) 
+		# 		print(verts)
+
+
