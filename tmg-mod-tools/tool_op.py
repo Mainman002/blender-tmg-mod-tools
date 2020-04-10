@@ -8,6 +8,12 @@ class TOOL_OT_Knurl_Face_Edit(bpy.types.Operator):
 	bl_context = "mesh_edit"
 	bl_options = {'REGISTER', 'UNDO'}
 
+	check_flatten_edge: bpy.props.BoolProperty(
+	name="Flatten Edge",
+	description="flatten the Knurled edges.",
+	default=False
+	)
+
 	check_inset_individual: bpy.props.BoolProperty(
 	name="Inset Individual",
 	description="Checks if individual faces so be seperate or unified.",
@@ -56,6 +62,50 @@ class TOOL_OT_Knurl_Face_Edit(bpy.types.Operator):
 	unit='LENGTH'
 	)
 
+	point_bevel: bpy.props.FloatProperty(
+	name="Point Bevel",
+	description="Margin between UV islands.",
+	default=0.03,
+	soft_min=-1.0,
+	soft_max=1.0,
+	unit='LENGTH'
+	)
+
+	point_profile: bpy.props.FloatProperty(
+	name="Point Bevel Profile",
+	description="Margin between UV islands.",
+	default=0.03,
+	soft_min=-1.0,
+	soft_max=1.0,
+	unit='LENGTH'
+	)
+
+
+	median_bevel: bpy.props.FloatProperty(
+	name="Median Bevel",
+	description="Margin between UV islands.",
+	default=0.03,
+	soft_min=-1.0,
+	soft_max=1.0,
+	unit='LENGTH'
+	)
+
+	point_segments: bpy.props.IntProperty(
+	name="Point Cuts",
+	description="Subdivision loops.",
+	default=1,
+	min=0,
+	soft_max=20,
+	)
+
+	median_segments: bpy.props.IntProperty(
+	name="Median Cuts",
+	description="Subdivision loops.",
+	default=1,
+	min=0,
+	soft_max=20,
+	)
+
 	cuts: bpy.props.IntProperty(
 	name="Loop Cuts",
 	description="Subdivision loops.",
@@ -80,6 +130,7 @@ class TOOL_OT_Knurl_Face_Edit(bpy.types.Operator):
 	def invoke(self, context, event):
 		self.cuts = 0
 		self.bridge_cuts = 0
+		self.point_segments = 0
 		return self.execute(context)
 
 	def execute(self, context):
@@ -92,6 +143,9 @@ class TOOL_OT_Knurl_Face_Edit(bpy.types.Operator):
 		if self.bridge_cuts > 0:
 			bpy.ops.mesh.bridge_edge_loops(type='CLOSED', use_merge=False, number_cuts=self.bridge_cuts)
 
+		if self.median_bevel > 0:
+			bpy.ops.mesh.bevel(offset=self.median_bevel, offset_pct=0, segments=self.median_segments, vertex_only=True)
+
 		if self.cuts > 0:
 			bpy.ops.mesh.subdivide(number_cuts=self.cuts)
 
@@ -100,18 +154,22 @@ class TOOL_OT_Knurl_Face_Edit(bpy.types.Operator):
 
 		bpy.ops.mesh.poke(offset=self.poke_depth)
 
-		bpy.ops.mesh.select_all(action='INVERT')
+		if self.point_bevel > 0:
+			bpy.ops.mesh.bevel(offset=self.point_bevel, offset_pct=0, segments=self.point_segments, profile=self.point_profile, vertex_only=True, miter_outer='SHARP')
 
-		bpy.ops.mesh.select_mode(use_extend=False, use_expand=False, type='VERT')
-		bpy.ops.mesh.region_to_loop()
-		bpy.ops.mesh.select_interior_faces()
+		if self.check_flatten_edge:
+			bpy.ops.mesh.select_all(action='INVERT')
 
-		bpy.ops.mesh.loop_multi_select(ring=True)
-		bpy.ops.mesh.select_mode(use_extend=False, use_expand=False, type='FACE')
-		bpy.ops.mesh.quads_convert_to_tris(quad_method='SHORTEST_DIAGONAL')
+			bpy.ops.mesh.select_mode(use_extend=False, use_expand=False, type='VERT')
+			bpy.ops.mesh.region_to_loop()
+			bpy.ops.mesh.select_interior_faces()
 
-		# bpy.ops.mesh.select_all(action='INVERT')
-		bpy.ops.mesh.select_all(action='DESELECT')
+			bpy.ops.mesh.loop_multi_select(ring=True)
+			bpy.ops.mesh.select_mode(use_extend=False, use_expand=False, type='FACE')
+			bpy.ops.mesh.quads_convert_to_tris(quad_method='SHORTEST_DIAGONAL')
+
+			# bpy.ops.mesh.select_all(action='INVERT')
+			bpy.ops.mesh.select_all(action='DESELECT')
 
 
 		return {'FINISHED'}
@@ -595,6 +653,168 @@ class TOOL_OT_Wrinkle_Face_Edit(bpy.types.Operator):
 		return {'FINISHED'}
 
 
+class TOOL_OT_Edge_Slide_Edit(bpy.types.Operator):
+	bl_idname = 'wm.tool_ot_edge_slide_edit'
+	bl_label = 'Tool Edge Slide'
+	bl_description = 'Slides, Rotates, and fixes selected edges.'
+	bl_context = "mesh_edit"
+	bl_options = {'REGISTER', 'UNDO'}
+
+	check_edge_rotate: bpy.props.BoolProperty(
+	name="Edge Rotate",
+	description="Connects circle verts to the corner verts.",
+	default=True
+	)
+
+	remove_doubles_threshold: bpy.props.FloatProperty(
+	name="Remove Doubles",
+	description="Distance between verts to merge.",
+	default=0.01,
+	soft_min=0.0,
+	soft_max=1.0,
+	unit='LENGTH'
+	)
+
+	edge_slide: bpy.props.FloatProperty(
+	name="Edge Slide",
+	description="Smoothes subdivision loop cuts.",
+	default=0.0,
+	soft_min=-1.0,
+	soft_max=1.0,
+	unit='LENGTH'
+	)
+
+	# center: bpy.props.FloatVectorProperty(
+	# name="Center",
+	# subtype='XYZ',
+	# default=[0.0, 1.0, 0.0],
+	# unit='LENGTH'
+	# )
+
+	# mirror_axis: bpy.props.EnumProperty(
+	# name="Mirror Axis",
+	# description="Defines the mirror axis",
+	# items=(
+	# 	('X', 'X', 'X',0),
+	# 	('Y', 'Y', 'Y',1),
+	# 	('Z', 'Z', 'Z',2)
+	# 	),
+	# default='X'
+	# )
+
+	@classmethod
+	def poll(cls, context):
+		#print(f"My area is: {context.area.type}")
+		return context.area.type == 'VIEW_3D'
+
+	def invoke(self, context, event):
+		return self.execute(context)
+
+	def execute(self, context):
+
+		for obj in (bpy.context.selected_objects):
+			if (obj.type == "MESH"):
+
+				bpy.ops.transform.edge_slide(value=self.edge_slide, use_even=True, flipped=True, mirror=True, correct_uv=True)
+
+				# bpy.ops.transform.rotate(value=-0.766057, orient_axis=self.mirror_axis, orient_type='VIEW', orient_matrix=((self.center[0],0,0), (0, self.center[1], 0), (0, 0, self.center[2])), orient_matrix_type='GLOBAL', mirror=True, use_proportional_edit=False, proportional_edit_falloff='SMOOTH', proportional_size=1, use_proportional_connected=False, use_proportional_projected=False)
+
+				if self.check_edge_rotate:
+					bpy.ops.mesh.edge_rotate(use_ccw=self.check_edge_rotate)
+
+				# if self.remove_doubles_threshold > 0:
+				# 	bpy.context.scene.tool_settings.use_mesh_automerge = True
+				# 	bpy.context.scene.tool_settings.double_threshold = self.remove_doubles_threshold
+				# 	bpy.context.scene.tool_settings.use_mesh_automerge_and_split = True
+
+				if self.remove_doubles_threshold > 0:
+					bpy.ops.mesh.select_more(use_face_step=False)
+					bpy.ops.mesh.remove_doubles(threshold=self.remove_doubles_threshold)
+
+
+		return {'FINISHED'}
+
+
+class TOOL_OT_Slotted_Grate_Edit(bpy.types.Operator):
+	bl_idname = 'wm.tool_ot_slotted_grate_edit'
+	bl_label = 'Tool Slotted Grate'
+	bl_description = 'Turns selected faces into a slotted grate pattern.'
+	bl_context = "mesh_edit"
+	bl_options = {'REGISTER', 'UNDO'}
+
+	check_vertex_only: bpy.props.BoolProperty(
+	name="Vertex Only",
+	description="Bevel only vertex.",
+	default=True
+	)
+
+	bevel_thickness: bpy.props.FloatProperty(
+	name="Bevel Thickness",
+	description="Adjusts beveled edge thickness.",
+	default=0.0,
+	soft_min=0.0,
+	soft_max=1.0,
+	unit='LENGTH'
+	)
+
+	inset_thickness: bpy.props.FloatProperty(
+	name="Inset Thickness",
+	description="Adjusts inset face thickness.",
+	default=0.0,
+	soft_min=0.0,
+	soft_max=1.0,
+	unit='LENGTH'
+	)
+
+	inset_depth: bpy.props.FloatProperty(
+	name="Inset Depth",
+	description="Adjusts inset face depth.",
+	default=0.0,
+	soft_min=0.0,
+	soft_max=1.0,
+	unit='LENGTH'
+	)
+
+	bridge_twist: bpy.props.IntProperty(
+	name="Edge Twist",
+	description="Twist edge loops.",
+	default=0,
+	min=0,
+	soft_max=60,
+	)
+
+	bridge_cuts: bpy.props.IntProperty(
+	name="Edge Twist",
+	description="Twist edge loops.",
+	default=0,
+	min=0,
+	soft_max=10,
+	)
+
+	@classmethod
+	def poll(cls, context):
+		#print(f"My area is: {context.area.type}")
+		return context.area.type == 'VIEW_3D'
+
+	def invoke(self, context, event):
+		return self.execute(context)
+
+	def execute(self, context):
+
+		for obj in (bpy.context.selected_objects):
+			if (obj.type == "MESH"):
+
+				# if self.bridge_twist > 0:
+				bpy.ops.mesh.bridge_edge_loops(use_merge=False, twist_offset=self.bridge_twist, number_cuts=self.bridge_cuts)
+				# else:
+				# 	bpy.ops.mesh.bridge_edge_loops(use_merge=False, twist_offset=0, number_cuts=self.bridge_cuts)
+				
+				bpy.ops.mesh.bevel(offset=self.bevel_thickness, offset_pct=0, vertex_only=self.check_vertex_only)
+
+				bpy.ops.mesh.inset(thickness=self.inset_thickness, depth=self.inset_depth)
+
+		return {'FINISHED'}
+
 
 # bpy.props.FloatVectorProperty(
 # name="", 
@@ -629,3 +849,13 @@ class TOOL_OT_Wrinkle_Face_Edit(bpy.types.Operator):
 		# 		print(verts)
 
 
+
+
+# bpy.ops.transform.edge_slide(value=-0.385636, use_even=False, flipped=False, mirror=True, correct_uv=True)
+# bpy.ops.mesh.edge_rotate(use_ccw=False)
+# bpy.ops.transform.rotate(value=-0.766057, orient_axis='Z', orient_type='VIEW', orient_matrix=((0.846491, -0.532403, -4.11272e-06), (0.0968547, 0.154001, -0.983312), (-0.523519, -0.832364, -0.181926)), orient_matrix_type='VIEW', mirror=True, use_proportional_edit=False, proportional_edit_falloff='SMOOTH', proportional_size=1, use_proportional_connected=False, use_proportional_projected=False)
+
+
+# bpy.ops.mesh.bridge_edge_loops(use_merge=False, twist_offset=61, number_cuts=3)
+# bpy.ops.mesh.bevel(offset=0.033168, offset_pct=0, vertex_only=False)
+# bpy.ops.mesh.inset(thickness=0, depth=0.0337667)
