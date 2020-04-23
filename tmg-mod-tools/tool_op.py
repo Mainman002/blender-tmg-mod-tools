@@ -16,8 +16,8 @@ class TOOL_OT_Knurl_Face_Edit(bpy.types.Operator):
 
 	check_inset_individual: bpy.props.BoolProperty(
 	name="Inset Individual",
-	description="Checks if individual faces so be seperate or unified.",
-	default=True
+	description="Checks if individual faces are seperate or unified.",
+	default=False
 	)
 
 	check_vert_bevel: bpy.props.BoolProperty(
@@ -34,7 +34,7 @@ class TOOL_OT_Knurl_Face_Edit(bpy.types.Operator):
 
 	inset_edge_thickness: bpy.props.FloatProperty(
 	name="Inset Edge Thickness",
-	description="Margin between outside edges.",
+	description="Adjust outer Inset Thickness.",
 	default=0.08,
 	soft_min=0.0,
 	soft_max=1.0,
@@ -43,7 +43,7 @@ class TOOL_OT_Knurl_Face_Edit(bpy.types.Operator):
 
 	inset_center_thickness: bpy.props.FloatProperty(
 	name="Inset Center Thickness",
-	description="Margin between outside edges.",
+	description="Adjust inside Inset Thickness.",
 	default=0.08,
 	soft_min=0.0,
 	soft_max=1.0,
@@ -52,7 +52,7 @@ class TOOL_OT_Knurl_Face_Edit(bpy.types.Operator):
 
 	inset_depth: bpy.props.FloatProperty(
 	name="Inset Depth",
-	description="Margin between outside edges.",
+	description="Adjust inside Inset Depth.",
 	default=0.0,
 	soft_min=-1.0,
 	soft_max=1.0,
@@ -60,8 +60,8 @@ class TOOL_OT_Knurl_Face_Edit(bpy.types.Operator):
 	)
 
 	poke_depth: bpy.props.FloatProperty(
-	name="Poke Depth",
-	description="Margin between UV islands.",
+	name="Vert Depth",
+	description="Adjust Vert depth.",
 	default=0.2,
 	soft_min=-1.0,
 	soft_max=1.0,
@@ -69,17 +69,17 @@ class TOOL_OT_Knurl_Face_Edit(bpy.types.Operator):
 	)
 
 	point_bevel: bpy.props.FloatProperty(
-	name="Point Bevel",
-	description="Margin between UV islands.",
-	default=-0.77,
-	soft_min=-1.0,
+	name="Vert Bevel",
+	description="Bevel verts.",
+	default=0.0,
+	soft_min=0.0,
 	soft_max=1.0,
 	unit='LENGTH'
 	)
 
 	point_profile: bpy.props.FloatProperty(
-	name="Point Bevel Profile",
-	description="Margin between UV islands.",
+	name="Vert Bevel Profile",
+	description="Bevel Verts profile curve.",
 	default=0.0,
 	soft_min=-1.0,
 	soft_max=1.0,
@@ -88,33 +88,33 @@ class TOOL_OT_Knurl_Face_Edit(bpy.types.Operator):
 
 
 	median_bevel: bpy.props.FloatProperty(
-	name="Median Bevel",
-	description="Margin between UV islands.",
+	name="Edge Bevel",
+	description="Bevel intersecting edges.",
 	default=0.0,
-	soft_min=-1.0,
+	soft_min=0.0,
 	soft_max=1.0,
 	unit='LENGTH'
 	)
 
 	point_segments: bpy.props.IntProperty(
-	name="Point Cuts",
-	description="Subdivision loops.",
+	name="Vert Subdivisions",
+	description="Subdivision Vert loops.",
 	default=2,
 	min=0,
 	soft_max=20,
 	)
 
 	median_segments: bpy.props.IntProperty(
-	name="Median Cuts",
-	description="Subdivision loops.",
+	name="Edge Subdivisions",
+	description="Subdivision Edge loops.",
 	default=3,
 	min=0,
 	soft_max=20,
 	)
 
 	cuts: bpy.props.IntProperty(
-	name="Loop Cuts",
-	description="Subdivision loops.",
+	name="Face Subdivisions",
+	description="Subdivision Face loops.",
 	default=3,
 	min=0,
 	soft_max=20,
