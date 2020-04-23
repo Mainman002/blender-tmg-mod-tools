@@ -85,7 +85,7 @@ class ADD_OT_Solid_Plane_Object(bpy.types.Operator):
 	)
 
 	subdivision_level: bpy.props.IntProperty(
-	name="Subdivision Level",
+	name="Subdivisions",
 	description="Subdivision level.",
 	default=0,
 	min=0,
@@ -272,7 +272,7 @@ class ADD_OT_Solid_Circle_Object(bpy.types.Operator):
 	)
 
 	subdivision_level: bpy.props.IntProperty(
-	name="Subdivision Level",
+	name="Subdivisions",
 	description="Subdivision level.",
 	default=0,
 	min=0,
@@ -1043,7 +1043,7 @@ class ADD_OT_SubDCube(bpy.types.Operator):
 	)
 
 	cuts: bpy.props.IntProperty(
-	name="Loop Cuts",
+	name="Subdivisions",
 	description="Subdivision loops.",
 	default=1,
 	min=0,
@@ -1166,7 +1166,7 @@ class ADD_OT_SubDCylinder(bpy.types.Operator):
 	)
 
 	vert_cuts: bpy.props.IntProperty(
-	name="Vert Count",
+	name="Vert Subdivisions",
 	description="Vertex amount.",
 	default=8,
 	min=0,
@@ -1174,7 +1174,7 @@ class ADD_OT_SubDCylinder(bpy.types.Operator):
 	)
 
 	cuts: bpy.props.IntProperty(
-	name="Loop Cuts",
+	name="Face Subdivisions",
 	description="Subdivision loops.",
 	default=1,
 	min=0,

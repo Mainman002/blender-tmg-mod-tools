@@ -303,7 +303,7 @@ class TOOL_OT_Bevel_Edge_Edit(bpy.types.Operator):
 	)
 
 	cuts: bpy.props.IntProperty(
-	name="Loop Cuts",
+	name="Subdivisions",
 	description="Subdivision loops.",
 	default=1,
 	min=0,
@@ -459,7 +459,7 @@ class TOOL_OT_Mesh_Face_To_Circle_Edit(bpy.types.Operator):
 	)
 
 	cuts: bpy.props.IntProperty(
-	name="Loop Cuts",
+	name="Subdivisions",
 	description="Subdivision loops.",
 	default=3,
 	min=1,
@@ -523,20 +523,20 @@ class TOOL_OT_Wrinkle_Face_Edit(bpy.types.Operator):
 	default=False
 	)
 
-	cuts: bpy.props.IntProperty(
-	name="Loop Cuts",
-	description="Subdivision loops.",
-	default=1,
-	min=0,
-	soft_max=20,
-	)
-
 	smoothing: bpy.props.IntProperty(
 	name="Smooth Verts",
 	description="Smooth vertex.",
 	default=3,
 	min=0,
 	soft_max=10,
+	)
+
+	cuts: bpy.props.IntProperty(
+	name="Subdivisions",
+	description="Subdivision loops.",
+	default=1,
+	min=0,
+	soft_max=20,
 	)
 
 	subdivide_smoothness: bpy.props.FloatProperty(
