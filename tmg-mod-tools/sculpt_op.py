@@ -330,7 +330,7 @@ class Sculpt_Shape_Keys_Panel(bpy.types.Panel):
 			# props = self.layout.separator()
 				# props = self.layout.label(text='TMG Objects')
 			props = colm.operator('mesh.sculpt_ot_shape_key_set',
-										text = 'Merge Down',
+										text = 'Merge Visible',
 										icon = 'SHAPEKEY_DATA')
 			props.mode = 3
 
