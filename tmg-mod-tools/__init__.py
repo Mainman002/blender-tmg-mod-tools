@@ -16,8 +16,6 @@ from bpy.props import FloatVectorProperty
 from bpy_extras.object_utils import AddObjectHelper, object_data_add
 from mathutils import Vector
 from bpy.props import *
-# from bpy.types import Menu, Panel, UIList
-# from rna_prop_ui import PropertyPanel
 
 
 from . ui_op import *
@@ -920,15 +918,6 @@ def mesh_add_menu_draw(self, context):
 	props.cuts = 3
 	props.smoothness = 0
 
-	props = self.layout.operator('mesh.add_ot_hollow_cube',
-		text = 'Add Hollow Cube',
-		icon = 'MESH_CUBE')
-	# props.size = 0.5
-	# props.depth = 1
-	# props.vert_cuts = 8
-	# props.cuts = 0
-	# props.smoothness = 0
-
 	props = self.layout.operator('mesh.add_ot_subd_cylinder',
 		text = 'Add Subdivided Cylinder',
 		icon = 'MESH_CYLINDER')
@@ -937,7 +926,6 @@ def mesh_add_menu_draw(self, context):
 	props.vert_cuts = 8
 	props.cuts = 0
 	props.smoothness = 0
-
 
 
 
@@ -995,12 +983,12 @@ classes = (
 	ADD_OT_Spline_Follow_Y,
 	ADD_OT_SubDCube,
 	ADD_OT_SubDCylinder,
-	ADD_OT_HollowCube,
 
 	## Sculpt Operators
 	Sculpt_Brush_Panel,
 	Sculpt_Referance_Panel,
-	Sculpt_shape_keys_panel,
+	Sculpt_Shape_Keys_Panel,
+	Sculpt_OT_Shape_Key_Set,
 )
 
 
