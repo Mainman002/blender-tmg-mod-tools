@@ -142,48 +142,59 @@ class Sculpt_Shape_Keys_Panel(bpy.types.Panel):
 
 	def draw(self, context):
 		layout = self.layout
+		row = layout.row(align=True)
 
 		ob = context.object
 		key = ob.data.shape_keys
 		kb = ob.active_shape_key
 
-		props = self.layout.separator()
+		col = row.column(align=True)
+
+		props = col.separator()
 			# props = self.layout.label(text='TMG Objects')
-		props = self.layout.operator('mesh.sculpt_ot_shape_key_set',
+		props = col.operator('mesh.sculpt_ot_shape_key_set',
 									text = 'Add Layer',
-									icon = 'MESH_CUBE')
+									icon = 'ADD')
 		props.mode = 0
+
+		# props = col.separator()
 
 		if bpy.context.active_object.active_shape_key_index > 0:
 
-			props = self.layout.separator()
-				# props = self.layout.label(text='TMG Objects')
-			props = self.layout.operator('mesh.sculpt_ot_shape_key_set',
-										text = 'Selected Layer',
-										icon = 'MESH_CUBE')
-			props.mode = 1
+			colb = col.box()
+			row = colb.row(align=True)
+			colm = row.column(align=True)
 
-			props = self.layout.separator()
-				# props = self.layout.label(text='TMG Objects')
-			props = self.layout.operator('mesh.sculpt_ot_shape_key_set',
-										text = 'All Timeline Frame',
-										icon = 'MESH_CUBE')
-			props.mode = 2
+			props = colm.separator()
 
-			props = self.layout.separator()
+			# props = self.layout.separator()
 				# props = self.layout.label(text='TMG Objects')
-			props = self.layout.operator('mesh.sculpt_ot_shape_key_set',
-										text = 'Apply All Layers',
-										icon = 'MESH_CUBE')
-			props.mode = 3
-
-			props = self.layout.separator()
-				# props = self.layout.label(text='TMG Objects')
-			props = self.layout.operator('mesh.sculpt_ot_shape_key_set',
-										text = 'Solo Layer Toggle',
-										icon = 'MESH_CUBE')
+			props = colm.operator('mesh.sculpt_ot_shape_key_set',
+										text = 'Hide Other Layers',
+										icon = 'RESTRICT_RENDER_OFF')
 			props.mode = 4
 			props.check_layer_mute = True
+
+			# props = self.layout.separator()
+				# props = self.layout.label(text='TMG Objects')
+			props = colm.operator('mesh.sculpt_ot_shape_key_set',
+										text = 'Active Layer',
+										icon = 'KEY_HLT')
+			props.mode = 1
+
+			# props = self.layout.separator()
+				# props = self.layout.label(text='TMG Objects')
+			props = colm.operator('mesh.sculpt_ot_shape_key_set',
+										text = 'All Layers',
+										icon = 'KEYINGSET')
+			props.mode = 2
+
+			# props = self.layout.separator()
+				# props = self.layout.label(text='TMG Objects')
+			props = colm.operator('mesh.sculpt_ot_shape_key_set',
+										text = 'Merge Down',
+										icon = 'SHAPEKEY_DATA')
+			props.mode = 3
 
 		enable_edit = ob.mode != 'EDIT'
 		enable_edit_value = False
@@ -262,7 +273,6 @@ class Sculpt_Shape_Keys_Panel(bpy.types.Panel):
 
 
 
-
 class Sculpt_OT_Shape_Key_Set(bpy.types.Operator):
 	"""Sculpt Shape Key Set"""
 	bl_idname = 'mesh.sculpt_ot_shape_key_set'
@@ -276,24 +286,6 @@ class Sculpt_OT_Shape_Key_Set(bpy.types.Operator):
 	default=False
 	)
 
-	# size: bpy.props.FloatProperty(
-	# name="Scale",
-	# description="Cylinder scale.",
-	# default=1,
-	# min=0.01,
-	# soft_max=10.0,
-	# unit='LENGTH',
-	# )
-
-	# depth: bpy.props.FloatProperty(
-	# name="Depth",
-	# description="Cylinder depth.",
-	# default=1,
-	# min=0.01,
-	# soft_max=10.0,
-	# unit='LENGTH',
-	# )
-
 	mode: bpy.props.IntProperty(
 	name="Mode",
 	description="Adjust what mode to use when adding shape keys.",
@@ -302,94 +294,78 @@ class Sculpt_OT_Shape_Key_Set(bpy.types.Operator):
 	soft_max=4,
 	)
 
-	# cuts: bpy.props.IntProperty(
-	# name="Face Subdivisions",
-	# description="Subdivision loops.",
-	# default=1,
-	# min=0,
-	# soft_max=10,
-	# )
-
-	# smoothness: bpy.props.FloatProperty(
-	# name="To Sphere",
-	# description="Smoothes subdivision loop cuts.",
-	# default=0.0,
-	# soft_min=0.0,
-	# soft_max=1.0,
-	# unit='LENGTH',
-	# # step=.5,
-	# )
-
 	@classmethod
 	def poll(cls, context):
 		#print(f"My area is: {context.area.type}")
 		return context.area.type == 'VIEW_3D'
 
-	def invoke(self, context, event):
-		# self.size = 0.5
-		# self.depth = 1
-		# self.vert_cuts = 8
-		# self.cuts = 0
-		# self.smoothness = 0
-		return self.execute(context)
+	# def invoke(self, context, event):
+	# 	return self.execute(context)
 
 	def execute(self, context):
 
 		mode = 0
-		ob = bpy.context.active_object
 		keys = 0
+		ob = bpy.context.active_object
 
-		if self.check_layer_mute == False:
+		## Create shape layers
+		if self.mode == 0: 
+			bpy.ops.object.shape_key_add(from_mix=False)
+		current_frame = bpy.context.active_object.active_shape_key_index
+		keys = ob.data.shape_keys.key_blocks.keys()
 
-			## Create shape layers
-			if self.mode == 0: 
-				bpy.ops.object.shape_key_add(from_mix=False)
-			current_frame = bpy.context.active_object.active_shape_key_index
-			keys = ob.data.shape_keys.key_blocks.keys()
+		if self.mode == 0: 
+			for shape in ob.data.shape_keys.key_blocks:
+				if (current_frame==0):
+					shape.name = 'Base Shape'
+					shape.keyframe_insert("value",frame=0)
+				elif (shape.name==ob.active_shape_key.name):
+					shape.name = "Layer " + str(current_frame)
+					shape.value=1.0
+					shape.keyframe_insert("value",frame=ob.active_shape_key_index)
+					bpy.data.scenes['Scene'].frame_current = ob.active_shape_key_index
 
-			if self.mode == 0: 
-				for shape in ob.data.shape_keys.key_blocks:
-					if (current_frame==0):
-						shape.name = 'Base Shape'
-						shape.keyframe_insert("value",frame=0)
-					elif (shape.name==ob.active_shape_key.name):
-						shape.name = "Layer " + str(current_frame)
-						shape.value=1.0
-						shape.keyframe_insert("value",frame=ob.active_shape_key_index)
-						bpy.data.scenes['Scene'].frame_current = ob.active_shape_key_index
-			
-			## Set active shape layer value 
-			elif self.mode == 1:
-				for shape in ob.data.shape_keys.key_blocks:
-					if (shape.name==ob.active_shape_key.name):
-						shape.keyframe_insert("value",frame=bpy.data.scenes['Scene'].frame_current)
-						bpy.data.scenes['Scene'].frame_current = bpy.data.scenes['Scene'].frame_current
-
-			## Set all shape layer's value on current frame
-			elif self.mode == 2:
-				for shape in ob.data.shape_keys.key_blocks:
+			return {'FINISHED'}
+		
+		## Set active shape layer value 
+		elif self.mode == 1:
+			for shape in ob.data.shape_keys.key_blocks:
+				if (shape.name==ob.active_shape_key.name):
 					shape.keyframe_insert("value",frame=bpy.data.scenes['Scene'].frame_current)
 					bpy.data.scenes['Scene'].frame_current = bpy.data.scenes['Scene'].frame_current
 
-			## Apply all layers to shape
-			elif self.mode == 3:
-				for shape in ob.data.shape_keys.key_blocks:
-					shape.keyframe_insert("value",frame=bpy.data.scenes['Scene'].frame_current)
-					bpy.data.scenes['Scene'].frame_current = bpy.data.scenes['Scene'].frame_current
+			return {'FINISHED'}
 
-				bpy.ops.object.shape_key_add(from_mix=True)
+		## Set all shape layer's value on current frame
+		elif self.mode == 2:
+			for shape in ob.data.shape_keys.key_blocks:
+				shape.keyframe_insert("value",frame=bpy.data.scenes['Scene'].frame_current)
+				bpy.data.scenes['Scene'].frame_current = bpy.data.scenes['Scene'].frame_current
+
+			return {'FINISHED'}
+
+		## Apply all layers to shape
+		elif self.mode == 3:
+			for shape in ob.data.shape_keys.key_blocks:
+				shape.keyframe_insert("value",frame=bpy.data.scenes['Scene'].frame_current)
+				bpy.data.scenes['Scene'].frame_current = bpy.data.scenes['Scene'].frame_current
+
+			bpy.ops.object.shape_key_add(from_mix=True)
+
+			return {'FINISHED'}
 		
 		## Mute all other layers
-		else:
+		elif self.mode == 4:
 			current_frame = bpy.context.active_object.active_shape_key_index
 			keys = ob.data.shape_keys.key_blocks.keys()
 			for shape in ob.data.shape_keys.key_blocks:
-				if (shape.name is not ob.active_shape_key.name):
+				if shape.name == ob.active_shape_key.name:
+					print('found: ' + shape.name)
+				else:
+					print('other: ' + shape.name)
 					shape.mute = self.check_layer_mute
-				elif (shape.name==ob.active_shape_key.name):
-					shape.key_blocks[ob.active_shape_key.name].mute = False
 
-		return {'FINISHED'}
+			return {'FINISHED'}
 
 
 
