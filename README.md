@@ -9,6 +9,9 @@
 
 ### youtube video showing what it can do -> 
 
+### TMG-Mod-Tools v0.2.3-Alpha Features
+https://youtu.be/-rwkOdRscCM
+
 ### TMG-Mod-Tools v0.1.9-Alpha-1 Demo
 https://youtu.be/xaKq91LFCfI
 
