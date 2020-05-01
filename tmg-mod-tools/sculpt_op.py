@@ -125,6 +125,144 @@ def sculpt_referanceSize_changed(self, context):
 
 # obj.empty_display_size = 14.92
 
+
+
+
+class Sculpt_Brush_Panel(bpy.types.Panel):
+	bl_idname = 'SCULPT_PT_sculpt_brush_panel'
+	bl_category = 'Edit'
+	bl_label = 'TMG Sculpt Brush Panel'
+	bl_context = "sculpt_mode"
+	bl_space_type = 'VIEW_3D'
+	bl_region_type = 'UI'
+
+	def draw(self, context):
+
+		scene = context.scene
+
+		obj = context.object
+		
+		sculpt_spacingDistance = context.scene.sculpt_spacingDistance
+
+		layout = self.layout
+
+		layout.use_property_split = True
+		layout.use_property_decorate = False  # No animation.
+
+		#layout = self.layout
+		#col = layout.column()
+		#col.prop(context.active_object, "MyInt")
+
+		#### Master Panel Layout Controllers ###############################
+
+		Master_Col = layout.column(align=True)
+		Master_Subcol = Master_Col.column()
+
+		#### View Tab Panel Layout Controllers #########################
+
+		Sculpt_Col = Master_Col.column(align=True)
+		Sculpt_Subcol = Sculpt_Col.column()
+		Sculpt_Row = Sculpt_Col.row()
+
+		#### View Tab  ############################################################################################################
+
+		#if check_view == False:
+			#View_Col.prop(scene, "check_view", text="View", icon="RIGHTARROW")
+		#else:
+			#View_Col.prop(scene, "check_view", text="View", icon="DOWNARROW_HLT")
+
+		Sculpt_Col = Master_Col.column() ###### Box if needed for View Panel #############
+		Sculpt_Subcol = Sculpt_Col.column(align=True)
+
+		Sculpt_Col.use_property_split = True
+		Sculpt_Flow = Sculpt_Col.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
+
+		#if obj is not None:
+			#if obj.type == 'FONT':
+		colm = Sculpt_Flow.box()
+
+		Sculpt_Flow = colm.row()
+		Sculpt_Flow.label(text="Sculpt Distance")
+
+		Sculpt_Flow = colm.row()
+		Sculpt_Flow.prop(scene, "sculpt_spacingDistance", text='')
+
+		# Sculpt_Flow = colm.row()
+		# Sculpt_Flow.label(text="Use Face Sets")
+
+		# Sculpt_Flow = colm.row()
+		# Sculpt_Flow.prop(scene, "sculpt_faceSets", text='')
+
+
+class Sculpt_Referance_Panel(bpy.types.Panel):
+	bl_idname = 'SCULPT_PT_sculpt_referance_panel'
+	bl_category = 'Edit'
+	bl_label = 'TMG Sculpt Referance Panel'
+	bl_context = "sculpt_mode"
+	bl_space_type = 'VIEW_3D'
+	bl_region_type = 'UI'
+
+	def draw(self, context):
+
+		scene = context.scene
+
+		obj = context.object
+		
+		sculpt_spacingDistance = context.scene.sculpt_spacingDistance
+
+		layout = self.layout
+
+		layout.use_property_split = True
+		layout.use_property_decorate = False  # No animation.
+
+		#layout = self.layout
+		#col = layout.column()
+		#col.prop(context.active_object, "MyInt")
+
+		#### Master Panel Layout Controllers ###############################
+
+		Master_Col = layout.column(align=True)
+		Master_Subcol = Master_Col.column()
+
+		#### View Tab Panel Layout Controllers #########################
+
+		Sculpt_Col = Master_Col.column(align=True)
+		Sculpt_Subcol = Sculpt_Col.column()
+		Sculpt_Row = Sculpt_Col.row()
+
+		#### View Tab  ############################################################################################################
+
+		#if check_view == False:
+			#View_Col.prop(scene, "check_view", text="View", icon="RIGHTARROW")
+		#else:
+			#View_Col.prop(scene, "check_view", text="View", icon="DOWNARROW_HLT")
+
+		Sculpt_Col = Master_Col.column() ###### Box if needed for View Panel #############
+		Sculpt_Subcol = Sculpt_Col.column(align=True)
+
+		Sculpt_Col.use_property_split = True
+		Sculpt_Flow = Sculpt_Col.grid_flow(row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
+
+		colb = Sculpt_Flow.box()
+		row = colb.row(align=True)
+		colm = row.row(align=True)
+
+		Sculpt_Flow = colm.column(align=True)
+		Sculpt_Flow.alignment = 'RIGHT'
+		Sculpt_Flow.label(text="Referance Transparency")
+		Sculpt_Flow.label(text="Referance Position X")
+		Sculpt_Flow.label(text="Referance Position Y")
+		Sculpt_Flow.label(text="Referance Size")
+
+		Sculpt_Flow = colm.column(align=True)
+		Sculpt_Flow.prop(scene, "sculpt_referanceTransparency", text='')
+		Sculpt_Flow.prop(scene, "sculpt_referancePositionX", text='')
+		Sculpt_Flow.prop(scene, "sculpt_referancePositionY", text='')
+		Sculpt_Flow.prop(scene, "sculpt_referanceSize", text='')
+
+
+
+
 class Sculpt_Shape_Keys_Panel(bpy.types.Panel):
 	bl_idname = 'SCULPT_PT_shape_keys_panel'
 	bl_category = 'Edit'
