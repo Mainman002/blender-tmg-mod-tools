@@ -558,6 +558,10 @@ bpy.types.Scene.textName = bpy.props.StringProperty(name = "Text Name", default 
 bpy.types.Scene.textText = bpy.props.StringProperty(name = "Text Text", default = "Blank", update=textText_changed)
 
 
+##### Sculpt Update #########
+# bpy.types.Scene.sculpt_single_shape_layer = bpy.props.BoolProperty(name = "sculpt single shape layer", default = False, update=sculpt_single_shape_layer_changed)
+
+
 ##### Object View Mode ##########
 bpy.types.Scene.viewMode = bpy.props.EnumProperty(
 	name="View Mode",
@@ -616,6 +620,12 @@ bpy.types.Scene.sculpt_referanceSize = FloatProperty(name="Referance Size",
 				min=0.0,
 				update=sculpt_referanceSize_changed,
 				description="Set referance image size.")
+
+#### Sculpt Show Selected Shape Layer #########################
+bpy.types.Scene.sculpt_single_shape_layer = BoolProperty(name="Only show selected shape layer.",
+				default=False,
+				update=sculpt_single_shape_layer_changed,
+				description="Only show selected shape layer.")
 
 ##### Text VAlign ########## ( TOP_BASELINE TOP CENTER BOTTOM BOTTOM_BASELINE )
 bpy.types.Scene.text_vAlign = bpy.props.EnumProperty(
@@ -774,6 +784,7 @@ bpy.types.Scene.ui_viewMode = BoolProperty(name="Set view mode",
 bpy.types.Scene.ui_wireMode = BoolProperty(name="Set wireframe view mode",
 				default=False,
 				description="Set wireframe view / normal view mode")
+
 
 #### Dropdown Buttons #########################
 
@@ -989,6 +1000,7 @@ classes = (
 	Sculpt_Referance_Panel,
 	Sculpt_Shape_Keys_Panel,
 	Sculpt_OT_Shape_Key_Set,
+	Sculpt_OT_Shape_Key_Hide_Others,
 )
 
 

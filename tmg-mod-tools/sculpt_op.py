@@ -1,6 +1,5 @@
 import bpy
 
-
 ##################### Update Sculpt View Distance #############################
 def sculpt_spacingDistance_changed(self, context):
 	sculpt_spacingDistance = context.scene.sculpt_spacingDistance
@@ -125,6 +124,23 @@ def sculpt_referanceSize_changed(self, context):
 
 # obj.empty_display_size = 14.92
 
+
+
+##################### Update Sculpt Hide Other Shape Layers #############################
+def sculpt_single_shape_layer_changed(self, context):
+	sculpt_single_shape_layer = context.scene.sculpt_single_shape_layer
+
+	ob = bpy.context.active_object
+
+	current_frame = bpy.context.active_object.active_shape_key_index
+	keys = ob.data.shape_keys.key_blocks.keys()
+	for shape in ob.data.shape_keys.key_blocks:
+		if shape.name == ob.active_shape_key.name or shape.name == 'Base Shape':
+			print('found: ' + shape.name)
+			shape.mute = False
+		else:
+			print('other: ' + shape.name)
+			shape.mute = sculpt_single_shape_layer
 
 
 
@@ -279,6 +295,10 @@ class Sculpt_Shape_Keys_Panel(bpy.types.Panel):
 		return (obj and obj.type in {'MESH', 'LATTICE', 'CURVE', 'SURFACE'} and (engine in cls.COMPAT_ENGINES))
 
 	def draw(self, context):
+
+		scene = context.scene
+		sculpt_single_shape_layer = context.scene.sculpt_single_shape_layer
+
 		layout = self.layout
 		row = layout.row(align=True)
 
@@ -307,11 +327,20 @@ class Sculpt_Shape_Keys_Panel(bpy.types.Panel):
 
 			# props = self.layout.separator()
 				# props = self.layout.label(text='TMG Objects')
-			props = colm.operator('mesh.sculpt_ot_shape_key_set',
-										text = 'Hide Other Layers',
+			# if sculpt_single_shape_layer == True:
+			props = colm.row(align=True)
+			# props = colm.operator('mesh.sculpt_ot_shape_key_hide_others',
+			# 							text = 'Show Other Layers',
+			# 							icon = 'RESTRICT_RENDER_OFF')
+			# else:
+			props = colm.operator('mesh.sculpt_ot_shape_key_hide_others',
+										text = 'Toggle Other Layers',
 										icon = 'RESTRICT_RENDER_OFF')
-			props.mode = 4
-			props.check_layer_mute = True
+
+			props = colm.row(align=True)
+
+			# props.mode = 4
+			# props.check_layer_mute = True
 
 			# props = self.layout.separator()
 				# props = self.layout.label(text='TMG Objects')
@@ -432,13 +461,24 @@ class Sculpt_OT_Shape_Key_Set(bpy.types.Operator):
 	soft_max=4,
 	)
 
+	# lastIndex: bpy.props.IntProperty(
+	# name="lastIndex",
+	# description="Adjust what mode to use when adding shape keys.",
+	# default=0,
+	# min=0,
+	# )
+
 	@classmethod
 	def poll(cls, context):
 		#print(f"My area is: {context.area.type}")
+		# if self.lastIndex != bpy.context.active_object.active_shape_key_index:
+		# 	print(str(bpy.context.active_object.active_shape_key_index))
+		# 	self.lastIndex = bpy.context.active_object.active_shape_key_index
 		return context.area.type == 'VIEW_3D'
 
-	# def invoke(self, context, event):
-	# 	return self.execute(context)
+	def invoke(self, context, event):
+		# lastIndex = 0
+		return self.execute(context)
 
 	def execute(self, context):
 
@@ -493,20 +533,63 @@ class Sculpt_OT_Shape_Key_Set(bpy.types.Operator):
 			return {'FINISHED'}
 		
 		## Mute all other layers
-		elif self.mode == 4:
-			current_frame = bpy.context.active_object.active_shape_key_index
-			keys = ob.data.shape_keys.key_blocks.keys()
-			for shape in ob.data.shape_keys.key_blocks:
-				if shape.name == ob.active_shape_key.name:
-					print('found: ' + shape.name)
-				else:
-					print('other: ' + shape.name)
-					shape.mute = self.check_layer_mute
+		# elif self.mode == 4:
+		# 	current_frame = bpy.context.active_object.active_shape_key_index
+		# 	keys = ob.data.shape_keys.key_blocks.keys()
+		# 	for shape in ob.data.shape_keys.key_blocks:
+		# 		if shape.name == ob.active_shape_key.name:
+		# 			print('found: ' + shape.name)
+		# 		else:
+		# 			print('other: ' + shape.name)
+		# 			shape.mute = self.check_layer_mute
+		# 	return {'FINISHED'}
+		
+		return {'FINISHED'}
 
-			return {'FINISHED'}
 
 
+class Sculpt_OT_Shape_Key_Hide_Others(bpy.types.Operator):
+	"""Sculpt Shape Key Hide Other Shape Layers"""
+	bl_idname = 'mesh.sculpt_ot_shape_key_hide_others'
+	bl_label = 'View Single Shape Layer'
+	bl_description = 'Only view selected shape layer.'
+	bl_options = {'REGISTER'}
 
+	# check_layer_mute: bpy.props.BoolProperty(
+	# name="Solo Layer",
+	# description="Hides all other shape layers.",
+	# default=False
+	# )
+
+	@classmethod
+	def poll(cls, context):
+		#print(f"My area is: {context.area.type}")
+		# sculpt_single_shape_layer = context.scene.sculpt_single_shape_layer
+		return context.area.type == 'VIEW_3D'
+
+	def execute(self, context):
+
+		ob = bpy.context.active_object
+		sculpt_single_shape_layer = context.scene.sculpt_single_shape_layer
+
+		if context.scene.sculpt_single_shape_layer == True:
+			sculpt_single_shape_layer = False
+			context.scene.sculpt_single_shape_layer = False
+		else:
+			sculpt_single_shape_layer = True
+			context.scene.sculpt_single_shape_layer = True
+
+		# current_frame = bpy.context.active_object.active_shape_key_index
+		# keys = ob.data.shape_keys.key_blocks.keys()
+		# for shape in ob.data.shape_keys.key_blocks:
+		# 	if shape.name == ob.active_shape_key.name:
+		# 		print('found: ' + shape.name)
+		# 		shape.mute = False
+		# 	else:
+		# 		print('other: ' + shape.name)
+		# 		shape.mute = sculpt_single_shape_layer
+			
+		return {'FINISHED'}
 
 
 
