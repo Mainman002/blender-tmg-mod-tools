@@ -1001,6 +1001,7 @@ classes = (
 	Sculpt_Shape_Keys_Panel,
 	Sculpt_OT_Shape_Key_Set,
 	Sculpt_OT_Shape_Key_Hide_Others,
+	Sculpt_OT_Apply_Shape_Keys,
 )
 
 
