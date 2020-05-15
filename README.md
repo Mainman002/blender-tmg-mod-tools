@@ -1,7 +1,7 @@
 # tmg-mod-tools (blender 2.8x addon) 
 #### Modify multiple objects, sculpt tools, and various features to help use Blender.
 
-#### current version is supported for Blender 2.80 (stable)
+#### current version is supported for Blender 2.83
 
 ### Alpha Release zip here -> 
 
