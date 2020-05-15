@@ -1,4 +1,4 @@
-# (blender 2.8x addon) tmg-mod-tools
+# tmg-mod-tools (blender 2.8x addon) 
 #### Adding various mesh decimation, add object, and modifier tools to the Edit Panel.
 
 #### current version is supported for Blender 2.80 (stable)
