@@ -10,6 +10,8 @@ bl_info = {
 }
 
 import bpy
+from bpy.types import Operator, AddonPreferences
+from bpy.props import StringProperty, IntProperty, BoolProperty
 from bpy.types import PropertyGroup
 from bpy.types import Operator
 from bpy.props import FloatVectorProperty
@@ -18,6 +20,7 @@ from mathutils import Vector
 from bpy.props import *
 
 
+from . userprefs import *
 from . ui_op import *
 from . dec_op import *
 from . mod_op import * 
@@ -28,6 +31,7 @@ from . sculpt_op import *
 from . mat_op import * 
 from . uv_op import * 
 from . dec_panel import * 
+# from . test_panel import * 
 
 
 ##################### Update Defs Start #############################
@@ -560,6 +564,39 @@ bpy.types.Scene.textText = bpy.props.StringProperty(name = "Text Text", default 
 
 ##### Sculpt Update #########
 # bpy.types.Scene.sculpt_single_shape_layer = bpy.props.BoolProperty(name = "sculpt single shape layer", default = False, update=sculpt_single_shape_layer_changed)
+# bpy.types.Scene.sculpt_shape_keys_icon_view = bpy.props.BoolProperty(name = "sculpt panel icon view", default = False, update=Update_TMG_User_Preferences_changed)
+
+
+# def Update_TMG_User_Preferences_changed(self, context):
+# 	# ob = context.scene
+# 	button_mode = bpy.types.Scene.sculpt_shape_keys_icon_view
+# 	if button_mode == True:
+# 		button_mode = False
+# 	else:
+# 		button_mode = True
+	
+# 	bpy.types.Scene.sculpt_shape_keys_icon_view = button_mode
+# 	print(bpy.types.Scene.sculpt_shape_keys_icon_view)
+
+def myBool_changed(self, context):
+	if context.active_object is not None:
+		ob = context.scene
+		if ob is not None:
+			if ob.myBool:
+				ob.data.body = "On"
+			else:
+				ob.data.body = "Off"
+
+def objectName_changed(self, context):
+	object_name = context.scene.objectName
+
+	obj = bpy.context.active_object
+
+	for nr, obj in enumerate(bpy.context.selected_objects):
+
+		if obj.type is not 'TEXT':
+			obj.name = object_name
+			obj.data.name = object_name
 
 
 ##### Object View Mode ##########
@@ -576,6 +613,12 @@ bpy.types.Scene.viewMode = bpy.props.EnumProperty(
 	)
 
 
+#### Sculpt Shape Keys Panel Mode Switch #########################
+bpy.types.Scene.sculpt_shape_keys_icon_view = BoolProperty(name="Icon View",
+				default=False,
+				# update=Update_TMG_User_Preferences,
+				description="Switches the shape key panel from labeled buttons, to icons.")
+
 ##### Sculpt Space Distance ##########
 bpy.types.Scene.sculpt_spacingDistance = bpy.props.EnumProperty(
 	name="Spacing Distance",
@@ -587,6 +630,11 @@ bpy.types.Scene.sculpt_spacingDistance = bpy.props.EnumProperty(
 	default='VIEW', 
 	update=sculpt_spacingDistance_changed
 	)
+
+#### Sculpt Keframe Timeline #################################
+bpy.types.Scene.keyframe_timeline = BoolProperty(name="Keframe timeline",
+				default=False,
+				description="Keyframes timeline when you add a shape layer.")
 
 #### Sculpt Face Sets #################################
 bpy.types.Scene.sculpt_faceSets = BoolProperty(name="Sculpt Face Sets.",
@@ -941,7 +989,10 @@ def mesh_add_menu_draw(self, context):
 
 
 classes = (
-## UV Operators
+	## Preferances Panel
+	TMG_User_Preferences,
+
+	## UV Operators
 	UV_OT_MarginUnwrap,
 
 	## Text Operators
@@ -999,9 +1050,16 @@ classes = (
 	Sculpt_Brush_Panel,
 	Sculpt_Referance_Panel,
 	Sculpt_Shape_Keys_Panel,
-	Sculpt_OT_Shape_Key_Set,
+	Sculpt_OT_ADD_New_Shape_Layer,
+	# Sculpt_OT_Shape_Key_Set,
 	Sculpt_OT_Shape_Key_Hide_Others,
+	Sculpt_OT_Merge_Shape_Keys,
+	Sculpt_OT_Keyframe_Shape_Keys,
 	Sculpt_OT_Apply_Shape_Keys,
+	Sculpt_OT_Clear_All_Keyframes,
+
+	## Test Panel
+	# Object_Test_Panel,
 )
 
 
@@ -1009,6 +1067,9 @@ def register():
 	for rsclass in classes:
 		bpy.utils.register_class(rsclass)
 	bpy.types.VIEW3D_MT_mesh_add.append(mesh_add_menu_draw)
+	# user_preferences = bpy.ops.scene.user_preferences
+	# addon_prefs = user_preferences.addons["tmg_mod_tools"].preferences
+	# context.scene.sculpt_shape_keys_icon_view = addon_prefs.Sculpt_Button_Mode
 
 
 def unregister():

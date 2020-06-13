@@ -297,7 +297,9 @@ class Sculpt_Shape_Keys_Panel(bpy.types.Panel):
 	def draw(self, context):
 
 		scene = context.scene
+		keyframe_timeline = context.scene.keyframe_timeline
 		sculpt_single_shape_layer = context.scene.sculpt_single_shape_layer
+		button_mode = context.scene.sculpt_shape_keys_icon_view
 
 		layout = self.layout
 		row = layout.row(align=True)
@@ -306,70 +308,72 @@ class Sculpt_Shape_Keys_Panel(bpy.types.Panel):
 		key = ob.data.shape_keys
 		kb = ob.active_shape_key
 
-		col = row.column(align=True)
+		if button_mode == False:
 
-		props = col.separator()
-			# props = self.layout.label(text='TMG Objects')
-		props = col.operator('mesh.sculpt_ot_shape_key_set',
-									text = 'Add Layer',
-									icon = 'ADD')
-		props.mode = 0
+			layout.column(align=True).use_property_split = True
+			col = layout.column(align=True).grid_flow(row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
 
-		# props = col.separator()
+			# colb = col.box()
+			row = col.row(align=True)
+			colm = row.row(align=True)
 
-		if bpy.context.active_object.active_shape_key_index > 0:
+			col = colm.column(align=True)
+			# row = col.row(align=True)
 
-			colb = col.box()
-			row = colb.row(align=True)
-			colm = row.column(align=True)
+			props = row.separator()
 
-			props = colm.separator()
+			props = row.operator('mesh.sculpt_ot_add_new_shape_layer',
+										text = 'Add Layer',
+										icon = 'ADD')
 
-			# props = self.layout.separator()
-				# props = self.layout.label(text='TMG Objects')
-			# if sculpt_single_shape_layer == True:
-			props = colm.row(align=True)
-			# props = colm.operator('mesh.sculpt_ot_shape_key_hide_others',
-			# 							text = 'Show Other Layers',
-			# 							icon = 'RESTRICT_RENDER_OFF')
-			# else:
-			props = colm.operator('mesh.sculpt_ot_shape_key_hide_others',
-										text = 'Toggle Other Layers',
-										icon = 'RESTRICT_RENDER_OFF')
+			if keyframe_timeline:
+				row.label(text="Keyframe")
+			else:
+				row.label(text="Keyframe")
+			row.prop(scene, "keyframe_timeline", text="")
 
-			props = colm.row(align=True)
+			props = col.separator()
 
-			# props.mode = 4
-			# props.check_layer_mute = True
+			if bpy.context.active_object.active_shape_key_index > 0:
 
-			# props = self.layout.separator()
-				# props = self.layout.label(text='TMG Objects')
-			# props = colm.operator('mesh.sculpt_ot_shape_key_set',
-			# 							text = 'Active Layer',
-			# 							icon = 'KEY_HLT')
-			# props.mode = 1
+				layout.column(align=True).use_property_split = True
+				col = layout.column(align=True).grid_flow(row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
 
-			# props = self.layout.separator()
-				# props = self.layout.label(text='TMG Objects')
-			props = colm.operator('mesh.sculpt_ot_shape_key_set',
-										text = 'Keyframe Layers',
-										icon = 'KEYINGSET')
-			props.mode = 2
+				colb = col.box()
+				row = colb.row(align=True)
+				colm = row.column(align=True)
 
-			# props = self.layout.separator()
-				# props = self.layout.label(text='TMG Objects')
-			props = colm.operator('mesh.sculpt_ot_shape_key_set',
-										text = 'Merge Visible',
-										icon = 'SHAPEKEY_DATA',
-										#bl_description = 'Test 1.'
-										)
-			props.mode = 3
+				col = colm.column(align=True)
+				# row = col.row(align=True)
 
-			props = colm.operator('mesh.sculpt_ot_apply_shape_keys',
-										text = 'Apply Shape Keys',
-										icon = 'MESH_CUBE',
-										#bl_description = 'Bla.'
-										)
+				props = colm.separator()
+
+				props = colm.row(align=True)
+
+				props = colm.operator('mesh.sculpt_ot_shape_key_hide_others',
+											text = 'Toggle Other Layers',
+											icon = 'RESTRICT_RENDER_OFF')
+
+				# props = colm.row(align=True)
+
+				props = colm.operator('mesh.sculpt_ot_keyframe_shape_keys',
+											text = 'Keyframe Layers',
+											icon = 'KEYINGSET')
+
+				props = colm.operator('mesh.sculpt_ot_merge_shape_keys',
+											text = 'Merge Layers',
+											icon = 'SHAPEKEY_DATA',
+											)
+
+				props = colm.operator('mesh.sculpt_ot_clear_all_keyframes',
+											text = 'Clear Keyframes',
+											icon = 'MESH_CUBE',
+											)
+
+				props = colm.operator('mesh.sculpt_ot_apply_shape_keys',
+											text = 'Apply Object',
+											icon = 'MESH_CUBE',
+											)
 
 		enable_edit = ob.mode != 'EDIT'
 		enable_edit_value = False
@@ -382,13 +386,17 @@ class Sculpt_Shape_Keys_Panel(bpy.types.Panel):
 
 		rows = 3
 		if kb:
-			rows = 5
+			rows = 6
 
 		row.template_list("MESH_UL_shape_keys", "", key, "key_blocks", ob, "active_shape_key_index", rows=rows)
 
 		col = row.column(align=True)
 
-		col.operator("object.shape_key_add", icon='ADD', text="").from_mix = False
+		props = col.operator('mesh.sculpt_ot_add_new_shape_layer',
+									text = '',
+									icon = 'ADD')
+		# props.mode = 0
+
 		col.operator("object.shape_key_remove", icon='REMOVE', text="").all = False
 
 		col.separator()
@@ -401,6 +409,31 @@ class Sculpt_Shape_Keys_Panel(bpy.types.Panel):
 			sub = col.column(align=True)
 			sub.operator("object.shape_key_move", icon='TRIA_UP', text="").type = 'UP'
 			sub.operator("object.shape_key_move", icon='TRIA_DOWN', text="").type = 'DOWN'
+
+			if button_mode == True:
+				if bpy.context.active_object.active_shape_key_index > 0:
+
+					sub.separator()
+
+					props = sub.operator('mesh.sculpt_ot_shape_key_hide_others',
+												text = '',
+												icon = 'RESTRICT_RENDER_OFF')
+					
+					props = sub.operator('mesh.sculpt_ot_keyframe_shape_keys',
+												text = '',
+												icon = 'KEYINGSET',
+												)
+
+					props = sub.operator('mesh.sculpt_ot_merge_shape_keys',
+												text = '',
+												icon = 'SHAPEKEY_DATA',
+												#bl_description = 'Test 1.'
+												)
+
+					props = sub.operator('mesh.sculpt_ot_apply_shape_keys',
+												text = '',
+												icon = 'MESH_CUBE',
+												)
 
 			split = layout.split(factor=0.4)
 			row = split.row()
@@ -447,120 +480,44 @@ class Sculpt_Shape_Keys_Panel(bpy.types.Panel):
 
 
 
-
-class Sculpt_OT_Shape_Key_Set(bpy.types.Operator):
-	"""Sculpt Shape Key Set"""
-	bl_idname = 'mesh.sculpt_ot_shape_key_set'
-	bl_label = 'Add Shape Key'
-	bl_description = 'Add Shape Keys for use in sculpt mode.'
-	bl_options = {'REGISTER', 'UNDO'}
-
-	check_layer_mute: bpy.props.BoolProperty(
-	name="Solo Layer",
-	description="Hides all other shape layers.",
-	default=False
-	)
-
-	mode: bpy.props.IntProperty(
-	name="Mode",
-	description="Adjust what mode to use when adding shape keys.",
-	default=0,
-	min=0,
-	soft_max=4,
-	)
-
-	# lastIndex: bpy.props.IntProperty(
-	# name="lastIndex",
-	# description="Adjust what mode to use when adding shape keys.",
-	# default=0,
-	# min=0,
-	# )
+class Sculpt_OT_ADD_New_Shape_Layer(bpy.types.Operator):
+	"""Sculpt ADD New Shape Layer"""
+	bl_idname = 'mesh.sculpt_ot_add_new_shape_layer'
+	bl_label = 'New Layer'
+	bl_description = 'Add a new shape layer.'
+	bl_options = {'REGISTER'}
 
 	@classmethod
 	def poll(cls, context):
 		#print(f"My area is: {context.area.type}")
-		# if self.lastIndex != bpy.context.active_object.active_shape_key_index:
-		# 	print(str(bpy.context.active_object.active_shape_key_index))
-		# 	self.lastIndex = bpy.context.active_object.active_shape_key_index
+		# sculpt_single_shape_layer = context.scene.sculpt_single_shape_layer
 		return context.area.type == 'VIEW_3D'
-
-	def invoke(self, context, event):
-		# lastIndex = 0
-		return self.execute(context)
 
 	def execute(self, context):
 
-		mode = 0
 		keys = 0
 		ob = bpy.context.active_object
 		current_frame = bpy.context.active_object.active_shape_key_index
-		#keys = ob.data.shape_keys.key_blocks.keys()
+
+		keyframe_timeline = context.scene.keyframe_timeline
 
 		## Create shape layers
-		if self.mode == 0: 
-			bpy.ops.object.shape_key_add(from_mix=False)
+		bpy.ops.object.shape_key_add(from_mix=False)
 		current_frame = bpy.context.active_object.active_shape_key_index
 		keys = ob.data.shape_keys.key_blocks.keys()
 
-		if self.mode == 0: 
-			for shape in ob.data.shape_keys.key_blocks:
-				if (current_frame==0):
-					shape.name = 'Base Shape'
+		for shape in ob.data.shape_keys.key_blocks:
+			if (current_frame==0):
+				shape.name = 'Base Shape'
+				if keyframe_timeline:
 					shape.keyframe_insert("value",frame=0)
-				elif (shape.name==ob.active_shape_key.name):
-					shape.name = "Layer " + str(current_frame)
-					shape.value=1.0
+			elif (shape.name==ob.active_shape_key.name):
+				shape.name = "Layer " + str(current_frame)
+				shape.value=1.0
+				if keyframe_timeline:
 					shape.keyframe_insert("value",frame=ob.active_shape_key_index)
-					bpy.data.scenes['Scene'].frame_current = ob.active_shape_key_index
-
-			return {'FINISHED'}
-		
-		## Set active shape layer value 
-		elif self.mode == 1:
-			for shape in ob.data.shape_keys.key_blocks:
-				if (shape.name==ob.active_shape_key.name):
-					shape.keyframe_insert("value",frame=bpy.data.scenes['Scene'].frame_current)
-					bpy.data.scenes['Scene'].frame_current = bpy.data.scenes['Scene'].frame_current
-
-			return {'FINISHED'}
-
-		## Set all shape layer's value on current frame
-		elif self.mode == 2:
-			for shape in ob.data.shape_keys.key_blocks:
-				shape.keyframe_insert("value",frame=bpy.data.scenes['Scene'].frame_current)
-				bpy.data.scenes['Scene'].frame_current = bpy.data.scenes['Scene'].frame_current
-
-			return {'FINISHED'}
-
-		## Apply all layers to shape
-		elif self.mode == 3:
-			for shape in ob.data.shape_keys.key_blocks:
-				shape.keyframe_insert("value",frame=bpy.data.scenes['Scene'].frame_current)
-				bpy.data.scenes['Scene'].frame_current = bpy.data.scenes['Scene'].frame_current
-
-			bpy.ops.object.shape_key_add(from_mix=True)
-
-			for shape in ob.data.shape_keys.key_blocks:
-				if shape.name == ob.active_shape_key.name:
-					shape.name = "Applied Shape " + str(current_frame)
-					shape.value=0.0
-					shape.keyframe_insert("value",frame=ob.active_shape_key_index)
-					bpy.data.scenes['Scene'].frame_current = ob.active_shape_key_index
-
-			return {'FINISHED'}
-		
-		## Mute all other layers
-		# elif self.mode == 4:
-		# 	current_frame = bpy.context.active_object.active_shape_key_index
-		# 	keys = ob.data.shape_keys.key_blocks.keys()
-		# 	for shape in ob.data.shape_keys.key_blocks:
-		# 		if shape.name == ob.active_shape_key.name:
-		# 			print('found: ' + shape.name)
-		# 		else:
-		# 			print('other: ' + shape.name)
-		# 			shape.mute = self.check_layer_mute
-		# 	return {'FINISHED'}
-		
+				bpy.data.scenes['Scene'].frame_current = ob.active_shape_key_index
+			
 		return {'FINISHED'}
 
 
@@ -610,11 +567,153 @@ class Sculpt_OT_Shape_Key_Hide_Others(bpy.types.Operator):
 
 
 
+class Sculpt_OT_Merge_Shape_Keys(bpy.types.Operator):
+	"""Sculpt Merge Shape Layers To New Layer"""
+	bl_idname = 'mesh.sculpt_ot_merge_shape_keys'
+	bl_label = 'Merge Visible'
+	bl_description = 'Merge visible shape layers to a new layer.'
+	bl_options = {'REGISTER'}
+
+	@classmethod
+	def poll(cls, context):
+		#print(f"My area is: {context.area.type}")
+		# sculpt_single_shape_layer = context.scene.sculpt_single_shape_layer
+		return context.area.type == 'VIEW_3D'
+
+	def execute(self, context):
+
+		keys = 0
+		ob = bpy.context.active_object
+		current_frame = bpy.context.active_object.active_shape_key_index
+
+		for shape in ob.data.shape_keys.key_blocks:
+			shape.keyframe_insert("value",frame=bpy.data.scenes['Scene'].frame_current)
+			bpy.data.scenes['Scene'].frame_current = bpy.data.scenes['Scene'].frame_current
+
+		bpy.ops.object.shape_key_add(from_mix=True)
+
+		for shape in ob.data.shape_keys.key_blocks:
+			if shape.name == ob.active_shape_key.name:
+				shape.name = "Applied Shape " + str(current_frame)
+				shape.value=0.0
+				shape.keyframe_insert("value",frame=ob.active_shape_key_index)
+				bpy.data.scenes['Scene'].frame_current = ob.active_shape_key_index
+			
+		return {'FINISHED'}
+
+
+
+class Sculpt_OT_Keyframe_Shape_Keys(bpy.types.Operator):
+	"""Set all shape layer's value on current frame"""
+	bl_idname = 'mesh.sculpt_ot_keyframe_shape_keys'
+	bl_label = 'Keyframe Layers'
+	bl_description = 'Set all shape layers value to current keyframe.'
+	bl_options = {'REGISTER'}
+
+	@classmethod
+	def poll(cls, context):
+		#print(f"My area is: {context.area.type}")
+		return context.area.type == 'VIEW_3D'
+
+	def execute(self, context):
+
+		shape_list = []
+		keys = 0
+		ob = bpy.context.active_object
+		current_frame = bpy.context.active_object.active_shape_key_index
+		keys = ob.data.shape_keys.key_blocks.keys()
+
+		for shape in ob.data.shape_keys.key_blocks:
+			shape.keyframe_insert("value",frame=bpy.data.scenes['Scene'].frame_current)
+			bpy.data.scenes['Scene'].frame_current = bpy.data.scenes['Scene'].frame_current
+
+		bpy.ops.object.shape_key_add(from_mix=True)
+
+		for shape in ob.data.shape_keys.key_blocks:
+			if shape.name == ob.active_shape_key.name:
+				shape.name = "Applied Shape " + str(current_frame)
+				shape.value=0.0
+				shape.keyframe_insert("value",frame=ob.active_shape_key_index)
+				bpy.data.scenes['Scene'].frame_current = ob.active_shape_key_index
+		
+		return {'FINISHED'}
+
+
+
+class Sculpt_OT_Keyframe_Shape_Keys(bpy.types.Operator):
+	"""Set all shape layer's value on current frame"""
+	bl_idname = 'mesh.sculpt_ot_keyframe_shape_keys'
+	bl_label = 'Keyframe Layers'
+	bl_description = 'Set all shape layers value to current keyframe.'
+	bl_options = {'REGISTER'}
+
+	@classmethod
+	def poll(cls, context):
+		#print(f"My area is: {context.area.type}")
+		return context.area.type == 'VIEW_3D'
+
+	def execute(self, context):
+
+		shape_list = []
+		keys = 0
+		ob = bpy.context.active_object
+		current_frame = bpy.context.active_object.active_shape_key_index
+		keys = ob.data.shape_keys.key_blocks.keys()
+
+		for shape in ob.data.shape_keys.key_blocks:
+			shape.keyframe_insert("value",frame=bpy.data.scenes['Scene'].frame_current)
+			bpy.data.scenes['Scene'].frame_current = bpy.data.scenes['Scene'].frame_current
+		
+		return {'FINISHED'}
+
+
+
+
+class Sculpt_OT_Clear_All_Keyframes(bpy.types.Operator):
+	"""Clears all keyframes from timeline"""
+	bl_idname = 'mesh.sculpt_ot_clear_all_keyframes'
+	bl_label = 'Clear All Keyframes'
+	bl_description = 'Clears all keyframes from timeline.'
+	bl_options = {'REGISTER'}
+
+	@classmethod
+	def poll(cls, context):
+		#print(f"My area is: {context.area.type}")
+		return context.area.type == 'VIEW_3D'
+
+	def execute(self, context):
+
+		shape_list = []
+		keys = 0
+		ob = bpy.context.active_object
+		current_frame = bpy.context.active_object.active_shape_key_index
+		keys = ob.data.shape_keys.key_blocks.keys()
+
+		for shape in ob.data.shape_keys.key_blocks:
+			# shape.keyframe_clear(all_True)
+			# bpy.ops.object.shape_key_add(from_mix=False)
+			shape.keyframe_insert("value", from_mix=False)
+
+			# bpy.data.scenes['Scene'].frame_current = bpy.data.scenes['Scene'].frame_current
+			# bpy.ops.mesh.sculpt_ot_keyframe_shape_keys()
+			# shape.keyframe_timeline = False
+			# shape.keyframe_remove("value",frame=All)
+		# ob.animation_data_clear()
+		# bpy.data.shape_keys["Key"].key_blocks["Layer 3"].value
+		# bpy.ops.anim.keyframe_clear_button(all=True)
+		# bpy.ops.anim.keyframe_clear_button(all=True)
+		# bpy.ops.anim.keyframe_clear_button(all=True)
+		
+		
+		return {'FINISHED'}
+
+
+
 class Sculpt_OT_Apply_Shape_Keys(bpy.types.Operator):
-	"""Sculpt Apply Shape Keys"""
+	"""Sculpt Apply Layers"""
 	bl_idname = 'mesh.sculpt_ot_apply_shape_keys'
-	bl_label = 'Apply Shape Keys'
-	bl_description = 'Applies all shape keys.'
+	bl_label = 'Apply Layers'
+	bl_description = 'Merges all layers then removes all shape keys from the selected object.'
 	bl_options = {'REGISTER'}
 
 	# check_layer_mute: bpy.props.BoolProperty(
@@ -712,3 +811,33 @@ class Sculpt_OT_Apply_Shape_Keys(bpy.types.Operator):
 
 # print(ob.active_shape_key_index)
 # print('frame: ' + str(bpy.data.scenes['Scene'].frame_current))
+
+
+
+## for creating an object that wraps around the sculpt object
+# subdiv_loop = []
+# subdivisions = 3
+
+# if subdivisions > 0:
+#     subdiv_loop.append(int(subdivisions))
+#     subdivisions -= 1
+
+# ## Add Multires
+# bpy.ops.object.modifier_add(type='MULTIRES')
+
+# for i in subdiv_loop:
+#     bpy.ops.object.multires_subdivide(modifier="Multires")
+#     print(str(id))
+
+# ## Add Shrinkwrap
+# bpy.ops.object.modifier_add(type='SHRINKWRAP')
+# bpy.context.object.modifiers["Shrinkwrap"].target = bpy.data.objects["rock"]
+# bpy.context.object.modifiers["Shrinkwrap"].wrap_mode = 'ABOVE_SURFACE'
+# bpy.context.object.modifiers["Shrinkwrap"].wrap_method = 'TARGET_PROJECT'
+
+# ## Add Smooth
+# bpy.ops.object.modifier_add(type='SMOOTH')
+# bpy.context.object.modifiers["Smooth"].factor = 2
+
+# ## Object Smooth Shading
+# bpy.ops.object.shade_smooth()
