@@ -360,14 +360,14 @@ class Sculpt_Shape_Keys_Panel(bpy.types.Panel):
 											text = 'Keyframe Layers',
 											icon = 'KEYINGSET')
 
+				props = colm.operator('mesh.sculpt_ot_clear_all_keyframes',
+											text = 'Clear All Keyframes',
+											icon = 'KEYFRAME',
+											)
+
 				props = colm.operator('mesh.sculpt_ot_merge_shape_keys',
 											text = 'Merge Layers',
 											icon = 'SHAPEKEY_DATA',
-											)
-
-				props = colm.operator('mesh.sculpt_ot_clear_all_keyframes',
-											text = 'Clear Keyframes',
-											icon = 'MESH_CUBE',
 											)
 
 				props = colm.operator('mesh.sculpt_ot_apply_shape_keys',
@@ -423,6 +423,11 @@ class Sculpt_Shape_Keys_Panel(bpy.types.Panel):
 												text = '',
 												icon = 'KEYINGSET',
 												)
+
+					props = sub.operator('mesh.sculpt_ot_clear_all_keyframes',
+											text = '',
+											icon = 'KEYFRAME',
+											)
 
 					props = sub.operator('mesh.sculpt_ot_merge_shape_keys',
 												text = '',
@@ -503,7 +508,8 @@ class Sculpt_OT_ADD_New_Shape_Layer(bpy.types.Operator):
 
 		## Create shape layers
 		bpy.ops.object.shape_key_add(from_mix=False)
-		current_frame = bpy.context.active_object.active_shape_key_index
+		if keyframe_timeline:
+			current_frame = bpy.context.active_object.active_shape_key_index
 		keys = ob.data.shape_keys.key_blocks.keys()
 
 		for shape in ob.data.shape_keys.key_blocks:
@@ -516,7 +522,7 @@ class Sculpt_OT_ADD_New_Shape_Layer(bpy.types.Operator):
 				shape.value=1.0
 				if keyframe_timeline:
 					shape.keyframe_insert("value",frame=ob.active_shape_key_index)
-				bpy.data.scenes['Scene'].frame_current = ob.active_shape_key_index
+					bpy.data.scenes['Scene'].frame_current = ob.active_shape_key_index
 			
 		return {'FINISHED'}
 
@@ -683,27 +689,20 @@ class Sculpt_OT_Clear_All_Keyframes(bpy.types.Operator):
 
 	def execute(self, context):
 
-		shape_list = []
-		keys = 0
 		ob = bpy.context.active_object
-		current_frame = bpy.context.active_object.active_shape_key_index
 		keys = ob.data.shape_keys.key_blocks.keys()
 
-		for shape in ob.data.shape_keys.key_blocks:
-			# shape.keyframe_clear(all_True)
-			# bpy.ops.object.shape_key_add(from_mix=False)
-			shape.keyframe_insert("value", from_mix=False)
+		s = bpy.data.scenes['Scene']
 
-			# bpy.data.scenes['Scene'].frame_current = bpy.data.scenes['Scene'].frame_current
-			# bpy.ops.mesh.sculpt_ot_keyframe_shape_keys()
-			# shape.keyframe_timeline = False
-			# shape.keyframe_remove("value",frame=All)
-		# ob.animation_data_clear()
-		# bpy.data.shape_keys["Key"].key_blocks["Layer 3"].value
-		# bpy.ops.anim.keyframe_clear_button(all=True)
-		# bpy.ops.anim.keyframe_clear_button(all=True)
-		# bpy.ops.anim.keyframe_clear_button(all=True)
-		
+		for fr in range(0, len(keys)):
+			s.frame_current = fr
+			for shape in ob.data.shape_keys.key_blocks:
+				if bpy.data.actions:
+					try:
+						shape.keyframe_delete("value", index=-1, frame=fr, group="")
+						# print("Removed Frame: % s" % fr)
+					except RuntimeError:
+						break
 		
 		return {'FINISHED'}
 
