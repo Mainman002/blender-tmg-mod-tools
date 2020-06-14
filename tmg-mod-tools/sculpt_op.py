@@ -591,10 +591,12 @@ class Sculpt_OT_Merge_Shape_Keys(bpy.types.Operator):
 		keys = 0
 		ob = bpy.context.active_object
 		current_frame = bpy.context.active_object.active_shape_key_index
+		keyframe_timeline = context.scene.keyframe_timeline
 
 		for shape in ob.data.shape_keys.key_blocks:
-			shape.keyframe_insert("value",frame=bpy.data.scenes['Scene'].frame_current)
-			bpy.data.scenes['Scene'].frame_current = bpy.data.scenes['Scene'].frame_current
+			if keyframe_timeline:
+				shape.keyframe_insert("value",frame=bpy.data.scenes['Scene'].frame_current)
+				bpy.data.scenes['Scene'].frame_current = bpy.data.scenes['Scene'].frame_current
 
 		bpy.ops.object.shape_key_add(from_mix=True)
 
@@ -602,8 +604,9 @@ class Sculpt_OT_Merge_Shape_Keys(bpy.types.Operator):
 			if shape.name == ob.active_shape_key.name:
 				shape.name = "Applied Shape " + str(current_frame)
 				shape.value=0.0
-				shape.keyframe_insert("value",frame=ob.active_shape_key_index)
-				bpy.data.scenes['Scene'].frame_current = ob.active_shape_key_index
+				if keyframe_timeline:
+					shape.keyframe_insert("value",frame=ob.active_shape_key_index)
+					bpy.data.scenes['Scene'].frame_current = ob.active_shape_key_index
 			
 		return {'FINISHED'}
 
@@ -703,6 +706,8 @@ class Sculpt_OT_Clear_All_Keyframes(bpy.types.Operator):
 						# print("Removed Frame: % s" % fr)
 					except RuntimeError:
 						break
+
+		bpy.data.scenes['Scene'].frame_current = 0
 		
 		return {'FINISHED'}
 
@@ -759,6 +764,7 @@ class Sculpt_OT_Apply_Shape_Keys(bpy.types.Operator):
 			bpy.ops.object.shape_key_remove()
 
 		bpy.ops.object.shape_key_remove()
+		bpy.data.scenes['Scene'].frame_current = 0
 		
 		return {'FINISHED'}
 
