@@ -1138,6 +1138,7 @@ classes = (
     Sculpt_OT_Keyframe_Shape_Keys,
     Sculpt_OT_Apply_Shape_Keys,
     Sculpt_OT_Clear_All_Keyframes,
+    Sculpt_OT_Remove_Selected_Layer,
 
     # Test Panel
     # Object_Test_Panel,
