@@ -1,3 +1,5 @@
+import bpy
+
 from . dec_panel import *
 from . uv_op import *
 from . mat_op import *
@@ -9,6 +11,7 @@ from . mod_op import *
 from . dec_op import *
 from . ui_op import *
 from . userprefs import *
+
 from bpy.props import *
 from mathutils import Vector
 from bpy_extras.object_utils import AddObjectHelper, object_data_add
@@ -17,7 +20,7 @@ from bpy.types import Operator
 from bpy.types import PropertyGroup
 from bpy.props import StringProperty, IntProperty, BoolProperty
 from bpy.types import Operator, AddonPreferences
-import bpy
+
 bl_info = {
     "name": "TMG_Mod_Tools",
     "author": "Johnathan Mueller, Jayanam",
@@ -697,8 +700,6 @@ bpy.types.Scene.viewMode = bpy.props.EnumProperty(
 #### Sculpt Shape Keys Panel Mode Switch #########################
 bpy.types.Scene.sculpt_shape_keys_icon_view = BoolProperty(name="Icon View",
                                                            default=False,
-                                                           update=Update_TMG_User_Preferences_changed,
-                                                           # update=Update_TMG_User_Preferences,
                                                            description="Switches the shape key panel from labeled buttons, to icons."
                                                            )
 
@@ -715,9 +716,11 @@ bpy.types.Scene.sculpt_spacingDistance = bpy.props.EnumProperty(
 )
 
 #### Sculpt Keframe Timeline #################################
-bpy.types.Scene.keyframe_timeline = BoolProperty(name="Keframe timeline",
-                                                 default=False,
-                                                 description="Keyframes timeline when you add a shape layer.")
+
+bpy.types.Scene.keyframe_timeline = BoolProperty(name="Keframe Timeline",
+                                                           default=False,
+                                                           description="Keyframes timeline when you add a shape layer."
+                                                           )
 
 #### Sculpt Face Sets #################################
 bpy.types.Scene.sculpt_faceSets = BoolProperty(name="Sculpt Face Sets.",
@@ -1068,6 +1071,7 @@ def mesh_add_menu_draw(self, context):
 classes = (
     # Preferances Panel
     TMG_User_Preferences,
+    Sculpt_OT_Show_TMG_Addon_Prefs,
 
     # UV Operators
     UV_OT_MarginUnwrap,
@@ -1149,6 +1153,11 @@ def register():
     # addon_prefs = user_preferences.addons["tmg_mod_tools"].preferences
     # bpy.ops.scene.sculpt_shape_keys_icon_view = addon_prefs.Sculpt_Button_Mode
     # bpy.ops.scene.sculpt_shape_keys_icon_view = addon_prefs.Sculpt_Button_Mode
+
+    # preferences = context.preferences
+    # addon_prefs = preferences.addons[__init__].preferences
+
+    # bpy.types.Scene.sculpt_shape_keys_icon_view = context.preferences.addons[__init__].preferences.sculpt_shape_keys_icon_view
 
 
 def unregister():

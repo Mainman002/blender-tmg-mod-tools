@@ -300,33 +300,31 @@ class Sculpt_Shape_Keys_Panel(bpy.types.Panel):
 
     def draw(self, context):
 
+        preferences = context.preferences
+        addon_prefs = preferences.addons['tmg-mod-tools'].preferences
+
+        button_mode = context.preferences.addons['tmg-mod-tools'].preferences.Sculpt_Button_Mode
+        keyframe_timeline = context.preferences.addons['tmg-mod-tools'].preferences.Sculpt_Keyframe_Timeline
+
         scene = context.scene
-        keyframe_timeline = context.scene.keyframe_timeline
+        # keyframe_timeline = context.scene.keyframe_timeline
         sculpt_single_shape_layer = context.scene.sculpt_single_shape_layer
-        button_mode = context.scene.sculpt_shape_keys_icon_view
-        # button_mode = context.preferences.addons[__name__].preferences.sculpt_shape_keys_icon_view
-
-        # if button_mode:
-        #     button_mode = False
-        #     button_mode = True
-        #     print("True: % s" % button_mode)
-        # else:
-        #     button_mode = True
-        #     button_mode = False
-        #     print("False: % s" % button_mode)
-
-        # user_preferences = bpy.context.user_preferences
-        # addon_prefs = user_preferences.addons["tmg_mod_tools"].preferences
-        # button_mode = addon_prefs.sculpt_shape_keys_icon_view
-
-        # button_mode = bpy.ops.scene.sculpt_shape_keys_icon_view
 
         layout = self.layout
         # row = layout.row(align=True)
 
-        ob = context.object
+        # ob = context.object
+        ob = bpy.context.active_object
         key = ob.data.shape_keys
         kb = ob.active_shape_key
+
+        all_keys = []
+
+        if bpy.context.active_object.data.shape_keys:
+            for _i in bpy.context.active_object.data.shape_keys.key_blocks.keys():
+                all_keys.append(_i)
+        
+        keys_total = len(all_keys)
 
         # if button_mode == False:
 
@@ -348,24 +346,32 @@ class Sculpt_Shape_Keys_Panel(bpy.types.Panel):
         row = laya.row(align=True)
         colm = row.row(align=True)
 
-        if button_mode == False:
-            props = row.operator('mesh.sculpt_ot_add_new_shape_layer',
-                                    text='Add Layer',
-                                    icon='ADD')
+        # if button_mode == False:
+        #     props = row.operator('mesh.sculpt_ot_add_new_shape_layer',
+        #                             text='Add Layer',
+        #                             icon='ADD')
 
-        if button_mode == True:
-            props = row.operator('mesh.sculpt_ot_add_new_shape_layer',
-                                    text='',
-                                    icon='ADD')
 
+        # if button_mode == True:
+        #     props = row.operator('mesh.sculpt_ot_add_new_shape_layer',
+        #                             text='',
+        #                             icon='ADD')
+
+        # props = row.separator()
+
+        row.prop(addon_prefs, "Sculpt_Keyframe_Timeline", text="")
         row.label(text="Keyframe")
-        row.prop(scene, "keyframe_timeline", text="")
 
         props = col.separator()
 
+        props = row.operator('mesh.sculpt_ot_show_tmg_addon_prefs',
+                            text='',
+                            icon='TOOL_SETTINGS')
+
         if button_mode == False:
 
-            if bpy.context.active_object.active_shape_key_index > 0:
+            # if bpy.context.active_object.active_shape_key_index > 0:
+            if keys_total > 0:
 
                 # layout.column(align=True).use_property_split = True
                 # col = layout.column(align=True).grid_flow(
@@ -410,7 +416,8 @@ class Sculpt_Shape_Keys_Panel(bpy.types.Panel):
 
         if button_mode == True:
 
-            if bpy.context.active_object.active_shape_key_index > 0:
+            # if bpy.context.active_object.active_shape_key_index > 0:
+            if keys_total > 0:
 
                 laya = self.layout.row(align=True)
                 boxed = laya.box()
@@ -527,6 +534,20 @@ class Sculpt_Shape_Keys_Panel(bpy.types.Panel):
                 row.prop(key, "eval_time")
 
 
+class Sculpt_OT_Show_TMG_Addon_Prefs(bpy.types.Operator):
+    """Shows the TMG addon preferances"""
+    bl_idname = 'mesh.sculpt_ot_show_tmg_addon_prefs'
+    bl_label = 'Show Settings'
+    bl_description = 'Shows the TMG addon preferances.'
+    bl_options = {'REGISTER'}
+
+    def execute(self, context):
+
+        bpy.ops.preferences.addon_show(module="tmg-mod-tools")
+
+        return {'FINISHED'}
+
+
 class Sculpt_OT_ADD_New_Shape_Layer(bpy.types.Operator):
     """Sculpt ADD New Shape Layer"""
     bl_idname = 'mesh.sculpt_ot_add_new_shape_layer'
@@ -542,11 +563,14 @@ class Sculpt_OT_ADD_New_Shape_Layer(bpy.types.Operator):
 
     def execute(self, context):
 
+        preferences = context.preferences
+        addon_prefs = preferences.addons['tmg-mod-tools'].preferences
+
+        keyframe_timeline = context.preferences.addons['tmg-mod-tools'].preferences.Sculpt_Keyframe_Timeline
+
         keys = 0
         ob = bpy.context.active_object
         current_frame = bpy.context.active_object.active_shape_key_index
-
-        keyframe_timeline = context.scene.keyframe_timeline
 
         # Adds Layer with timeline keyframe
         if keyframe_timeline:
@@ -579,7 +603,6 @@ class Sculpt_OT_ADD_New_Shape_Layer(bpy.types.Operator):
                     shape.value = 1.0
 
         return {'FINISHED'}
-
 
 class Sculpt_OT_Shape_Key_Hide_Others(bpy.types.Operator):
     """Sculpt Shape Key Hide Other Shape Layers"""
