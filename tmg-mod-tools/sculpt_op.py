@@ -322,61 +322,72 @@ class Sculpt_Shape_Keys_Panel(bpy.types.Panel):
         # button_mode = bpy.ops.scene.sculpt_shape_keys_icon_view
 
         layout = self.layout
-        row = layout.row(align=True)
+        # row = layout.row(align=True)
 
         ob = context.object
         key = ob.data.shape_keys
         kb = ob.active_shape_key
 
+        # if button_mode == False:
+
+        # layout.column(align=True).use_property_split = True
+        # col = layout.column(align=True).grid_flow(
+        #     row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
+
+        # # colb = col.box()
+        # row = col.row(align=True)
+        # colm = row.row(align=True)
+
+        col = self.layout.column(align=True)
+        # # row = col.row(align=True)
+
+        # # props = row.separator()
+
+        laya = self.layout.row(align=True)
+        # boxed = laya.box()
+        row = laya.row(align=True)
+        colm = row.row(align=True)
+
         if button_mode == False:
-
-            layout.column(align=True).use_property_split = True
-            col = layout.column(align=True).grid_flow(
-                row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
-
-            # colb = col.box()
-            row = col.row(align=True)
-            colm = row.row(align=True)
-
-            col = colm.column(align=True)
-            # row = col.row(align=True)
-
-            props = row.separator()
-
             props = row.operator('mesh.sculpt_ot_add_new_shape_layer',
-                                 text='Add Layer',
-                                 icon='ADD')
+                                    text='Add Layer',
+                                    icon='ADD')
 
-            if keyframe_timeline:
-                row.label(text="Keyframe")
-            else:
-                row.label(text="Keyframe")
-            row.prop(scene, "keyframe_timeline", text="")
+        if button_mode == True:
+            props = row.operator('mesh.sculpt_ot_add_new_shape_layer',
+                                    text='',
+                                    icon='ADD')
 
-            props = col.separator()
+        row.label(text="Keyframe")
+        row.prop(scene, "keyframe_timeline", text="")
+
+        props = col.separator()
+
+        if button_mode == False:
 
             if bpy.context.active_object.active_shape_key_index > 0:
 
-                layout.column(align=True).use_property_split = True
-                col = layout.column(align=True).grid_flow(
-                    row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
+                # layout.column(align=True).use_property_split = True
+                # col = layout.column(align=True).grid_flow(
+                #     row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
 
-                colb = col.box()
-                row = colb.row(align=True)
-                colm = row.column(align=True)
-
-                col = colm.column(align=True)
+                # # colb = col.box()
                 # row = col.row(align=True)
+                # colm = row.column(align=True)
 
-                props = colm.separator()
+                # col = colm.column(align=True)
+                # # row = col.row(align=True)
 
-                props = colm.row(align=True)
+                # props = row.separator()
+
+                laya = self.layout.column(align=True)
+                boxed = laya.box()
+                row = boxed.column(align=True)
+                colm = row.column(align=True)
 
                 props = colm.operator('mesh.sculpt_ot_shape_key_hide_others',
                                       text='Toggle Other Layers',
                                       icon='RESTRICT_RENDER_OFF')
-
-                # props = colm.row(align=True)
 
                 props = colm.operator('mesh.sculpt_ot_keyframe_shape_keys',
                                       text='Keyframe Layers',
@@ -396,6 +407,38 @@ class Sculpt_Shape_Keys_Panel(bpy.types.Panel):
                                       text='Apply Object',
                                       icon='MESH_CUBE',
                                       )
+
+        if button_mode == True:
+
+            if bpy.context.active_object.active_shape_key_index > 0:
+
+                laya = self.layout.row(align=True)
+                boxed = laya.box()
+                row = boxed.row(align=True)
+                colm = row.row(align=True)
+
+                props = colm.operator('mesh.sculpt_ot_shape_key_hide_others',
+                                    text='',
+                                    icon='RESTRICT_RENDER_OFF')
+
+                props = colm.operator('mesh.sculpt_ot_keyframe_shape_keys',
+                                    text='',
+                                    icon='KEYINGSET')
+
+                props = colm.operator('mesh.sculpt_ot_clear_all_keyframes',
+                                    text='',
+                                    icon='KEYFRAME',
+                                    )
+
+                props = colm.operator('mesh.sculpt_ot_merge_shape_keys',
+                                    text='',
+                                    icon='SHAPEKEY_DATA',
+                                    )
+
+                props = colm.operator('mesh.sculpt_ot_apply_shape_keys',
+                                    text='',
+                                    icon='MESH_CUBE',
+                                    )
 
         enable_edit = ob.mode != 'EDIT'
         enable_edit_value = False
@@ -436,36 +479,6 @@ class Sculpt_Shape_Keys_Panel(bpy.types.Panel):
                          icon='TRIA_UP', text="").type = 'UP'
             sub.operator("object.shape_key_move",
                          icon='TRIA_DOWN', text="").type = 'DOWN'
-
-            if button_mode == True:
-                if bpy.context.active_object.active_shape_key_index > 0:
-
-                    sub.separator()
-
-                    props = sub.operator('mesh.sculpt_ot_shape_key_hide_others',
-                                         text='',
-                                         icon='RESTRICT_RENDER_OFF')
-
-                    props = sub.operator('mesh.sculpt_ot_keyframe_shape_keys',
-                                         text='',
-                                         icon='KEYINGSET',
-                                         )
-
-                    props = sub.operator('mesh.sculpt_ot_clear_all_keyframes',
-                                         text='',
-                                         icon='KEYFRAME',
-                                         )
-
-                    props = sub.operator('mesh.sculpt_ot_merge_shape_keys',
-                                         text='',
-                                         icon='SHAPEKEY_DATA',
-                                         # bl_description = 'Test 1.'
-                                         )
-
-                    props = sub.operator('mesh.sculpt_ot_apply_shape_keys',
-                                         text='',
-                                         icon='MESH_CUBE',
-                                         )
 
             split = layout.split(factor=0.4)
             row = split.row()
