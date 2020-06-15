@@ -27,8 +27,16 @@ https://youtu.be/nr9dIqI0Ll4
 ### Decimate_Tools Update #3
 https://youtu.be/D8FJvBc65Lk
 
+### Object-Mode Panel Preview
+
 ![TMG_Mod_Tools pic1](Preview-Images/01.png)
+
+### Edit-Mode Panel Preview
 
 ![TMG_Mod_Tools pic2](Preview-Images/02.png)
 
+### Sculpt Panel Preview
+
 ![TMG_Mod_Tools pic3](Preview-Images/03.png)
+
+![TMG_Mod_Tools pic3](Preview-Images/04.png)
