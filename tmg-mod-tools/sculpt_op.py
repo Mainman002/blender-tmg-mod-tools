@@ -320,7 +320,7 @@ class Sculpt_Shape_Keys_Panel(bpy.types.Panel):
 
 		all_keys = []
 
-		if bpy.context.active_object.data.shape_keys:
+		if ob.data.shape_keys:
 			for _i in bpy.context.active_object.data.shape_keys.key_blocks.keys():
 				all_keys.append(_i)
 		
@@ -470,12 +470,12 @@ class Sculpt_Shape_Keys_Panel(bpy.types.Panel):
 							 icon='ADD')
 		# props.mode = 0
 
-		# col.operator('mesh.sculpt_ot_remove_selected_layer',
-		# 					 text='T',
-		# 					 icon='REMOVE')
+		col.operator('mesh.sculpt_ot_remove_selected_layer',
+							 text='T',
+							 icon='REMOVE')
 
-		col.operator("object.shape_key_remove",
-		             icon='REMOVE', text="").all = False
+		# col.operator("object.shape_key_remove",
+		#              icon='REMOVE', text="").all = False
 
 		col.separator()
 
@@ -743,13 +743,21 @@ class Sculpt_OT_Remove_Selected_Layer(bpy.types.Operator):
 
 		all_keys = []
 
-		if bpy.context.active_object.data.shape_keys:
+		# o = bpy.context.object
+
+		# if ob.data.shape_keys:
+		# 	num_of_SK_blocks = len( o.data.shape_keys.key_blocks )
+		# 	print( "Number of shape keys: ", num_of_SK_blocks )
+		# else:
+		# 	print('no data')
+
+		if ob.data.shape_keys:
 			for _i in bpy.context.active_object.data.shape_keys.key_blocks.keys():
 				all_keys.append(_i)
 		
 		keys_total = len(all_keys)
 
-		if bpy.context.active_object.data.shape_keys:
+		if ob.data.shape_keys:
 			keys = ob.data.shape_keys.key_blocks.keys()
 
 		current_frame = bpy.context.active_object.active_shape_key_index
@@ -762,10 +770,12 @@ class Sculpt_OT_Remove_Selected_Layer(bpy.types.Operator):
 		# for fcurve in dispose_curves:
 		# 	armature.animation_data.action.fcurves.remove(fcurve)
 
-		if bpy.context.active_object.data.shape_keys:
+		if ob.data.shape_keys:
 			for shape in ob.data.shape_keys.key_blocks:
-				shape.keyframe_delete("value", index=-1, frame=current_frame, group="")
-			# s.frame_current = (keys_total - 1)
+				try:
+					shape.keyframe_delete("value", index=-1, frame=current_frame, group="")
+				except RuntimeError:
+					break
 			bpy.ops.object.shape_key_remove(all=False)
 
 		return {'FINISHED'}
