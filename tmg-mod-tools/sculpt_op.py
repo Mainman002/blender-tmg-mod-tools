@@ -141,10 +141,10 @@ def sculpt_single_shape_layer_changed(self, context):
 	keys = ob.data.shape_keys.key_blocks.keys()
 	for shape in ob.data.shape_keys.key_blocks:
 		if shape.name == ob.active_shape_key.name or shape.name == 'Base Shape':
-			print('found: ' + shape.name)
+			# print('found: ' + shape.name)
 			shape.mute = False
 		else:
-			print('other: ' + shape.name)
+			# print('other: ' + shape.name)
 			shape.mute = sculpt_single_shape_layer
 
 
@@ -309,6 +309,8 @@ class Sculpt_Shape_Keys_Panel(bpy.types.Panel):
 		scene = context.scene
 		# keyframe_timeline = context.scene.keyframe_timeline
 		sculpt_single_shape_layer = context.scene.sculpt_single_shape_layer
+
+		shape_settings_menu = context.scene.shape_settings_menu
 
 		layout = self.layout
 		# row = layout.row(align=True)
@@ -479,63 +481,81 @@ class Sculpt_Shape_Keys_Panel(bpy.types.Panel):
 
 		col.separator()
 
+		laya = self.layout.row(align=True)
+		# boxed = laya.box()
+		row = laya.row(align=True)
+		colm = row.row(align=True)
+
+		laya.prop(scene, "shape_settings_menu", text="")
+		laya.label(text="Shape Settings")
+
+		col.separator()
+
 		col.menu("MESH_MT_shape_key_context_menu",
-				 icon='DOWNARROW_HLT', text="")
+				icon='DOWNARROW_HLT', text="")
 
 		if kb:
 			col.separator()
 
 			sub = col.column(align=True)
 			sub.operator("object.shape_key_move",
-						 icon='TRIA_UP', text="").type = 'UP'
+						icon='TRIA_UP', text="").type = 'UP'
 			sub.operator("object.shape_key_move",
-						 icon='TRIA_DOWN', text="").type = 'DOWN'
+						icon='TRIA_DOWN', text="").type = 'DOWN'
 
-			split = layout.split(factor=0.4)
-			row = split.row()
-			row.enabled = enable_edit
-			row.prop(key, "use_relative")
+			if shape_settings_menu:
 
-			row = split.row()
-			row.alignment = 'RIGHT'
+				boxed_menu = layout.box()
 
-			sub = row.row(align=True)
-			sub.label()  # XXX, for alignment only
-			subsub = sub.row(align=True)
-			subsub.active = enable_edit_value
-			subsub.prop(ob, "show_only_shape_key", text="")
-			sub.prop(ob, "use_shape_key_edit_mode", text="")
+				boxed_split = boxed_menu.split(factor=0.4)
+				# split = layout.split(factor=0.4)
+				split = boxed_split
+				row = split.row()
+				row.enabled = enable_edit
+				row.prop(key, "use_relative")
 
-			sub = row.row()
-			if key.use_relative:
-				sub.operator("object.shape_key_clear", icon='X', text="")
-			else:
-				sub.operator("object.shape_key_retime",
-							 icon='RECOVER_LAST', text="")
+				row = split.row()
+				row.alignment = 'RIGHT'
 
-			layout.use_property_split = True
-			if key.use_relative:
-				if ob.active_shape_key_index != 0:
-					row = layout.row()
+				sub = row.row(align=True)
+				sub.label()  # XXX, for alignment only
+				subsub = sub.row(align=True)
+				subsub.active = enable_edit_value
+				subsub.prop(ob, "show_only_shape_key", text="")
+				sub.prop(ob, "use_shape_key_edit_mode", text="")
+
+				sub = row.row()
+				if key.use_relative:
+					sub.operator("object.shape_key_clear", icon='X', text="")
+				else:
+					sub.operator("object.shape_key_retime",
+								icon='RECOVER_LAST', text="")
+
+				layout.use_property_split = True
+				if key.use_relative:
+					if ob.active_shape_key_index != 0:
+						row = boxed_menu.row()
+						# row = layout.row()
+						row.active = enable_edit_value
+						row.prop(kb, "value")
+
+						col = boxed_menu.column()
+						# col = layout.column()
+						sub.active = enable_edit_value
+						sub = col.column(align=True)
+						sub.prop(kb, "slider_min", text="Range Min")
+						sub.prop(kb, "slider_max", text="Max")
+
+						col.prop_search(kb, "vertex_group", ob,
+										"vertex_groups", text="Vertex Group")
+						col.prop_search(kb, "relative_key", key,
+										"key_blocks", text="Relative To")
+
+				else:
+					layout.prop(kb, "interpolation")
+					row = layout.column()
 					row.active = enable_edit_value
-					row.prop(kb, "value")
-
-					col = layout.column()
-					sub.active = enable_edit_value
-					sub = col.column(align=True)
-					sub.prop(kb, "slider_min", text="Range Min")
-					sub.prop(kb, "slider_max", text="Max")
-
-					col.prop_search(kb, "vertex_group", ob,
-									"vertex_groups", text="Vertex Group")
-					col.prop_search(kb, "relative_key", key,
-									"key_blocks", text="Relative To")
-
-			else:
-				layout.prop(kb, "interpolation")
-				row = layout.column()
-				row.active = enable_edit_value
-				row.prop(key, "eval_time")
+					row.prop(key, "eval_time")
 
 
 class Sculpt_OT_Show_TMG_Addon_Prefs(bpy.types.Operator):
@@ -858,6 +878,12 @@ class Sculpt_OT_Apply_Shape_Keys(bpy.types.Operator):
 
 		bpy.ops.object.shape_key_remove()
 		bpy.data.scenes['Scene'].frame_current = 0
+
+		# Edit Mode
+		bpy.ops.object.editmode_toggle()
+
+		# Object Mode
+		bpy.ops.sculpt.sculptmode_toggle()
 
 		return {'FINISHED'}
 

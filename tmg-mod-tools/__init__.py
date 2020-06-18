@@ -696,6 +696,11 @@ bpy.types.Scene.viewMode = bpy.props.EnumProperty(
     update=viewMode_changed
 )
 
+#### shows the settings for shape keys #########################
+bpy.types.Scene.shape_settings_menu = BoolProperty(name="Shape Key Settings",
+                                                           default=False,
+                                                           description="Shows the menu settings for shape key layers."
+                                                           )
 
 #### Sculpt Shape Keys Panel Mode Switch #########################
 bpy.types.Scene.sculpt_shape_keys_icon_view = BoolProperty(name="Icon View",
