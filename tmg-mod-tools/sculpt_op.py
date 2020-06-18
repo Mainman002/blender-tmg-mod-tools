@@ -302,20 +302,17 @@ class Sculpt_Shape_Keys_Panel(bpy.types.Panel):
 
 		preferences = context.preferences
 		addon_prefs = preferences.addons['tmg-mod-tools'].preferences
+		tmg_prefs = context.preferences.addons['tmg-mod-tools'].preferences
 
-		button_mode = context.preferences.addons['tmg-mod-tools'].preferences.Sculpt_Button_Mode
-		keyframe_timeline = context.preferences.addons['tmg-mod-tools'].preferences.Sculpt_Keyframe_Timeline
+		button_mode = tmg_prefs.Sculpt_Button_Mode
+		keyframe_timeline = tmg_prefs.Sculpt_Keyframe_Timeline
+		shape_settings_menu = tmg_prefs.shape_settings_menu
 
 		scene = context.scene
-		# keyframe_timeline = context.scene.keyframe_timeline
 		sculpt_single_shape_layer = context.scene.sculpt_single_shape_layer
 
-		shape_settings_menu = context.scene.shape_settings_menu
-
 		layout = self.layout
-		# row = layout.row(align=True)
 
-		# ob = context.object
 		ob = bpy.context.active_object
 		key = ob.data.shape_keys
 		kb = ob.active_shape_key
@@ -328,126 +325,241 @@ class Sculpt_Shape_Keys_Panel(bpy.types.Panel):
 		
 		keys_total = len(all_keys)
 
-		# if button_mode == False:
-
-		# layout.column(align=True).use_property_split = True
-		# col = layout.column(align=True).grid_flow(
-		#     row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
-
-		# # colb = col.box()
-		# row = col.row(align=True)
-		# colm = row.row(align=True)
-
 		col = self.layout.column(align=True)
-		# # row = col.row(align=True)
 
-		# # props = row.separator()
+		if button_mode:
 
-		laya = self.layout.row(align=True)
-		# boxed = laya.box()
-		row = laya.row(align=True)
-		colm = row.row(align=True)
-
-		# if button_mode == False:
-		#     props = row.operator('mesh.sculpt_ot_add_new_shape_layer',
-		#                             text='Add Layer',
-		#                             icon='ADD')
-
-
-		# if button_mode == True:
-		#     props = row.operator('mesh.sculpt_ot_add_new_shape_layer',
-		#                             text='',
-		#                             icon='ADD')
-
-		# props = row.separator()
-
-		row.prop(addon_prefs, "Sculpt_Keyframe_Timeline", text="")
-		row.label(text="Keyframe")
-
-		props = col.separator()
-
-		props = row.operator('mesh.sculpt_ot_show_tmg_addon_prefs',
-							text='',
-							icon='TOOL_SETTINGS')
-
-		if button_mode == False:
-
-			# if bpy.context.active_object.active_shape_key_index > 0:
 			if keys_total > 0:
 
-				# layout.column(align=True).use_property_split = True
-				# col = layout.column(align=True).grid_flow(
-				#     row_major=True, columns=0, even_columns=True, even_rows=True, align=True)
+				layout = self.layout.column(align=True)
+				panel = layout.column(align=True)
+				lay = panel.row(align=False)
+				col_1 = lay.row()
+				col_2 = lay.row()
+				col_3 = lay.row()
 
-				# # colb = col.box()
-				# row = col.row(align=True)
-				# colm = row.column(align=True)
+				# Button Group 3
+				row = col_1.row(align=True)
 
-				# col = colm.column(align=True)
-				# # row = col.row(align=True)
-
-				# props = row.separator()
-
-				laya = self.layout.column(align=True)
-				boxed = laya.box()
-				row = boxed.column(align=True)
-				colm = row.column(align=True)
-
-				props = colm.operator('mesh.sculpt_ot_shape_key_hide_others',
-									  text='Toggle Other Layers',
-									  icon='RESTRICT_RENDER_OFF')
-
-				props = colm.operator('mesh.sculpt_ot_keyframe_shape_keys',
-									  text='Keyframe Layers',
-									  icon='KEYINGSET')
-
-				props = colm.operator('mesh.sculpt_ot_clear_all_keyframes',
-									  text='Clear All Keyframes',
-									  icon='KEYFRAME',
-									  )
-
-				props = colm.operator('mesh.sculpt_ot_merge_shape_keys',
-									  text='Merge Layers',
-									  icon='SHAPEKEY_DATA',
-									  )
-
-				props = colm.operator('mesh.sculpt_ot_apply_shape_keys',
-									  text='Apply Object',
-									  icon='MESH_CUBE',
-									  )
-
-		if button_mode == True:
-
-			# if bpy.context.active_object.active_shape_key_index > 0:
-			if keys_total > 0:
-
-				laya = self.layout.row(align=True)
-				boxed = laya.box()
-				row = boxed.row(align=True)
-				colm = row.row(align=True)
-
-				props = colm.operator('mesh.sculpt_ot_shape_key_hide_others',
+				row.operator('mesh.sculpt_ot_shape_key_hide_others',
 									text='',
 									icon='RESTRICT_RENDER_OFF')
 
-				props = colm.operator('mesh.sculpt_ot_keyframe_shape_keys',
+				row.operator('mesh.sculpt_ot_keyframe_shape_keys',
 									text='',
 									icon='KEYINGSET')
 
-				props = colm.operator('mesh.sculpt_ot_clear_all_keyframes',
+				row.operator('mesh.sculpt_ot_clear_all_keyframes',
 									text='',
 									icon='KEYFRAME',
 									)
 
-				props = colm.operator('mesh.sculpt_ot_merge_shape_keys',
+				row.operator('mesh.sculpt_ot_merge_shape_keys',
 									text='',
 									icon='SHAPEKEY_DATA',
 									)
 
-				props = colm.operator('mesh.sculpt_ot_apply_shape_keys',
+				row.operator('mesh.sculpt_ot_apply_shape_keys',
 									text='',
 									icon='MESH_CUBE',
 									)
+
+
+				# panel = layout.row(align=True)
+				lay = panel.row(align=True)
+				# row = col_2.row(align=True)
+
+				# row.label(text='')
+
+				panel = layout.row(align=True)
+				lay = panel.row(align=True)
+				row = col_3.row(align=True)
+
+				row.prop(addon_prefs, "Sculpt_Keyframe_Timeline", text="", icon='KEY_HLT')
+				row.operator('mesh.sculpt_ot_show_tmg_addon_prefs', text='', icon='TOOL_SETTINGS')
+
+				
+
+				# props = row.separator()
+
+				# props = row.prop(addon_prefs, "Sculpt_Keyframe_Timeline", text="", icon='KEY_HLT')
+
+				# props = row.operator('mesh.sculpt_ot_show_tmg_addon_prefs', text='', icon='TOOL_SETTINGS')
+
+			else:
+
+				layout = self.layout.column(align=True)
+				panel = layout.column(align=True)
+				lay = panel.row(align=False)
+				col_1 = lay.row()
+				col_2 = lay.row()
+				col_3 = lay.row()
+
+				# Button Group 3
+				row = col_1.row(align=True)
+
+				# panel = layout.row(align=True)
+				lay = panel.row(align=True)
+				# row = col_2.row(align=True)
+
+				# row.label(text='')
+
+				panel = layout.row(align=True)
+				lay = panel.row(align=True)
+				row = col_3.row(align=True)
+
+				row.prop(addon_prefs, "Sculpt_Keyframe_Timeline", text="", icon='KEY_HLT')
+				row.operator('mesh.sculpt_ot_show_tmg_addon_prefs', text='', icon='TOOL_SETTINGS')
+
+
+		else:
+			
+			# layout = self.layout.column(align=True)
+			# panel = layout.column(align=True)
+
+			# row = panel.row(align=True)
+			# row.label(text='Header')
+			# row.operator('mesh.sculpt_ot_apply_shape_keys',text='',icon='MESH_CUBE',)
+
+			# row = panel.column(align=True)
+			# row.operator('mesh.sculpt_ot_apply_shape_keys',text='test 1',icon='MESH_CUBE',)
+			# row.operator('mesh.sculpt_ot_apply_shape_keys',text='test 2',icon='MESH_CUBE',)
+
+
+			layout = self.layout.column(align=True)
+			panel = layout.column(align=True)
+			lay = panel.row(align=False)
+			col_1 = lay.row()
+			col_2 = lay.row()
+			col_3 = lay.row()
+
+
+			# row = col_2.row(align=True)
+			# row.label(text="")
+
+			row = col_3.row(align=True)
+			row.prop(addon_prefs, "Sculpt_Keyframe_Timeline", text="Keyframe", icon='KEY_HLT')
+			
+			# row = panel.row(align=True)
+			row.operator('mesh.sculpt_ot_show_tmg_addon_prefs',
+								text='Preferences',
+								icon='TOOL_SETTINGS')
+
+			if keys_total > 0:
+
+				layout = self.layout.column(align=True)
+				panel = layout.column(align=True)
+
+				# row = panel.row(align=True)
+				# row.label(text='Header')
+				# row.operator('mesh.sculpt_ot_apply_shape_keys',text='',icon='MESH_CUBE',)
+
+				# row = panel.column(align=True)
+				# row.operator('mesh.sculpt_ot_apply_shape_keys',text='test 1',icon='MESH_CUBE',)
+				# row.operator('mesh.sculpt_ot_apply_shape_keys',text='test 2',icon='MESH_CUBE',)
+
+				# row = panel.row(align=True)
+				# row.prop(addon_prefs, "Sculpt_Keyframe_Timeline", text="", icon='KEY_HLT')
+				# row.label(text="Keyframe")
+				
+				# # row = panel.row(align=True)
+				# row.operator('mesh.sculpt_ot_show_tmg_addon_prefs',
+				# 					text='',
+				# 					icon='TOOL_SETTINGS')
+
+
+
+				row = panel.column(align=True)
+
+				row.operator('mesh.sculpt_ot_shape_key_hide_others',
+									text='Toggle Other Layers',
+									icon='RESTRICT_RENDER_OFF')
+
+				row.operator('mesh.sculpt_ot_keyframe_shape_keys',
+									text='Keyframe Layers',
+									icon='KEYINGSET')
+
+				row.operator('mesh.sculpt_ot_clear_all_keyframes',
+									text='Clear All Keyframes',
+									icon='KEYFRAME',
+									)
+
+				row.operator('mesh.sculpt_ot_merge_shape_keys',
+									text='Merge Layers',
+									icon='SHAPEKEY_DATA',
+									)
+
+				row.operator('mesh.sculpt_ot_apply_shape_keys',
+									text='Apply Object',
+									icon='MESH_CUBE',
+									)
+
+
+
+				# layout = self.layout.column(align=True)
+				# panel = layout.column(align=True)
+				# lay = panel.row(align=False)
+				# col_1 = lay.row()
+				# col_2 = lay.row()
+				# col_3 = lay.row()
+
+				# # panel = layout.row(align=True)
+				# lay = panel.row(align=True)
+				# # row = col_2.row(align=True)
+
+				# # row.label(text='')
+
+				# panel = layout.row(align=True)
+				# lay = panel.row(align=True)
+				# row = col_3.row(align=True)
+
+				# row.prop(addon_prefs, "Sculpt_Keyframe_Timeline", text="", icon='KEY_HLT')
+				# row.operator('mesh.sculpt_ot_show_tmg_addon_prefs', text='', icon='TOOL_SETTINGS')
+
+
+				# layout = self.layout.column(align=True)
+				# panel = layout.column(align=True)
+				# lay = panel.row(align=False)
+				# col_1 = lay.row()
+				# col_2 = lay.row()
+				# col_3 = lay.row()
+
+				# # Button Group 3
+				# row = col_1.row(align=True)
+
+				# laya = self.layout.row(align=True)
+				# # boxed = laya.box()
+				# row = laya.row(align=True)
+				# colm = row.row(align=True)
+
+				# row = laya.column(align=True)
+
+				# row.operator('mesh.sculpt_ot_shape_key_hide_others',
+				# 					text='Toggle Other Layers',
+				# 					icon='RESTRICT_RENDER_OFF')
+
+				# row.operator('mesh.sculpt_ot_keyframe_shape_keys',
+				# 					text='Keyframe Layers',
+				# 					icon='KEYINGSET')
+
+				# row.operator('mesh.sculpt_ot_clear_all_keyframes',
+				# 					text='Clear All Keyframes',
+				# 					icon='KEYFRAME',
+				# 					)
+
+				# row.operator('mesh.sculpt_ot_merge_shape_keys',
+				# 					text='Merge Layers',
+				# 					icon='SHAPEKEY_DATA',
+				# 					)
+
+				# row.operator('mesh.sculpt_ot_apply_shape_keys',
+				# 					text='Apply Object',
+				# 					icon='MESH_CUBE',
+				# 					)
+
+
+		layout = self.layout.column(align=True)
+		panel = layout.column(align=True)
 
 		enable_edit = ob.mode != 'EDIT'
 		enable_edit_value = False
@@ -481,13 +593,56 @@ class Sculpt_Shape_Keys_Panel(bpy.types.Panel):
 
 		col.separator()
 
-		laya = self.layout.row(align=True)
-		# boxed = laya.box()
-		row = laya.row(align=True)
-		colm = row.row(align=True)
+		# laya = self.layout.row(align=True)
+		# # boxed = laya.box()
+		# row = laya.row(align=True)
+		# colm = row.row(align=True)
 
-		laya.prop(scene, "shape_settings_menu", text="")
-		laya.label(text="Shape Settings")
+
+		layout = self.layout.column(align=True)
+		panel = layout.column(align=True)
+		lay = panel.row(align=False)
+		col_1 = lay.row()
+		col_2 = lay.row()
+		col_3 = lay.row()
+
+		# Button Group 3
+		row = col_1.row(align=True)
+
+		if tmg_prefs.shape_settings_menu:
+			row.prop(tmg_prefs, "shape_settings_menu", text="", icon='DOWNARROW_HLT')
+		else:
+			row.prop(tmg_prefs, "shape_settings_menu", text="", icon='RIGHTARROW')
+
+		if button_mode:
+			pass
+		else:
+			row = col_1.row(align=True)
+			# row.prop(tmg_prefs, "shape_settings_menu", text="Shape Settings", icon='OUTLINER_DATA_GP_LAYER')
+			row.label(text="Layer Settings")
+
+		# row.prop(addon_prefs, "Sculpt_Keyframe_Timeline", text="", icon='KEY_HLT')
+		# row.operator('mesh.sculpt_ot_show_tmg_addon_prefs', text='', icon='TOOL_SETTINGS')
+
+
+		# layout = self.layout.column(align=True)
+		# panel = layout.column(align=True)
+		# lay = panel.row(align=False)
+		# col_1 = lay.row()
+		# col_2 = lay.row()
+		# col_3 = lay.row()
+
+		# # Button Group 3
+		# row = col_1.column(align=True)
+
+		# row.prop(tmg_prefs, "shape_settings_menu", text="", icon='OUTLINER_DATA_GP_LAYER')
+
+		# if button_mode:
+		# 	pass
+		# else:
+		# 	row = col_1.row(align=True)
+		# 	# row.prop(tmg_prefs, "shape_settings_menu", text="Shape Settings", icon='OUTLINER_DATA_GP_LAYER')
+		# 	row.label(text="Shape Settings")
 
 		col.separator()
 
@@ -503,9 +658,19 @@ class Sculpt_Shape_Keys_Panel(bpy.types.Panel):
 			sub.operator("object.shape_key_move",
 						icon='TRIA_DOWN', text="").type = 'DOWN'
 
-			if shape_settings_menu:
+			if tmg_prefs.shape_settings_menu:
 
-				boxed_menu = layout.box()
+				layout = self.layout.column(align=True)
+				panel = layout.column(align=True)
+				lay = panel.row(align=False)
+				col_1 = lay.row()
+				col_2 = lay.row()
+				col_3 = lay.row()
+
+				# Button Group 3
+				row = panel.column(align=True)
+
+				boxed_menu = row.box()
 
 				boxed_split = boxed_menu.split(factor=0.4)
 				# split = layout.split(factor=0.4)
@@ -558,11 +723,59 @@ class Sculpt_Shape_Keys_Panel(bpy.types.Panel):
 					row.prop(key, "eval_time")
 
 
+
+
+		# layout = self.layout.box()
+
+		# panel = layout.column(align=True)
+
+		# # split = colm.split(align=True)
+
+		# # split_boxed = split.box()
+
+		# lay = panel.row(align=False)
+		# col_1 = lay.box()
+		# col_2 = lay.box()
+
+		# # Button Group 3
+		# row = col_1.row(align=True)
+		# row.operator('mesh.sculpt_ot_apply_shape_keys',text='',icon='MESH_CUBE',)
+		# row.label(text='Header')
+
+		# row = col_2.row(align=True)
+		# row.operator('mesh.sculpt_ot_apply_shape_keys',text='',icon='MESH_CUBE',)
+		# row.operator('mesh.sculpt_ot_apply_shape_keys',text='',icon='MESH_CUBE',)
+
+
+		# panel = layout.row(align=True)
+		# lay = panel.row(align=True)
+		# col_1 = lay.box()
+		# col_2 = lay.box()
+		
+		# # Button Group 1
+		# col_1.label(text='Body')
+		# col_2.operator('mesh.sculpt_ot_apply_shape_keys',text='',icon='MESH_CUBE',)
+
+		# # Button Group 2
+		# col_1.label(text='Side')
+		# col_2.operator('mesh.sculpt_ot_apply_shape_keys',text='',icon='MESH_CUBE',)
+
+		# panel = layout.column(align=True)
+		# lay = panel.row(align=True)
+		# col_1 = lay.box()
+
+		# # Button Group 3
+		# col_1.label(text='Footer')
+		# col_1.label(text='')
+		# col_1.operator('mesh.sculpt_ot_apply_shape_keys',text='3',icon='MESH_CUBE',)
+
+
+
 class Sculpt_OT_Show_TMG_Addon_Prefs(bpy.types.Operator):
-	"""Shows the TMG addon preferances"""
+	"""Shows the TMG addon preferences"""
 	bl_idname = 'mesh.sculpt_ot_show_tmg_addon_prefs'
-	bl_label = 'Show Settings'
-	bl_description = 'Shows the TMG addon preferances.'
+	bl_label = 'Show Preferences'
+	bl_description = 'Shows the TMG addon preferences.'
 	bl_options = {'REGISTER'}
 
 	def execute(self, context):
@@ -631,7 +844,7 @@ class Sculpt_OT_ADD_New_Shape_Layer(bpy.types.Operator):
 class Sculpt_OT_Shape_Key_Hide_Others(bpy.types.Operator):
 	"""Sculpt Shape Key Hide Other Shape Layers"""
 	bl_idname = 'mesh.sculpt_ot_shape_key_hide_others'
-	bl_label = 'View Single Shape Layer'
+	bl_label = 'View Selected Layer Only'
 	bl_description = 'Only view selected shape layer.'
 	bl_options = {'REGISTER'}
 

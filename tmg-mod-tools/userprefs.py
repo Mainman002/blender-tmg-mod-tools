@@ -19,9 +19,15 @@ class TMG_User_Preferences(AddonPreferences):
         default=False
     )
 
-    def invoke(self, context, event):
-        bpy.types.Scene.sculpt_shape_keys_icon_view = self.Sculpt_Button_Mode
-        return self.execute(context)
+    shape_settings_menu: bpy.props.BoolProperty(
+        name="Layer Panel Settings",
+        description="Show shape layer settings.",
+        default=False
+    )
+
+    # def invoke(self, context, event):
+    #     bpy.types.Scene.sculpt_shape_keys_icon_view = self.Sculpt_Button_Mode
+    #     return self.execute(context)
 
     def execute(self, context):
         user_preferences = context.user_preferences
@@ -31,6 +37,7 @@ class TMG_User_Preferences(AddonPreferences):
     def draw(self, context):
         self.layout.prop(self, "Sculpt_Button_Mode")
         self.layout.prop(self, "Sculpt_Keyframe_Timeline")
+        self.layout.prop(self, "shape_settings_menu")
 
 
 def register():
@@ -47,3 +54,5 @@ def register():
     # Sculpt Panel Variables
     bpy.types.Scene.sculpt_shape_keys_icon_view = self.Sculpt_Button_Mode
     bpy.types.Scene.keyframe_timeline = self.Sculpt_Keyframe_Timeline
+    bpy.types.Scene.shape_settings_menu = self.shape_settings_menu
+
